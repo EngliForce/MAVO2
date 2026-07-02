@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EngliForce Headquarters</title>
+    <script src="https://cdn.counter.dev/script.js" data-id="0eed7a4e-ef67-4086-a7e5-429c47941b67" data-utcoffset="1"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Lexend:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hero-blue-main: #0288d1;
+            --hero-blue-dark: #01579b;
+            --hero-yellow: #ffb703;
+            --hero-cyan: #81d4fa;
+        }
+        body, html { 
+            margin: 0; padding: 0; height: 100%; overflow: hidden;
+            font-family: 'Lexend', sans-serif; 
+            background: radial-gradient(circle at center, #102a43 0%, #05101a 100%); 
+            color: white;
+            display: flex; flex-direction: column;
+        }
+        header { 
+            background: var(--hero-blue-main); padding: 1.5rem 1rem; text-align: center; 
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%); 
+            border-bottom: 5px solid var(--hero-yellow); box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+        }
+        h1 { font-family: 'Bangers', cursive; font-size: 3rem; margin: 0; text-shadow: 4px 4px 0px var(--hero-blue-dark); }
+        header p { font-weight: bold; letter-spacing: 2px; margin-top: 5px; }
+
+        main { 
+            flex: 1;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            padding: 20px;
+        }
+        .section-title { font-family: 'Bangers', cursive; font-size: 2.5rem; color: var(--hero-yellow); margin-bottom: 30px; letter-spacing: 2px; }
+        
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; max-width: 600px; width: 100%; }
+        .card { 
+            background: #102a43; border: 3px solid #243b53; border-radius: 20px; padding: 20px; 
+            display: flex; flex-direction: column; transition: all 0.3s ease; text-decoration: none; color: white; cursor: pointer; 
+        }
+        .card:hover { border-color: var(--hero-yellow); transform: translateY(-8px); }
+        .power-icon { font-size: 3rem; margin-bottom: 15px; text-align: center; }
+        .name { font-weight: bold; font-size: 1.5rem; text-align: center; margin-bottom: 10px; }
+        .btn { 
+            background: #243b53; border: none; color: white; padding: 12px; border-radius: 12px; 
+            cursor: pointer; font-family: 'Bangers', cursive; font-size: 1.2rem; margin-top: 10px; 
+        }
+        .card.done { border-color: var(--hero-yellow); background: #05101a; }
+        .card.done .btn { background: var(--hero-yellow); color: var(--hero-blue-dark); }
+        
+        footer { padding: 20px; text-align: center; opacity: 0.5; font-size: 0.9rem; }
+
+        .star { position: fixed; pointer-events: none; font-size: 3rem; z-index: 1000; animation: starFly 0.8s forwards; }
+        @keyframes starFly { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(2) translateY(-150px); opacity: 0; } }
+    </style>
+</head>
+<body>
+<header>
+    <h1>WELCOME</h1>
+    <p>ENGLIFORCE HEADQUARTERS</p>
+</header>
+<main>
+    <h2 class="section-title">CHOOSE YOUR MISSION</h2>
+    <div class="grid" id="module-grid"></div>
+</main>
+<footer>
+    &copy; 2025 EngliForce – Make English Your Superpower!
+</footer>
+<script>
+    const moduleData = [
+        { id: 'mh1', name: 'MH1', icon: '🛡️', url: 'indexmh1.html' },
+        { id: 'm2', name: 'M2', icon: '⚡', url: 'indexm2.html' }
+    ];
+
+    function createCard(item) {
+        const grid = document.getElementById('module-grid');
+        const card = document.createElement('a');
+        card.className = 'card';
+        card.id = item.id;
+        card.href = item.url;
+        card.innerHTML = `
+            <div class="power-icon">${item.icon}</div>
+            <div class="name">${item.name}</div>
+            <button class="btn" onclick="completeTask(event, '${item.id}')">MISSION COMPLETED</button>
+        `;
+        grid.appendChild(card);
+    }
+
+    moduleData.forEach(createCard);
+
+    function completeTask(event, id) {
+        event.preventDefault();
+        event.stopPropagation();
+        const card = document.getElementById(id);
+        const isDone = card.classList.toggle('done');
+        const saved = JSON.parse(localStorage.getItem('hero_progress_main') || '{}');
+        saved[id] = isDone;
+        localStorage.setItem('hero_progress_main', JSON.stringify(saved));
+        if(isDone) {
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#81d4fa', '#ffb703'] });
+            const s = document.createElement('div'); s.className = 'star'; s.innerHTML = '⚡';
+            s.style.left = event.clientX + 'px'; s.style.top = event.clientY + 'px';
+            document.body.appendChild(s); setTimeout(() => s.remove(), 800);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const saved = JSON.parse(localStorage.getItem('hero_progress_main') || '{}');
+        Object.keys(saved).forEach(id => {
+            const el = document.getElementById(id);
+            if(el && saved[id]) el.classList.add('done');
+        });
+    });
+</script>
+</body>
+</html>
