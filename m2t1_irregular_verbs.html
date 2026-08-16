@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EngliForce Academy: Irregular Verbs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Lexend:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hero-purple-main: #ff5722;
+            --hero-purple-dark: #bf360c;
+            --hero-yellow: #ffb703;
+            --hero-cyan: #b39ddb;
+            --dark-bg: #0b101a;
+            --hero-orange: #ff5722;
+            --thumb-up: #4caf50;
+            --success-green: #2ecc71;
+        }
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: radial-gradient(circle at center, #1a102a 0%, #05051a 100%);
+            color: white;
+            margin: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        header {
+            background: var(--hero-purple-main);
+            padding: 2.5rem 1rem;
+            text-align: center;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            border-bottom: 5px solid var(--hero-yellow);
+        }
+        h1 { font-family: 'Bangers', cursive; font-size: 3.5rem; letter-spacing: 3px; margin: 0; text-shadow: 4px 4px 0px var(--hero-purple-dark); }
+        h2 { font-family: 'Bangers', cursive; color: var(--hero-yellow); font-size: 2.2rem; margin-top: 10px; margin-bottom: 20px; border-bottom: 2px solid rgba(255,255,255,0.1); display: inline-block; padding-bottom: 5px; }
+        h3 { color: var(--hero-cyan); font-family: 'Bangers'; font-size: 1.8rem; margin-top: 0;}
+        main { max-width: 1200px; margin: 20px auto; padding: 20px; text-align: center; }
+        .section-divider {
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--hero-cyan), transparent);
+            margin: 40px 0;
+            opacity: 0.8;
+            border-radius: 2px;
+            box-shadow: 0 0 15px var(--hero-cyan);
+        }
+        .briefing-box {
+            background: rgba(26, 16, 42, 0.9);
+            border: 2px solid var(--hero-cyan);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            text-align: left;
+        }
+        .explanation-text {
+            font-size: 1.1rem; line-height: 1.6; margin-bottom: 20px;
+            border-left: 4px solid var(--hero-orange); padding-left: 20px;
+            background: rgba(255, 87, 34, 0.05); padding-top: 10px; padding-bottom: 10px;
+        }
+        
+        /* MULTI-SELECT GROUP FILTER */
+        .group-selection {
+            background: rgba(15, 10, 26, 0.85);
+            border: 2px dashed var(--hero-cyan);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .group-selection h4 {
+            font-family: 'Bangers', cursive;
+            color: var(--hero-yellow);
+            font-size: 1.6rem;
+            margin: 0 0 10px 0;
+        }
+        .group-selection p {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.7);
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        .group-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+        .btn-group-action {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--hero-cyan);
+            border: 1px solid var(--hero-cyan);
+            padding: 6px 14px;
+            border-radius: 15px;
+            font-family: 'Lexend', sans-serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-group-action:hover {
+            background: var(--hero-cyan);
+            color: var(--dark-bg);
+            font-weight: bold;
+        }
+        .group-container { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+        .btn-group {
+            background: #2a1b42; color: #a0a0a0; border: 2px solid #4a336e;
+            padding: 8px 16px; border-radius: 20px; font-family: 'Lexend', sans-serif;
+            font-size: 0.85rem; font-weight: bold; cursor: pointer; transition: 0.2s;
+            user-select: none;
+        }
+        .btn-group:hover { border-color: var(--hero-cyan); color: white; transform: translateY(-2px); }
+        .btn-group.active { 
+            background: var(--hero-yellow); 
+            color: var(--dark-bg); 
+            border-color: var(--hero-yellow); 
+            box-shadow: 0 0 12px rgba(255, 183, 3, 0.6); 
+        }
+
+        .toggle-container { display: flex; gap: 10px; justify-content: center; margin-bottom: 30px; flex-wrap: wrap; }
+        .btn-toggle {
+            background: var(--hero-purple-main); color: white; border: none;
+            padding: 10px 22px; border-radius: 50px; font-family: 'Bangers', cursive;
+            font-size: 1.2rem; cursor: pointer; transition: 0.2s; border-bottom: 4px solid var(--hero-purple-dark);
+        }
+        .btn-toggle:hover { transform: translateY(-2px); background: var(--hero-cyan); color: var(--hero-purple-dark); }
+        .btn-toggle.active { background: var(--hero-yellow); color: var(--dark-bg); border-bottom-color: #c78f00; }
+        .btn-video-tab {
+            background: #e52d27;
+            border-bottom: 4px solid #b31217;
+        }
+        .btn-video-tab:hover {
+            background: #ff0000;
+            color: white;
+        }
+
+        .table-container { width: 100%; border-radius: 15px; background: #1a102a; overflow-x: auto; margin-top: 20px; text-align: left; }
+        table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        th { background: var(--hero-purple-main); padding: 15px; text-align: left; font-family: 'Bangers'; font-size: 1.2rem; }
+        td { padding: 12px 15px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+        
+        .badge-group {
+            display: inline-block;
+            background: rgba(179, 157, 219, 0.2);
+            color: var(--hero-cyan);
+            border: 1px solid var(--hero-cyan);
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .content-section { display: none; animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* FLASHCARDS */
+        .controls { background: rgba(26, 16, 42, 0.8); padding: 20px; border-radius: 15px; border: 1px solid var(--hero-cyan); display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; align-items: center; margin-bottom: 30px; }
+        .controls label { font-family: 'Bangers'; font-size: 1.1rem; color: var(--hero-cyan); display: flex; align-items: center; gap: 5px; cursor: pointer; }
+        .controls select { background: #1a102a; color: white; border: 1px solid var(--hero-cyan); padding: 5px 10px; border-radius: 8px; font-family: 'Lexend'; }
+        
+        .flashcards-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 25px; margin-top: 20px; min-height: 300px; }
+        .card { width: 280px; height: 260px; perspective: 1000px; position: relative; transition: transform 0.4s, opacity 0.4s; }
+        .card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; cursor: pointer; }
+        .card.flipped .card-inner { transform: rotateY(180deg); }
+        .card-front, .card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 15px; box-sizing: border-box; border: 4px solid var(--hero-cyan); }
+        .card-front { background: var(--hero-purple-dark); color: white; font-size: 1.6rem; font-family: 'Bangers'; transition: border-color 0.3s, box-shadow 0.3s; }
+        .card-back { background: var(--hero-yellow); color: var(--dark-bg); transform: rotateY(180deg); font-size: 1.4rem; font-family: 'Bangers'; }
+        
+        .card-subtext { font-family: 'Lexend', sans-serif; font-size: 0.9rem; margin-top: 5px; font-weight: normal; }
+        .card-badge { position: absolute; top: 12px; right: 12px; font-size: 0.7rem; background: rgba(0,0,0,0.3); padding: 3px 8px; border-radius: 10px; font-family: 'Lexend'; color: white; }
+
+        /* KNOWN STATUS */
+        .known-btn {
+            margin-top: 15px;
+            background: rgba(0,0,0,0.1);
+            color: var(--dark-bg);
+            border: 2px solid var(--dark-bg);
+            padding: 8px 15px;
+            border-radius: 10px;
+            font-family: 'Lexend', sans-serif;
+            font-weight: bold;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .known-btn:hover { background: rgba(0,0,0,0.2); transform: scale(1.05); }
+        .card.is-known .card-front { border-color: var(--success-green); box-shadow: 0 0 15px rgba(46, 204, 113, 0.6); }
+
+        /* VIDEO EMBED CONTAINER */
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 3px solid var(--hero-cyan);
+            box-shadow: 0 0 30px rgba(0,0,0,0.7);
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* PICKLE GRID */
+        .pickle-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 25px; margin-top: 20px; }
+        .mission-card { background: #1a102a; border: 3px solid #3b2453; border-radius: 20px; padding: 25px; text-align: center; cursor: pointer; transition: 0.3s; width: 220px; display: flex; flex-direction: column; justify-content: space-between; }
+        .mission-card:hover { border-color: var(--hero-yellow); transform: translateY(-5px); }
+        .mission-card .title { font-family: 'Bangers'; font-size: 1.5rem; color: var(--hero-yellow); margin: 5px 0; }
+        .like-btn { background: rgba(255, 255, 255, 0.05); border: 2px solid var(--hero-cyan); border-radius: 10px; color: white; padding: 8px; margin-top: 15px; cursor: pointer; transition: 0.3s; font-family: 'Lexend', sans-serif; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .like-btn.liked { background: var(--thumb-up); border-color: white; }
+
+        /* EFFECTS */
+        .flash-effect { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; opacity: 0; pointer-events: none; z-index: 1999; }
+        .boom-text { position: fixed; pointer-events: none; font-family: 'Bangers', cursive; color: var(--hero-yellow); font-size: 4rem; z-index: 2001; text-shadow: 3px 3px 0px #000; animation: boomAnim 0.6s ease-out forwards; }
+        @keyframes boomAnim { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
+        .shake { animation: shake 0.2s ease-in-out; }
+        @keyframes shake { 0%, 100% { transform: translate(0,0); } 25% { transform: translate(-5px, 5px); } 50% { transform: translate(5px, -5px); } }
+        footer { text-align: center; padding: 40px; color: rgba(255,255,255,0.5); font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+<div class="flash-effect" id="flash"></div>
+
+<header>
+    <h1>ENGLIFORCE ACADEMY</h1>
+    <p>Irregular Verbs Practice</p>
+</header>
+
+<main>
+    <section class="briefing-box">
+        <h2>🚨 MISSION BRIEFING: IRREGULAR VERBS</h2>
+        <div class="explanation-text">
+            Select the <strong>groups</strong> you want to practice below. Click on any group to turn it on or off!
+        </div>
+    </section>
+
+    <!-- MULTI-SELECT GROUP FILTER -->
+    <div class="group-selection">
+        <h4>🎯 Choose your practice groups:</h4>
+        <p>Click a group to add or remove it from your practice session.</p>
+        
+        <div class="group-actions">
+            <button class="btn-group-action" onclick="selectAllGroups(true)">✅ Select all</button>
+            <button class="btn-group-action" onclick="selectAllGroups(false)">❌ Deselect all</button>
+        </div>
+
+        <div class="group-container">
+            <button class="btn-group" data-group="Group 1" onclick="toggleGroup('Group 1', event)">Group 1: All 3 forms same</button>
+            <button class="btn-group" data-group="Group 2" onclick="toggleGroup('Group 2', event)">Group 2: 1st & 2nd same</button>
+            <button class="btn-group" data-group="Group 3" onclick="toggleGroup('Group 3', event)">Group 3: 1st & 3rd same</button>
+            <button class="btn-group" data-group="Group 4a" onclick="toggleGroup('Group 4a', event)">Group 4a: 2nd & 3rd same (3 letters)</button>
+            <button class="btn-group" data-group="Group 4b" onclick="toggleGroup('Group 4b', event)">Group 4b: 2nd & 3rd same (4 letters)</button>
+            <button class="btn-group" data-group="Group 4c" onclick="toggleGroup('Group 4c', event)">Group 4c: 2nd & 3rd same (5 letters)</button>
+            <button class="btn-group" data-group="Group 5a" onclick="toggleGroup('Group 5a', event)">Group 5a: All different (2-3 letters)</button>
+            <button class="btn-group" data-group="Group 5b" onclick="toggleGroup('Group 5b', event)">Group 5b: All different (4 letters)</button>
+            <button class="btn-group" data-group="Group 5c" onclick="toggleGroup('Group 5c', event)">Group 5c: All different (5-6 letters)</button>
+        </div>
+    </div>
+
+    <!-- VIEW MODE TOGGLES -->
+    <div class="toggle-container">
+        <button class="btn-toggle active" onclick="showSection(event, 'vocab-list', 'ZAP!')">List Overview</button>
+        <button class="btn-toggle" onclick="showSection(event, 'flashcards-section', 'BOOST!')">Flashcards</button>
+        <button class="btn-toggle btn-video-tab" onclick="showSection(event, 'video-section', 'ACTION!')">📺 Watch Video Lesson</button>
+    </div>
+
+    <!-- TABLE OVERVIEW -->
+    <div id="vocab-list" class="content-section" style="display: block;">
+        <h3>Verb List Overview</h3>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Infinitive (1st form)</th>
+                        <th>Past Simple (2nd form)</th>
+                        <th>Past Participle (3rd form)</th>
+                        <th>Dutch Meaning</th>
+                        <th>Group</th>
+                    </tr>
+                </thead>
+                <tbody id="vocab-table-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- FLASHCARDS SECTION -->
+    <div id="flashcards-section" class="content-section">
+        <h3>Flashcard Practice</h3>
+        <div class="controls">
+            <label>Amount: 
+                <select id="card-count" onchange="generateCards()">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="all" selected>All selected</option>
+                </select>
+            </label>
+            <label><input type="checkbox" id="reverse-cards" onchange="generateCards()"> NL → EN</label>
+            <label style="color: var(--success-green);"><input type="checkbox" id="hide-known" onchange="generateCards()"> Hide learned words</label>
+            <button class="btn-toggle" onclick="resetKnown()" style="padding: 5px 12px; font-size: 0.9rem; background: #444;">Reset progress</button>
+            <button class="btn-toggle btn-action" onclick="generateCards()">Shuffle 🔄</button>
+        </div>
+        <div class="flashcards-container" id="flashcards-container"></div>
+    </div>
+
+    <!-- INTEGRATED VIDEO SECTION -->
+    <div id="video-section" class="content-section">
+        <h3>Video Lesson: Irregular Verbs Song</h3>
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/sk1TdBivuko" title="Irregular Verbs Song" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <h2>⚔️ PICKLE MISSIONS</h2>
+    <div class="pickle-grid">
+        <div class="mission-card" onclick="openPickle(event, 'm2t1_irregular_verbs_pickle_1.html', 'CRUNCH!')">
+            <div><div class="title">Pickle 1</div><p>...</p></div>
+            <button class="like-btn" onclick="toggleLike(event, this)">👍 Like!</button>
+        </div>
+        <div class="mission-card" onclick="openPickle(event, 'm2t1_irregular_verbs_pickle_2.html', 'SQUASH!')">
+            <div><div class="title">Pickle 2</div><p>...</p></div>
+            <button class="like-btn" onclick="toggleLike(event, this)">👍 Like!</button>
+        </div>
+        <div class="mission-card" onclick="openPickle(event, 'm2t1_irregular_verbs_pickle_3.html', 'KABOOM!')">
+            <div><div class="title">Pickle 3</div><p>...</p></div>
+            <button class="like-btn" onclick="toggleLike(event, this)">👍 Like!</button>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2026 EngliForce: Make English Your Superpower!</p>
+</footer>
+
+<script>
+    const verbsData = [
+        // Group 1: All 3 forms same
+        { inf: '(to) shut', past: 'shut', part: 'shut', nl: 'dichtdoen', group: 'Group 1' },
+        { inf: '(to) cost', past: 'cost', part: 'cost', nl: 'kosten', group: 'Group 1' },
+        { inf: '(to) let', past: 'let', part: 'let', nl: 'laten', group: 'Group 1' },
+        { inf: '(to) read', past: 'read', part: 'read', nl: 'lezen', group: 'Group 1' },
+        { inf: '(to) put', past: 'put', part: 'put', nl: '(neer)zetten', group: 'Group 1' },
+        { inf: '(to) hurt', past: 'hurt', part: 'hurt', nl: 'pijn doen', group: 'Group 1' },
+        { inf: '(to) hit', past: 'hit', part: 'hit', nl: 'slaan, raken', group: 'Group 1' },
+        { inf: '(to) cut', past: 'cut', part: 'cut', nl: 'snijden', group: 'Group 1' },
+        { inf: '(to) quit', past: 'quit', part: 'quit', nl: 'stoppen', group: 'Group 1' },
+        { inf: '(to) split', past: 'split', part: 'split', nl: 'uit elkaar gaan', group: 'Group 1' },
+
+        // Group 2: 1st & 2nd same
+        { inf: '(to) beat', past: 'beat', part: 'beaten', nl: '(ver)slaan', group: 'Group 2' },
+
+        // Group 3: 1st & 3rd same
+        { inf: '(to) come', past: 'came', part: 'come', nl: 'komen', group: 'Group 3' },
+        { inf: '(to) become', past: 'became', part: 'become', nl: 'worden', group: 'Group 3' },
+        { inf: '(to) run', past: 'ran', part: 'run', nl: 'rennen', group: 'Group 3' },
+
+        // Group 4a: 2nd & 3rd same (3 letters)
+        { inf: '(to) dig', past: 'dug', part: 'dug', nl: 'graven', group: 'Group 4a' },
+        { inf: '(to) get', past: 'got', part: 'got', nl: 'krijgen', group: 'Group 4a' },
+        { inf: '(to) lay', past: 'laid', part: 'laid', nl: 'leggen', group: 'Group 4a' },
+        { inf: '(to) pay', past: 'paid', part: 'paid', nl: 'betalen', group: 'Group 4a' },
+        { inf: '(to) say', past: 'said', part: 'said', nl: 'zeggen', group: 'Group 4a' },
+        { inf: '(to) sit', past: 'sat', part: 'sat', nl: 'zitten', group: 'Group 4a' },
+        { inf: '(to) win', past: 'won', part: 'won', nl: 'winnen', group: 'Group 4a' },
+        { inf: '(to) buy', past: 'bought', part: 'bought', nl: 'kopen', group: 'Group 4a' },
+
+        // Group 4b: 2nd & 3rd same (4 letters)
+        { inf: '(to) bend', past: 'bent', part: 'bent', nl: 'buigen', group: 'Group 4b' },
+        { inf: '(to) feel', past: 'felt', part: 'felt', nl: 'voelen', group: 'Group 4b' },
+        { inf: '(to) find', past: 'found', part: 'found', nl: 'vinden', group: 'Group 4b' },
+        { inf: '(to) hang', past: 'hung', part: 'hung', nl: 'hangen', group: 'Group 4b' },
+        { inf: '(to) have', past: 'had', part: 'had', nl: 'hebben', group: 'Group 4b' },
+        { inf: '(to) hear', past: 'heard', part: 'heard', nl: 'horen', group: 'Group 4b' },
+        { inf: '(to) hold', past: 'held', part: 'held', nl: 'vasthouden', group: 'Group 4b' },
+        { inf: '(to) keep', past: 'kept', part: 'kept', nl: 'houden', group: 'Group 4b' },
+        { inf: '(to) lead', past: 'led', part: 'led', nl: 'leiden', group: 'Group 4b' },
+        { inf: '(to) lend', past: 'lent', part: 'lent', nl: '(uit)lenen', group: 'Group 4b' },
+        { inf: '(to) lose', past: 'lost', part: 'lost', nl: 'verliezen', group: 'Group 4b' },
+        { inf: '(to) mean', past: 'meant', part: 'meant', nl: 'bedoelen', group: 'Group 4b' },
+        { inf: '(to) meet', past: 'met', part: 'met', nl: 'ontmoeten', group: 'Group 4b' },
+        { inf: '(to) sell', past: 'sold', part: 'sold', nl: 'verkopen', group: 'Group 4b' },
+        { inf: '(to) send', past: 'sent', part: 'sent', nl: 'zenden, versturen', group: 'Group 4b' },
+        { inf: '(to) make', past: 'made', part: 'made', nl: 'maken', group: 'Group 4b' },
+        { inf: '(to) tell', past: 'told', part: 'told', nl: 'vertellen', group: 'Group 4b' },
+
+        // Group 4c: 2nd & 3rd same (5 letters)
+        { inf: '(to) breed', past: 'bred', part: 'bred', nl: 'fokken', group: 'Group 4c' },
+        { inf: '(to) bring', past: 'brought', part: 'brought', nl: 'brengen', group: 'Group 4c' },
+        { inf: '(to) build', past: 'built', part: 'built', nl: 'bouwen', group: 'Group 4c' },
+        { inf: '(to) catch', past: 'caught', part: 'caught', nl: 'pakken, vangen', group: 'Group 4c' },
+        { inf: '(to) dream', past: 'dreamt', part: 'dreamt', nl: 'dromen', group: 'Group 4c' },
+        { inf: '(to) fight', past: 'fought', part: 'fought', nl: 'vechten', group: 'Group 4c' },
+        { inf: '(to) learn', past: 'learnt', part: 'learnt', nl: 'leren', group: 'Group 4c' },
+        { inf: '(to) leave', past: 'left', part: 'left', nl: 'verlaten, vertrekken', group: 'Group 4c' },
+        { inf: '(to) smell', past: 'smelt', part: 'smelt', nl: 'ruiken', group: 'Group 4c' },
+        { inf: '(to) spend', past: 'spent', part: 'spent', nl: 'doorbrengen, uitgeven', group: 'Group 4c' },
+        { inf: '(to) stand', past: 'stood', part: 'stood', nl: 'staan', group: 'Group 4c' },
+        { inf: '(to) stick', past: 'stuck', part: 'stuck', nl: 'vastzitten', group: 'Group 4c' },
+        { inf: '(to) sting', past: 'stung', part: 'stung', nl: 'steken', group: 'Group 4c' },
+        { inf: '(to) sweep', past: 'swept', part: 'swept', nl: 'vegen', group: 'Group 4c' },
+        { inf: '(to) teach', past: 'taught', part: 'taught', nl: 'lesgeven', group: 'Group 4c' },
+        { inf: '(to) think', past: 'thought', part: 'thought', nl: 'denken', group: 'Group 4c' },
+        { inf: '(to) sleep', past: 'slept', part: 'slept', nl: 'slapen', group: 'Group 4c' },
+
+        // Group 5a: All different (2-3 letters)
+        { inf: '(to) do', past: 'did', part: 'done', nl: 'doen, maken', group: 'Group 5a' },
+        { inf: '(to) go', past: 'went', part: 'gone', nl: 'gaan', group: 'Group 5a' },
+        { inf: '(to) be', past: 'was/were', part: 'been', nl: 'zijn', group: 'Group 5a' },
+        { inf: '(to) eat', past: 'ate', part: 'eaten', nl: 'eten', group: 'Group 5a' },
+        { inf: '(to) see', past: 'saw', part: 'seen', nl: 'zien', group: 'Group 5a' },
+        { inf: '(to) fly', past: 'flew', part: 'flown', nl: 'vliegen', group: 'Group 5a' },
+        { inf: '(to) lie', past: 'lay', part: 'lain', nl: 'liggen', group: 'Group 5a' },
+
+        // Group 5b: All different (4 letters)
+        { inf: '(to) beat', past: 'beat', part: 'beaten', nl: '(ver)slaan', group: 'Group 5b' },
+        { inf: '(to) bite', past: 'bit', part: 'bitten', nl: 'bijten', group: 'Group 5b' },
+        { inf: '(to) blow', past: 'blew', part: 'blown', nl: 'blazen', group: 'Group 5b' },
+        { inf: '(to) draw', past: 'drew', part: 'drawn', nl: 'tekenen', group: 'Group 5b' },
+        { inf: '(to) fall', past: 'fell', part: 'fallen', nl: 'vallen', group: 'Group 5b' },
+        { inf: '(to) give', past: 'gave', part: 'given', nl: 'geven', group: 'Group 5b' },
+        { inf: '(to) grow', past: 'grew', part: 'grown', nl: 'groeien', group: 'Group 5b' },
+        { inf: '(to) know', past: 'knew', part: 'known', nl: 'weten', group: 'Group 5b' },
+        { inf: '(to) ring', past: 'rang', part: 'rung', nl: 'bellen', group: 'Group 5b' },
+        { inf: '(to) ride', past: 'rode', part: 'ridden', nl: 'rijden (fiets/paard)', group: 'Group 5b' },
+        { inf: '(to) sing', past: 'sang', part: 'sung', nl: 'zingen', group: 'Group 5b' },
+        { inf: '(to) sink', past: 'sank', part: 'sunk', nl: 'zinken', group: 'Group 5b' },
+        { inf: '(to) swim', past: 'swam', part: 'swum', nl: 'zwemmen', group: 'Group 5b' },
+        { inf: '(to) take', past: 'took', part: 'taken', nl: 'nemen', group: 'Group 5b' },
+        { inf: '(to) tear', past: 'tore', part: 'torn', nl: 'scheuren', group: 'Group 5b' },
+        { inf: '(to) wear', past: 'wore', part: 'worn', nl: 'dragen', group: 'Group 5b' },
+
+        // Group 5c: All different (5-6 letters)
+        { inf: '(to) begin', past: 'began', part: 'begun', nl: 'beginnen', group: 'Group 5c' },
+        { inf: '(to) break', past: 'broke', part: 'broken', nl: 'breken', group: 'Group 5c' },
+        { inf: '(to) choose', past: 'chose', part: 'chosen', nl: 'kiezen', group: 'Group 5c' },
+        { inf: '(to) drink', past: 'drank', part: 'drunk', nl: 'drinken', group: 'Group 5c' },
+        { inf: '(to) drive', past: 'drove', part: 'driven', nl: 'rijden (auto)', group: 'Group 5c' },
+        { inf: '(to) forget', past: 'forgot', part: 'forgotten', nl: 'vergeten', group: 'Group 5c' },
+        { inf: '(to) freeze', past: 'froze', part: 'frozen', nl: 'bevriezen', group: 'Group 5c' },
+        { inf: '(to) speak', past: 'spoke', part: 'spoken', nl: 'spreken', group: 'Group 5c' },
+        { inf: '(to) steal', past: 'stole', part: 'stolen', nl: 'stelen', group: 'Group 5c' },
+        { inf: '(to) throw', past: 'threw', part: 'thrown', nl: 'gooien', group: 'Group 5c' },
+        { inf: '(to) write', past: 'wrote', part: 'written', nl: 'schrijven', group: 'Group 5c' },
+        { inf: '(to) wake (up)', past: 'woke (up)', part: 'woken (up)', nl: 'wakker worden', group: 'Group 5c' }
+    ];
+
+    const ALL_GROUPS = ['Group 1', 'Group 2', 'Group 3', 'Group 4a', 'Group 4b', 'Group 4c', 'Group 5a', 'Group 5b', 'Group 5c'];
+    let selectedGroups = [];
+    let knownWords = JSON.parse(localStorage.getItem('engliforce_verbs_known')) || [];
+
+    function init() {
+        renderTable();
+        generateCards();
+    }
+
+    function getFilteredVerbs() {
+        return verbsData.filter(v => selectedGroups.includes(v.group));
+    }
+
+    function toggleGroup(groupName, e) {
+        const index = selectedGroups.indexOf(groupName);
+        if (index > -1) {
+            selectedGroups.splice(index, 1);
+        } else {
+            selectedGroups.push(groupName);
+        }
+        
+        updateGroupButtonsUI();
+        createExplosion(e, index > -1 ? 'REMOVED!' : 'ADDED!');
+        renderTable();
+        generateCards();
+    }
+
+    function selectAllGroups(select) {
+        if (select) {
+            selectedGroups = [...ALL_GROUPS];
+        } else {
+            selectedGroups = [];
+        }
+        updateGroupButtonsUI();
+        renderTable();
+        generateCards();
+    }
+
+    function updateGroupButtonsUI() {
+        document.querySelectorAll('.btn-group[data-group]').forEach(btn => {
+            const groupName = btn.getAttribute('data-group');
+            if (selectedGroups.includes(groupName)) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+    }
+
+    function renderTable() {
+        const vBody = document.getElementById('vocab-table-body');
+        const data = getFilteredVerbs();
+        vBody.innerHTML = '';
+        
+        if (data.length === 0) {
+            vBody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 20px; color: var(--hero-yellow);">No groups selected. Choose at least one group above!</td></tr>`;
+            return;
+        }
+
+        data.forEach(item => {
+            vBody.innerHTML += `
+                <tr>
+                    <td><strong>${item.inf}</strong></td>
+                    <td>${item.past}</td>
+                    <td>${item.part}</td>
+                    <td>${item.nl}</td>
+                    <td><span class="badge-group">${item.group}</span></td>
+                </tr>`;
+        });
+    }
+
+    function generateCards() {
+        const container = document.getElementById('flashcards-container');
+        const countSelect = document.getElementById('card-count');
+        const reversed = document.getElementById('reverse-cards').checked;
+        const hideKnown = document.getElementById('hide-known').checked;
+        
+        container.innerHTML = '';
+        let filteredData = getFilteredVerbs();
+
+        if (selectedGroups.length === 0) {
+            container.innerHTML = "<p style='font-family:Bangers; font-size:1.5rem; color:var(--hero-yellow); margin-top:30px;'>No groups selected. Choose at least one group above!</p>";
+            return;
+        }
+
+        if (hideKnown) {
+            filteredData = filteredData.filter(v => !knownWords.includes(v.inf));
+        }
+
+        let count = countSelect.value === "all" ? filteredData.length : parseInt(countSelect.value);
+        let data = [...filteredData].sort(() => 0.5 - Math.random()).slice(0, count);
+
+        if (data.length === 0) {
+            container.innerHTML = "<p style='font-family:Bangers; font-size:1.5rem; color:var(--hero-yellow); margin-top:30px;'>No verbs available (all verbs in your selection are marked as learned).</p>";
+            return;
+        }
+
+        data.forEach(item => {
+            const isKnown = knownWords.includes(item.inf);
+            const cardWrap = document.createElement('div'); 
+            cardWrap.className = `card ${isKnown ? 'is-known' : ''}`;
+            
+            const inner = document.createElement('div'); 
+            inner.className = 'card-inner';
+            inner.onclick = () => cardWrap.classList.toggle('flipped');
+
+            const front = document.createElement('div'); 
+            front.className = 'card-front';
+            front.innerHTML = `
+                <span class="card-badge">${item.group}</span>
+                <div>${reversed ? item.nl : item.inf}</div>
+                <div class="card-subtext">${reversed ? 'Click for English' : 'Click for past forms'}</div>
+            `;
+
+            const back = document.createElement('div'); 
+            back.className = 'card-back';
+            back.innerHTML = `
+                <span class="card-badge">${item.group}</span>
+                <div>${reversed ? `${item.inf}` : `${item.past} | ${item.part}`}</div>
+                <div class="card-subtext">${reversed ? `${item.past} | ${item.part}` : item.nl}</div>
+            `;
+
+            const kBtn = document.createElement('button');
+            kBtn.className = 'known-btn';
+            updateBtnStyle(kBtn, isKnown);
+            kBtn.onclick = (e) => {
+                e.stopPropagation();
+                toggleKnown(e, item.inf, cardWrap, kBtn);
+            };
+
+            back.appendChild(kBtn);
+            inner.appendChild(front); 
+            inner.appendChild(back);
+            cardWrap.appendChild(inner);
+            container.appendChild(cardWrap);
+        });
+    }
+
+    function toggleKnown(e, verbInf, cardElem, btn) {
+        const index = knownWords.indexOf(verbInf);
+        const hideKnown = document.getElementById('hide-known').checked;
+
+        if (index === -1) {
+            knownWords.push(verbInf);
+            createExplosion(e, 'CHECK!');
+            if (hideKnown) {
+                cardElem.style.transform = 'scale(0)';
+                cardElem.style.opacity = '0';
+                setTimeout(() => generateCards(), 400);
+            } else {
+                cardElem.classList.add('is-known');
+                updateBtnStyle(btn, true);
+            }
+        } else {
+            knownWords.splice(index, 1);
+            createExplosion(e, 'RESET!');
+            cardElem.classList.remove('is-known');
+            updateBtnStyle(btn, false);
+        }
+        localStorage.setItem('engliforce_verbs_known', JSON.stringify(knownWords));
+    }
+
+    function updateBtnStyle(btn, isKnown) {
+        if (isKnown) {
+            btn.innerHTML = '✅ Learned';
+            btn.style.background = 'var(--success-green)';
+            btn.style.color = 'white';
+            btn.style.borderColor = 'white';
+        } else {
+            btn.innerHTML = '✔️ I know this';
+            btn.style.background = 'rgba(0,0,0,0.1)';
+            btn.style.color = 'var(--dark-bg)';
+            btn.style.borderColor = 'var(--dark-bg)';
+        }
+    }
+
+    function resetKnown() {
+        if(confirm("Do you want to reset your progress?")) {
+            knownWords = [];
+            localStorage.removeItem('engliforce_verbs_known');
+            generateCards();
+        }
+    }
+
+    function toggleLike(e, btn) {
+        e.stopPropagation();
+        btn.classList.toggle('liked');
+        btn.innerText = btn.classList.contains('liked') ? "👍 Liked!" : "👍 Like!";
+        if(btn.classList.contains('liked')) createExplosion(e, 'AWESOME!');
+    }
+
+    function openPickle(e, url, msg) {
+        createExplosion(e, msg);
+        setTimeout(() => window.open(url, '_blank'), 400);
+    }
+
+    function showSection(e, id, msg) {
+        document.querySelectorAll('.content-section').forEach(s => s.style.display = 'none');
+        document.querySelectorAll('.btn-toggle').forEach(b => b.classList.remove('active'));
+        document.getElementById(id).style.display = 'block';
+        if (e && e.target) e.target.classList.add('active');
+        createExplosion(e, msg);
+    }
+
+    function createExplosion(e, message) {
+        const x = (e && e.clientX) ? e.clientX : window.innerWidth/2; 
+        const y = (e && e.clientY) ? e.clientY : window.innerHeight/2;
+        const flash = document.getElementById('flash');
+        flash.style.opacity = '0.3'; 
+        document.body.classList.add('shake');
+        setTimeout(() => { flash.style.opacity = '0'; document.body.classList.remove('shake'); }, 200);
+        const txt = document.createElement('div'); 
+        txt.className = 'boom-text'; 
+        txt.innerText = message;
+        txt.style.left = (x - 50) + 'px'; 
+        txt.style.top = (y - 50) + 'px';
+        document.body.appendChild(txt); 
+        setTimeout(() => txt.remove(), 600);
+    }
+
+    window.onload = init;
+</script>
+</body>
+</html>
