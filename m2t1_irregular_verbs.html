@@ -53,11 +53,14 @@
             text-align: left;
         }
         .explanation-text {
-            font-size: 1.1rem; line-height: 1.6; margin-bottom: 20px;
+            font-size: 1rem; line-height: 1.6; margin-bottom: 20px;
             border-left: 4px solid var(--hero-orange); padding-left: 20px;
             background: rgba(255, 87, 34, 0.05); padding-top: 10px; padding-bottom: 10px;
         }
-        
+        .explanation-text p { margin-top: 0; margin-bottom: 10px; }
+        .explanation-text ul { margin: 10px 0; padding-left: 20px; }
+        .explanation-text li { margin-bottom: 8px; }
+
         /* MULTI-SELECT GROUP FILTER */
         .group-selection {
             background: rgba(15, 10, 26, 0.85);
@@ -132,9 +135,20 @@
             color: white;
         }
 
+        /* TABLE OVERVIEW */
         .table-container { width: 100%; border-radius: 15px; background: #1a102a; overflow-x: auto; margin-top: 20px; text-align: left; }
         table { width: 100%; border-collapse: collapse; min-width: 600px; }
-        th { background: var(--hero-purple-main); padding: 15px; text-align: left; font-family: 'Bangers'; font-size: 1.2rem; }
+        th { 
+            background: var(--hero-purple-main); 
+            padding: 15px; 
+            text-align: left; 
+            font-family: 'Lexend', sans-serif; 
+            font-weight: 700; 
+            font-size: 1.05rem; 
+            letter-spacing: 0.5px;
+            color: white;
+            text-transform: uppercase;
+        }
         td { padding: 12px 15px; border-bottom: 1px solid rgba(255,255,255,0.1); }
         tr:nth-child(even) { background: rgba(255,255,255,0.02); }
         
@@ -185,18 +199,43 @@
         .known-btn:hover { background: rgba(0,0,0,0.2); transform: scale(1.05); }
         .card.is-known .card-front { border-color: var(--success-green); box-shadow: 0 0 15px rgba(46, 204, 113, 0.6); }
 
-        /* VIDEO EMBED CONTAINER */
+        /* 2x2 VIDEO GRID */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            max-width: 1000px;
+            margin: 20px auto;
+        }
+        @media (max-width: 768px) {
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .video-card {
+            background: rgba(26, 16, 42, 0.9);
+            border: 2px solid var(--hero-cyan);
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .video-card h4 {
+            font-family: 'Bangers', cursive;
+            color: var(--hero-yellow);
+            font-size: 1.4rem;
+            margin: 0 0 10px 0;
+        }
         .video-container {
             position: relative;
             width: 100%;
-            max-width: 800px;
-            margin: 20px auto;
             padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
             height: 0;
-            border-radius: 20px;
+            border-radius: 10px;
             overflow: hidden;
-            border: 3px solid var(--hero-cyan);
-            box-shadow: 0 0 30px rgba(0,0,0,0.7);
+            border: 2px solid var(--hero-cyan);
         }
         .video-container iframe {
             position: absolute;
@@ -237,7 +276,22 @@
     <section class="briefing-box">
         <h2>🚨 MISSION BRIEFING: IRREGULAR VERBS</h2>
         <div class="explanation-text">
-            Select the <strong>groups</strong> you want to practice below. Click on any group to turn it on or off!
+            <p><strong>Waarom zijn onregelmatige werkwoorden zo belangrijk?</strong><br>
+            In het Engels krijgen regelmatige werkwoorden simpelweg <em>-ed</em> in de verleden tijd (zoals <em>walk → walked</em>). Onregelmatige werkwoorden volgen deze regel <strong>niet</strong>. Omdat de meest gebruikte werkwoorden in het Engels onregelmatig zijn (zoals <em>go, see, have, do</em>), moet je ze uit je hoofd leren om vloeiend en correct Engels te kunnen spreken en schrijven!</p>
+            
+            <p><strong>Hoe werken de 3 verschillende vormen?</strong></p>
+            <ul>
+                <li><strong>1st Form (Infinitive / Hele werkwoord):</strong> Gebruik je voor de tegenwoordige tijd (<em>Present Simple</em>) of na hulpwerkwoorden.<br>
+                👉 <em>Voorbeeld:</em> I <strong>go</strong> to school every day. / I will <strong>see</strong> you tomorrow.</li>
+
+                <li><strong>2nd Form (Past Simple / Verleden tijd):</strong> Gebruik je voor acties die in het verleden zijn gebeurd en helemaal zijn afgerond.<br>
+                👉 <em>Voorbeeld:</em> Yesterday I <strong>went</strong> to school. / I <strong>saw</strong> a great movie last night.</li>
+
+                <li><strong>3rd Form (Past Participle / Voltooid deelwoord):</strong> Gebruik je voor voltooide tijden (gecombineerd met <em>have / has / had</em>) en bij passieve zinnen.<br>
+                👉 <em>Voorbeeld:</em> I have <strong>gone</strong> home. / She has <strong>seen</strong> that film already.</li>
+            </ul>
+
+            <p style="margin-bottom:0; color: var(--hero-yellow);"><strong>🎯 Klaar voor actie?</strong> Selecteer hieronder de groepen die je wilt oefenen door erop te klikken!</p>
         </div>
     </section>
 
@@ -268,7 +322,7 @@
     <div class="toggle-container">
         <button class="btn-toggle active" onclick="showSection(event, 'vocab-list', 'ZAP!')">List Overview</button>
         <button class="btn-toggle" onclick="showSection(event, 'flashcards-section', 'BOOST!')">Flashcards</button>
-        <button class="btn-toggle btn-video-tab" onclick="showSection(event, 'video-section', 'ACTION!')">📺 Watch Video Lesson</button>
+        <button class="btn-toggle btn-video-tab" onclick="showSection(event, 'video-section', 'ACTION!')">📺 Videos</button>
     </div>
 
     <!-- TABLE OVERVIEW -->
@@ -310,11 +364,34 @@
         <div class="flashcards-container" id="flashcards-container"></div>
     </div>
 
-    <!-- INTEGRATED VIDEO SECTION -->
+    <!-- INTEGRATED VIDEO SECTION (2x2 GRID) -->
     <div id="video-section" class="content-section">
-        <h3>Video Lesson: Irregular Verbs Song</h3>
-        <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/sk1TdBivuko" title="Irregular Verbs Song" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <h3>Videos: Irregular Verb Raps</h3>
+        <div class="video-grid">
+            <div class="video-card">
+                <h4>Irregular Verbs: Group 1 - 3</h4>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/_EVNs67sBco" title="Irregular Verbs Group 1 - 3" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+            <div class="video-card">
+                <h4>Irregular Verbs: Group 4</h4>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/kWHJS0bnr3o" title="Irregular Verbs Group 4" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+            <div class="video-card">
+                <h4>Irregular Verbs: Group 5</h4>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/Vz89pTB8GMc" title="Irregular Verbs Group 5" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+            <div class="video-card">
+                <h4>Irregular Verbs: Complete Song</h4>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/sk1TdBivuko" title="Irregular Verbs Song" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
         </div>
     </div>
 
