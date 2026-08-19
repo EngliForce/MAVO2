@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EngliForce Academy: Mission 1 - History</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Lexend:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hero-orange-main: #ff7043;
+            --hero-orange-dark: #e65c30;
+            --hero-orange-glow: rgba(255, 112, 67, 0.4);
+            --hero-yellow: #ffb703;
+            --dark-bg: #0b1a2a;
+            --card-bg: #102a43;
+            --card-border: #243b53;
+            --card-bg-done: #05101a;
+        }
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: radial-gradient(circle at center, #102a43 0%, #05101a 100%);
+            color: white;
+            margin: 0;
+            min-height: 100vh;
+        }
+        header {
+            background: var(--hero-orange-main);
+            padding: 2.5rem 1rem;
+            text-align: center;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            border-bottom: 5px solid var(--hero-yellow);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            color: white;
+        }
+        h1 { font-family: 'Bangers', cursive; font-size: 3.5rem; letter-spacing: 3px; margin: 0; text-shadow: 4px 4px 0px var(--hero-orange-dark); }
+        header p { font-size: 1.2rem; font-weight: bold; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        main { max-width: 1000px; margin: 20px auto; padding: 20px; }
+        .section-title { font-family: 'Bangers', cursive; font-size: 2.8rem; color: var(--hero-orange-main); margin: 0; text-transform: uppercase; letter-spacing: 2px; text-align: center; }
+        
+        /* Flexibel grid voor Vocab */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; margin-top: 30px; }
+        
+        /* 3-koloms grid voor Grammar (2x3 grid bij 6 items) */
+        .grammar-grid { grid-template-columns: repeat(3, 1fr); }
+        
+        .card {
+            background: var(--card-bg);
+            border: 3px solid var(--card-border);
+            border-radius: 20px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: white;
+            position: relative;
+            cursor: pointer;
+        }
+        .card:hover { border-color: var(--hero-orange-main); transform: translateY(-8px); box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+        .card-header { display: flex; justify-content: center; margin-bottom: 10px; }
+        .power-icon { font-size: 2rem; background: rgba(255,255,255,0.05); width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
+        .name { font-weight: bold; font-size: 1.1rem; margin-bottom: 5px; color: #f8fafc; text-align: center; }
+        .desc { font-size: 0.85rem; color: #94a3b8; flex-grow: 1; text-align: center; margin-bottom: 15px; }
+        .btn { background: var(--card-border); border: none; color: white; padding: 10px; border-radius: 10px; cursor: pointer; font-family: 'Bangers', cursive; font-size: 1rem; transition: 0.3s; }
+        .card.done { border-color: var(--hero-orange-main); background: var(--card-bg-done); box-shadow: 0 0 20px var(--hero-orange-glow); }
+        .card.done .btn { background: var(--hero-orange-main); }
+        .star { position: fixed; pointer-events: none; font-size: 3rem; z-index: 1000; animation: starFly 0.8s forwards; }
+        @keyframes starFly { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(2) translateY(-150px); opacity: 0; } }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>ENGLIFORCE ACADEMY</h1>
+        <p>MISSION 1: HISTORY</p>
+    </header>
+    <main>
+        <h2 class="section-title">🧠 VOCAB TRAINING</h2>
+        <div class="grid" id="vocab-grid"></div>
+        
+        <div style="height: 4px; background: linear-gradient(90deg, transparent, #ff7043, transparent); margin: 60px 0 20px 0;"></div>
+        
+        <h2 class="section-title">📋 GRAMMAR BRIEFING</h2>
+        <div class="grid grammar-grid" id="grammar-grid"></div>
+    </main>
+
+    <footer>
+        <p style="text-align: center; opacity: 0.5; padding: 60px 0;">
+            &copy; 2026 EngliForce – Make English Your Superpower!
+        </p>
+    </footer>
+
+    <script>
+        const vocabData = [
+            { id: 't1v1', name: 'Life Through the Ages', desc: 'Step back in time and discover how teenagers lived in the past.', icon: '⏳', url: 'm2t1_vocabulary_1_1.html' },
+            { id: 't1v2', name: 'Famous Historical Heroes & Villains', desc: 'Meet the legends and villains who shaped our world.', icon: '👑', url: 'm2t1_vocabulary_1_2.html' },
+            { id: 't1v3', name: 'Great Inventions & Discoveries', desc: 'Explore the brilliant ideas that changed human history forever.', icon: '💡', url: 'm2t1_vocabulary_1_3.html' },
+            { id: 't1v4', name: 'Disasters & Turning Points', desc: 'Uncover the tragic events that altered the course of history.', icon: '🔥', url: 'm2t1_vocabulary_1_4.html' },
+            { id: 't1v5', name: 'All Vocab', desc: 'Vocabulary tester.', icon: '📝', url: 'm2t1_vocabulary_all.html' }
+        ];
+        const grammarData = [
+            { id: 't1g1', name: 'Irregular Verbs', desc: 'Onregelmatige werkwoorden', icon: '🔀', url: 'm2t1_irregular_verbs.html' },
+            { id: 't1g2', name: 'Past Simple', desc: 'Verleden tijd', icon: '⏪', url: 'm2t1_past_simple.html' },
+            { id: 't1g4', name: 'Wh-questions', desc: 'Vraagwoorden', icon: '❓', url: 'm2t1_question_words.html' },
+            { id: 't1g5', name: 'Past Continuous', desc: 'Verleden tijd duurvorm', icon: '🔄', url: 'm2t1_past_continuous.html' },
+            { id: 't1g6', name: 'Much / many / little / few', desc: 'Hoeveelheid', icon: '⚖️', url: 'm2t1_quantifiers.html' },
+            { id: 't1g7', name: 'Present Perfect', desc: 'Voltooide tijd', icon: '↔️', url: 'm2t1_present perfect.html' }
+        ];
+        function createCard(item, gridId) {
+            const grid = document.getElementById(gridId);
+            const card = document.createElement('a');
+            card.className = 'card';
+            card.id = item.id;
+            card.href = item.url;
+            card.innerHTML = `
+                <div class="card-header"><div class="power-icon">${item.icon}</div></div>
+                <div class="name">${item.name}</div>
+                <div class="desc">${item.desc}</div>
+                <button class="btn" onclick="completeTask(event, '${item.id}')">ACHIEVED</button>
+            `;
+            grid.appendChild(card);
+        }
+        vocabData.forEach(i => createCard(i, 'vocab-grid'));
+        grammarData.forEach(i => createCard(i, 'grammar-grid'));
+        function completeTask(event, id) {
+            event.preventDefault();
+            event.stopPropagation();
+            const card = document.getElementById(id);
+            const isDone = card.classList.toggle('done');
+            const saved = JSON.parse(localStorage.getItem('hero_progress_t1') || '{}');
+            saved[id] = isDone;
+            localStorage.setItem('hero_progress_t1', JSON.stringify(saved));
+            if(isDone) {
+                confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 }, colors: ['#ff7043', '#ffb703', '#ffffff'] });
+                const s = document.createElement('div'); s.className = 'star'; s.innerHTML = '⚡';
+                s.style.left = event.clientX + 'px'; s.style.top = event.clientY + 'px';
+                document.body.appendChild(s); setTimeout(() => s.remove(), 800);
+            }
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const saved = JSON.parse(localStorage.getItem('hero_progress_t1') || '{}');
+            Object.keys(saved).forEach(id => {
+                const el = document.getElementById(id);
+                if(el && saved[id]) el.classList.add('done');
+            });
+        });
+    </script>
+</body>
+</html>
