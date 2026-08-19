@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EngliForce Academy: WH-Words Whack It Zone</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Lexend:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hero-purple-main: #7b2cbf;
+            --hero-purple-dark: #3c096c;
+            --hero-yellow: #ffb703;
+            --hero-cyan: #00f5d4;
+            --hero-red: #d32f2f;
+            --hero-red-dark: #b71c1c;
+            --header-bg: #ff7043;
+            --header-border: var(--hero-yellow);
+        }
+        html, body { 
+            font-family: 'Lexend', sans-serif; 
+            background: #05101a; 
+            background: radial-gradient(circle at center, #1a102a 0%, #05101a 100%); 
+            color: white; 
+            margin: 0; 
+            height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            overflow: hidden; 
+            box-sizing: border-box;
+        }
+        *, *::before, *::after { box-sizing: border-box; }
+        
+        header { 
+            background: var(--header-bg); 
+            padding: 0.6rem 1rem; 
+            text-align: center; 
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%); 
+            border-bottom: 4px solid var(--header-border); 
+            flex-shrink: 0;
+        }
+        h1 { 
+            font-family: 'Bangers', cursive; 
+            font-size: 1.8rem; 
+            letter-spacing: 2px; 
+            margin: 0; 
+            text-shadow: 3px 3px 0px var(--hero-purple-dark); 
+        }
+        header p { margin: 2px 0 0 0; font-size: 0.8rem; font-weight: bold; }
+        
+        main { 
+            max-width: 800px; 
+            margin: 6px auto; 
+            padding: 0 15px; 
+            flex: 1; 
+            width: 100%; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between;
+        }
+        
+        .briefing-box { 
+            background: rgba(26, 16, 42, 0.9); 
+            border: 2px solid var(--hero-cyan); 
+            border-radius: 12px; 
+            padding: 6px 16px; 
+            flex-shrink: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .briefing-content h2 {
+            margin: 0 0 2px 0;
+            font-family: 'Bangers', cursive;
+            font-size: 1.05rem;
+            color: var(--hero-yellow);
+            letter-spacing: 1px;
+        }
+        .explanation-text { 
+            font-size: 0.9rem; 
+            line-height: 1.3; 
+            margin: 0; 
+            border-left: 3px solid var(--hero-cyan); 
+            padding-left: 10px; 
+            background: rgba(0, 245, 212, 0.05); 
+        }
+        .highlight { color: var(--hero-cyan); font-weight: bold; }
+        
+        .game-stats {
+            display: flex;
+            justify-content: space-around;
+            background: #1a102a;
+            border: 2px solid var(--hero-yellow);
+            border-radius: 10px;
+            padding: 5px;
+            font-family: 'Bangers', cursive;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            align-items: center;
+        }
+        .stat-item span { color: var(--hero-yellow); }
+        
+        .quiz-card {
+            background: #1a102a;
+            border: 3px solid var(--hero-purple-dark);
+            border-radius: 15px;
+            padding: 10px 20px;
+            position: relative;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin: 4px 0;
+        }
+
+        .question-title {
+            font-family: 'Bangers', cursive;
+            font-size: 1.1rem;
+            color: var(--hero-yellow);
+            margin-bottom: 2px;
+            letter-spacing: 1px;
+        }
+        .sentence-box {
+            font-size: 1.1rem;
+            background: rgba(0,0,0,0.3);
+            padding: 8px 15px;
+            border-radius: 10px;
+            margin-bottom: 4px;
+            border-left: 4px solid var(--hero-purple-main);
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        
+        .moles-container {
+            position: relative;
+            flex: 1;
+            min-height: 220px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            border: 2px dashed rgba(123, 44, 191, 0.4);
+            margin: 4px 0;
+        }
+
+        .hole {
+            background: #12091f;
+            border: 3px solid var(--hero-purple-dark);
+            border-radius: 50% / 30%;
+            width: 130px;
+            height: 65px;
+            position: absolute;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            box-shadow: inset 0 8px 8px rgba(0,0,0,0.8);
+        }
+
+        .mole {
+            background: var(--hero-purple-main);
+            color: white;
+            border: 3px solid var(--hero-yellow);
+            border-radius: 12px 12px 0 0;
+            width: 85%;
+            height: 0%;
+            position: absolute;
+            bottom: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Bangers', cursive;
+            font-size: 1.25rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: height 0.15s ease-in-out;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.5);
+            user-select: none;
+        }
+
+        .hole.active .mole {
+            height: 95%;
+        }
+
+        .mole:hover {
+            background: var(--hero-cyan);
+            color: var(--hero-purple-dark);
+        }
+
+        .mole.hit {
+            background: #2e7d32 !important;
+            border-color: #1b5e20 !important;
+        }
+
+        .mole.wrong {
+            background: var(--hero-red) !important;
+            border-color: var(--hero-red-dark) !important;
+        }
+        
+        .feedback-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 35px;
+            gap: 2px;
+        }
+        .feedback-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+        .feedback-msg {
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+        .explanation-msg {
+            font-size: 0.85rem;
+            color: var(--hero-yellow);
+            display: none;
+        }
+        
+        .btn-action {
+            background: var(--hero-yellow);
+            color: var(--hero-purple-dark);
+            border: none;
+            padding: 5px 18px;
+            border-radius: 50px;
+            font-family: 'Bangers', cursive;
+            font-size: 1.05rem;
+            cursor: pointer;
+            border-bottom: 4px solid #d99a00;
+            transition: 0.15s;
+        }
+        .btn-action:hover {
+            transform: translateY(-2px);
+            background: var(--hero-cyan);
+        }
+
+        .btn-start {
+            background: var(--hero-cyan);
+            color: var(--hero-purple-dark);
+            border: none;
+            padding: 7px 18px;
+            border-radius: 50px;
+            font-family: 'Bangers', cursive;
+            font-size: 1.1rem;
+            cursor: pointer;
+            border-bottom: 4px solid #00b4d8;
+            transition: 0.15s;
+            margin-left: 15px;
+            white-space: nowrap;
+        }
+        .btn-start:hover {
+            transform: translateY(-2px);
+            background: var(--hero-yellow);
+            border-bottom-color: #d99a00;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(5, 16, 26, 0.95);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+        .modal-content {
+            background: #1a102a;
+            border: 4px solid var(--hero-yellow);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            max-width: 420px;
+            width: 90%;
+        }
+        .modal-content h2 {
+            font-family: 'Bangers', cursive;
+            font-size: 2.2rem;
+            color: var(--hero-yellow);
+            margin-top: 0;
+            text-shadow: 2px 2px 0px var(--hero-purple-dark);
+        }
+        .modal-content p {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        footer { 
+            text-align: center; 
+            padding: 4px; 
+            background: rgba(0,0,0,0.3); 
+            font-family: 'Bangers', cursive; 
+            font-size: 0.85rem; 
+            flex-shrink: 0;
+        }
+        .footer-highlight { color: var(--hero-yellow); }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>ENGLIFORCE ACADEMY</h1>
+        <p>WH-WORDS WHACK IT ZONE</p>
+    </header>
+    <main>
+        <section class="briefing-box">
+            <div class="briefing-content">
+                <h2>🚨 MISSION INSTRUCTION</h2>
+                <div class="explanation-text">
+                    <p>Whack the correct <span class="highlight">WH-word mole</span> before it hides! Each mole appears for 3 seconds.</p>
+                </div>
+            </div>
+            <button class="btn-start" onclick="startNewGame()">START 🚀</button>
+        </section>
+
+        <div class="game-stats">
+            <div class="stat-item">Score: <span id="score">0</span> / 10</div>
+            <div class="stat-item">Mission: <span id="current-q">1</span> / 10</div>
+        </div>
+
+        <div class="quiz-card" id="quiz-card">
+            <div>
+                <div class="question-title" id="q-title">Mission 1</div>
+                <div class="sentence-box">
+                    <span id="q-sentence">Press START to begin your mole-whacking mission!</span> 
+                    <small id="q-hint" style="color:var(--hero-cyan); font-size: 0.9rem; font-weight: bold;"></small>
+                </div>
+            </div>
+            
+            <div class="moles-container" id="moles-container">
+                <div class="hole" id="hole-0" style="top: 15%; left: 8%;"><div class="mole" onclick="whackMole(0)"></div></div>
+                <div class="hole" id="hole-1" style="top: 10%; left: 38%;"><div class="mole" onclick="whackMole(1)"></div></div>
+                <div class="hole" id="hole-2" style="top: 15%; left: 68%;"><div class="mole" onclick="whackMole(2)"></div></div>
+                <div class="hole" id="hole-3" style="top: 45%; left: 4%;"><div class="mole" onclick="whackMole(3)"></div></div>
+                <div class="hole" id="hole-4" style="top: 50%; left: 36%;"><div class="mole" onclick="whackMole(4)"></div></div>
+                <div class="hole" id="hole-5" style="top: 45%; left: 68%;"><div class="mole" onclick="whackMole(5)"></div></div>
+                <div class="hole" id="hole-6" style="top: 75%; left: 38%;"><div class="mole" onclick="whackMole(6)"></div></div>
+            </div>
+
+            <div class="feedback-container">
+                <div class="feedback-row">
+                    <div class="feedback-msg" id="feedback-msg"></div>
+                    <button class="btn-action" id="next-btn" style="display:none;" onclick="nextQuestion()">NEXT ➔</button>
+                </div>
+                <div class="explanation-msg" id="explanation-msg"></div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal" id="result-modal">
+        <div class="modal-content">
+            <h2>MISSION ACCOMPLISHED!</h2>
+            <p id="final-score-text">You got 10 out of 10 correct!</p>
+            <button class="btn-action" onclick="startNewGame()"> PLAY AGAIN 🔄</button>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-text">&copy; 2026, EngliForce: <span class="footer-highlight">Make English Your Superpower!</span></div>
+    </footer>
+
+    <script>
+        const questionDatabase = [
+            // WHO (15 questions)
+            {q: "___ is your best friend?", ans: "Who", hint: "Answer: Michal", explanation: "Use 'Who' when the answer is a person."},
+            {q: "___ plays the guitar in the band?", ans: "Who", hint: "Answer: Tom", explanation: "Use 'Who' when asking about a person."},
+            {q: "___ won the science competition?", ans: "Who", hint: "Answer: Sarah", explanation: "Use 'Who' to ask about people."},
+            {q: "___ is knocking at the front door?", ans: "Who", hint: "Answer: the postman", explanation: "Use 'Who' for individuals."},
+            {q: "___ teaches you English at school?", ans: "Who", hint: "Answer: Mr. Smith", explanation: "Use 'Who' when referring to a teacher or person."},
+            {q: "___ left their school bag on the bus?", ans: "Who", hint: "Answer: David", explanation: "Use 'Who' to find out the person responsible."},
+            {q: "___ invited you to the birthday party?", ans: "Who", hint: "Answer: Anna", explanation: "Use 'Who' for the person performing an action."},
+            {q: "___ is your favourite singer?", ans: "Who", hint: "Answer: Taylor Swift", explanation: "Use 'Who' when asking about artists or people."},
+            {q: "___ can help me carry these heavy boxes?", ans: "Who", hint: "Answer: John", explanation: "Use 'Who' to ask for a person's help."},
+            {q: "___ knows the answer to this difficult math puzzle?", ans: "Who", hint: "Answer: Emma", explanation: "Use 'Who' when asking about individuals with knowledge."},
+            {q: "___ is speaking on the telephone right now?", ans: "Who", hint: "Answer: Dad", explanation: "Use 'Who' to ask about the person on a call."},
+            {q: "___ wrote the Harry Potter books?", ans: "Who", hint: "Answer: J.K. Rowling", explanation: "Use 'Who' for authors and people."},
+            {q: "___ is sitting next to you in class?", ans: "Who", hint: "Answer: Lisa", explanation: "Use 'Who' to ask about a classmate."},
+            {q: "___ is taking care of the dog today?", ans: "Who", hint: "Answer: Grandma", explanation: "Use 'Who' for caregivers and people."},
+            {q: "___ wants an extra slice of pizza?", ans: "Who", hint: "Answer: me", explanation: "Use 'Who' when asking who desires something."},
+
+            // WHAT (15 questions)
+            {q: "___ do you like to eat for breakfast?", ans: "What", hint: "Answer: pancakes", explanation: "Use 'What' when asking about a thing or food."},
+            {q: "___ are you reading right now?", ans: "What", hint: "Answer: an adventure book", explanation: "Use 'What' for things like books."},
+            {q: "___ is your favorite subject at school?", ans: "What", hint: "Answer: history", explanation: "Use 'What' for subjects, objects, or ideas."},
+            {q: "___ did you get for your birthday?", ans: "What", hint: "Answer: a new bicycle", explanation: "Use 'What' to ask about physical objects/gifts."},
+            {q: "___ are you doing this weekend?", ans: "What", hint: "Answer: playing football", explanation: "Use 'What' for activities or plans."},
+            {q: "___ is the capital city of France?", ans: "What", hint: "Answer: Paris", explanation: "Use 'What' when asking for factual information or names."},
+            {q: "___ time does the movie start?", ans: "What", hint: "Answer: at 8 PM", explanation: "Use 'What' when paired with 'time' to ask for hours."},
+            {q: "___ color is your new winter coat?", ans: "What", hint: "Answer: dark blue", explanation: "Use 'What' when asking about properties like colors."},
+            {q: "___ language do they speak in Brazil?", ans: "What", hint: "Answer: Portuguese", explanation: "Use 'What' when asking about languages."},
+            {q: "___ happened in the playground earlier?", ans: "What", hint: "Answer: a football match", explanation: "Use 'What' to ask about events."},
+            {q: "___ are you looking for in your backpack?", ans: "What", hint: "Answer: my pencil case", explanation: "Use 'What' for missing items."},
+            {q: "___ do you want to become when you grow up?", ans: "What", hint: "Answer: an astronaut", explanation: "Use 'What' for professions or future goals."},
+            {q: "___ animal makes a roaring sound?", ans: "What", hint: "Answer: a lion", explanation: "Use 'What' to ask about animals in general descriptions."},
+            {q: "___ is written on the blackboard?", ans: "What", hint: "Answer: homework instructions", explanation: "Use 'What' for text or written items."},
+            {q: "___ game are we playing on the computer?", ans: "What", hint: "Answer: Minecraft", explanation: "Use 'What' for specific names of media or games."},
+
+            // WHERE (15 questions)
+            {q: "___ do you live?", ans: "Where", hint: "Answer: in Amsterdam", explanation: "Use 'Where' when the answer is a place or location."},
+            {q: "___ did you put my winter jacket?", ans: "Where", hint: "Answer: on the coat rack", explanation: "Use 'Where' to ask about a location or position."},
+            {q: "___ are my car keys?", ans: "Where", hint: "Answer: on the kitchen table", explanation: "Use 'Where' to locate missing objects."},
+            {q: "___ are you going on holiday this summer?", ans: "Where", hint: "Answer: to Spain", explanation: "Use 'Where' for destinations and travel spots."},
+            {q: "___ did you buy those nice shoes?", ans: "Where", hint: "Answer: at the shopping mall", explanation: "Use 'Where' to ask about stores or locations."},
+            {q: "___ is the nearest supermarket?", ans: "Where", hint: "Answer: around the corner", explanation: "Use 'Where' when inquiring about positions."},
+            {q: "___ do penguins live naturally?", ans: "Where", hint: "Answer: in Antarctica", explanation: "Use 'Where' for habitats and geographical locations."},
+            {q: "___ did you leave your bicycle?", ans: "Where", hint: "Answer: in the bike shed", explanation: "Use 'Where' to ask about parking or storage spots."},
+            {q: "___ can I find a public restroom?", ans: "Where", hint: "Answer: near the entrance", explanation: "Use 'Where' when asking for directions."},
+            {q: "___ were you born?", ans: "Where", hint: "Answer: in Utrecht", explanation: "Use 'Where' for birthplaces and towns."},
+            {q: "___ do you keep your art supplies?", ans: "Where", hint: "Answer: in the bottom drawer", explanation: "Use 'Where' for storage locations."},
+            {q: "___ did you hide my comic book?", ans: "Where", hint: "Answer: under the bed", explanation: "Use 'Where' to find hidden places."},
+            {q: "___ are we supposed to park our cars?", ans: "Where", hint: "Answer: in the parking garage", explanation: "Use 'Where' for designated zones."},
+            {q: "___ is the teacher's desk located?", ans: "Where", hint: "Answer: at the front of the classroom", explanation: "Use 'Where' for indoor positions."},
+            {q: "___ does this river flow into?", ans: "Where", hint: "Answer: into the North Sea", explanation: "Use 'Where' to track routes or destinations."},
+
+            // WHEN (15 questions)
+            {q: "___ does the English class start?", ans: "When", hint: "Answer: at 11 o'clock", explanation: "Use 'When' when the answer is a time or moment."},
+            {q: "___ is your birthday?", ans: "When", hint: "Answer: on May 12th", explanation: "Use 'When' to ask about dates."},
+            {q: "___ did you arrive home yesterday?", ans: "When", hint: "Answer: at 5 PM", explanation: "Use 'When' for past times."},
+            {q: "___ are we going to eat dinner?", ans: "When", hint: "Answer: in ten minutes", explanation: "Use 'When' to ask about schedule timings."},
+            {q: "___ does the summer holiday begin?", ans: "When", hint: "Answer: next Friday", explanation: "Use 'When' for periods and vacation starts."},
+            {q: "___ did man first land on the moon?", ans: "When", hint: "Answer: in 1969", explanation: "Use 'When' for historical years."},
+            {q: "___ will you finish your homework?", ans: "When", hint: "Answer: before bedtime", explanation: "Use 'When' to ask about future completion."},
+            {q: "___ do the shops close on Saturdays?", ans: "When", hint: "Answer: at 6 PM", explanation: "Use 'When' for closing hours."},
+            {q: "___ was your little sister born?", ans: "When", hint: "Answer: last year", explanation: "Use 'When' for dates of birth."},
+            {q: "___ should we water the plants?", ans: "When", hint: "Answer: every morning", explanation: "Use 'When' for frequency or routine timing."},
+            {q: "___ did you start playing piano?", ans: "When", hint: "Answer: two years ago", explanation: "Use 'When' for past starting points."},
+            {q: "___ does the train leave the station?", ans: "When", hint: "Answer: at 3:15 PM", explanation: "Use 'When' for transport schedules."},
+            {q: "___ is the school sports day?", ans: "When", hint: "Answer: next month", explanation: "Use 'When' for upcoming events."},
+            {q: "___ do you usually wake up?", ans: "When", hint: "Answer: at 7 AM", explanation: "Use 'When' for daily routines."},
+            {q: "___ did you buy this cool watch?", ans: "When", hint: "Answer: on my birthday", explanation: "Use 'When' to ask about purchase occasions."},
+
+            // WHY (15 questions)
+            {q: "___ are you wearing a thick jacket?", ans: "Why", hint: "Answer: because it is freezing outside", explanation: "Use 'Why' when the answer gives a reason (because)."},
+            {q: "___ did you miss school yesterday?", ans: "Why", hint: "Answer: because I had a bad flu", explanation: "Use 'Why' to ask for a reason or explanation."},
+            {q: "___ are you laughing so loudly?", ans: "Why", hint: "Answer: because the joke was funny", explanation: "Use 'Why' to ask about emotions or laughter."},
+            {q: "___ did you bring an umbrella today?", ans: "Why", hint: "Answer: because it might rain", explanation: "Use 'Why' to ask about cautious choices."},
+            {q: "___ are you studying so hard tonight?", ans: "Why", hint: "Answer: because I have a big test", explanation: "Use 'Why' for motivations behind studying."},
+            {q: "___ did the baby start crying?", ans: "Why", hint: "Answer: because he was hungry", explanation: "Use 'Why' to discover causes."},
+            {q: "___ are you running down the hallway?", ans: "Why", hint: "Answer: because I am late for class", explanation: "Use 'Why' for urgent actions."},
+            {q: "___ did you choose this blue notebook?", ans: "Why", hint: "Answer: because blue is my favorite color", explanation: "Use 'Why' for personal preferences."},
+            {q: "___ is the computer screen turned off?", ans: "Why", hint: "Answer: because the battery is dead", explanation: "Use 'Why' to explain technical faults."},
+            {q: "___ did you eat all the cookies?", ans: "Why", hint: "Answer: because they were delicious", explanation: "Use 'Why' to ask about actions taken."},
+            {q: "___ are the birds flying south now?", ans: "Why", hint: "Answer: because winter is coming", explanation: "Use 'Why' for animal instincts and nature."},
+            {q: "___ did you turn on the heater?", ans: "Why", hint: "Answer: because my room is cold", explanation: "Use 'Why' for environmental adjustments."},
+            {q: "___ are you whispering to your friend?", ans: "Why", hint: "Answer: because it is a secret", explanation: "Use 'Why' for social behavior."},
+            {q: "___ did you wash your hands?", ans: "Why", hint: "Answer: because they were dirty", explanation: "Use 'Why' for hygiene reasons."},
+            {q: "___ are you wearing sunglasses indoors?", ans: "Why", hint: "Answer: because it's a costume party", explanation: "Use 'Why' to ask about funny situations."},
+
+            // HOW (15 questions)
+            {q: "___ do you spell your name?", ans: "How", hint: "Answer: M-I-C-H-A-L", explanation: "Use 'How' when asking about a method, spelling, or manner."},
+            {q: "___ do you make a chocolate cake?", ans: "How", hint: "Answer: by mixing flour, sugar and cocoa", explanation: "Use 'How' to ask for instructions or recipes."},
+            {q: "___ do you get to school every morning?", ans: "How", hint: "Answer: by bicycle", explanation: "Use 'How' for transportation methods."},
+            {q: "___ old is your little brother?", ans: "How", hint: "Answer: seven years old", explanation: "Use 'How' when asking about age."},
+            {q: "___ much does this comic book cost?", ans: "How", hint: "Answer: five euros", explanation: "Use 'How' when asking about prices or quantities."},
+            {q: "___ are you feeling today?", ans: "How", hint: "Answer: very happy", explanation: "Use 'How' when inquiring about health or feelings."},
+            {q: "___ do you solve this puzzle?", ans: "How", hint: "Answer: by turning the pieces around", explanation: "Use 'How' for methods and solutions."},
+            {q: "___ tall is the highest tree in the park?", ans: "How", hint: "Answer: twenty meters", explanation: "Use 'How' for measurements."},
+            {q: "___ many students are in your class?", ans: "How", hint: "Answer: twenty-four", explanation: "Use 'How' with 'many' to count countable items."},
+            {q: "___ long does the train ride take?", ans: "How", hint: "Answer: forty-five minutes", explanation: "Use 'How' with 'long' for durations."},
+            {q: "___ well do you speak English?", ans: "How", hint: "Answer: quite fluently", explanation: "Use 'How' with adverbs to measure skill."},
+            {q: "___ often do you visit your grandparents?", ans: "How", hint: "Answer: every weekend", explanation: "Use 'How' with 'often' for frequency."},
+            {q: "___ heavy is this schoolbag?", ans: "How", hint: "Answer: five kilograms", explanation: "Use 'How' with 'heavy' for weight."},
+            {q: "___ fast can that sports car drive?", ans: "How", hint: "Answer: 250 kilometers per hour", explanation: "Use 'How' with 'fast' for speed."},
+            {q: "___ did you paint such a nice picture?", ans: "How", hint: "Answer: with watercolors and a fine brush", explanation: "Use 'How' to ask about artistic techniques."},
+
+            // WHICH (10 questions)
+            {q: "___ fruit do you prefer: an apple or a banana?", ans: "Which", hint: "Answer: the banana", explanation: "Use 'Which' when choosing between specific options."},
+            {q: "___ jacket is yours: the red one or the blue one?", ans: "Which", hint: "Answer: the blue one", explanation: "Use 'Which' when selecting from a limited set of items."},
+            {q: "___ pet do you like more: a dog or a cat?", ans: "Which", hint: "Answer: the cat", explanation: "Use 'Which' for choices between alternatives."},
+            {q: "___ road leads to the city centre?", ans: "Which", hint: "Answer: the left road", explanation: "Use 'Which' when picking between paths or routes."},
+            {q: "___ pair of shoes are you wearing today?", ans: "Which", hint: "Answer: my white trainers", explanation: "Use 'Which' to specify an item from a collection."},
+            {q: "___ hand writes better, your left or right?", ans: "Which", hint: "Answer: my right hand", explanation: "Use 'Which' for binary choices."},
+            {q: "___ season do you like best: summer or winter?", ans: "Which", hint: "Answer: summer", explanation: "Use 'Which' when selecting from defined categories."},
+            {q: "___ door should we open to enter the hall?", ans: "Which", hint: "Answer: the double doors", explanation: "Use 'Which' to identify a specific choice."},
+            {q: "___ flavour of ice cream do you want: vanilla or chocolate?", ans: "Which", hint: "Answer: chocolate", explanation: "Use 'Which' for picking specific flavors."},
+            {q: "___ book is on your desk: the math book or history book?", ans: "Which", hint: "Answer: the math book", explanation: "Use 'Which' to specify between distinct objects."}
+        ];
+
+        const allWhWords = ["Who", "What", "Where", "When", "Why", "How", "Which"];
+
+        let currentGameQuestions = [];
+        let score = 0;
+        let currentQIndex = 0;
+        const totalQPerGame = 10;
+        let answered = false;
+        let moleInterval;
+        let gameStarted = false;
+        let activeHoleIndex = null;
+
+        const questionContainer = document.getElementById("q-sentence");
+        const scoreElement = document.getElementById("score");
+        const nextBtn = document.getElementById("next-btn");
+        const hintElement = document.getElementById("q-hint");
+        const explanationMsg = document.getElementById("explanation-msg");
+
+        function startNewGame() {
+            gameStarted = true;
+            document.getElementById('result-modal').style.display = 'none';
+            score = 0;
+            currentQIndex = 0;
+            scoreElement.textContent = score;
+            
+            let shuffled = [...questionDatabase].sort(() => 0.5 - Math.random());
+            currentGameQuestions = shuffled.slice(0, totalQPerGame);
+            
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            clearInterval(moleInterval);
+            answered = false;
+            
+            let qData = currentGameQuestions[currentQIndex];
+            
+            document.getElementById('current-q').textContent = currentQIndex + 1;
+            document.getElementById('q-title').textContent = `Mission ${currentQIndex + 1}`;
+            questionContainer.textContent = qData.q;
+            
+            hintElement.textContent = qData.hint;
+            hintElement.style.display = 'block';
+
+            document.getElementById('feedback-msg').textContent = '';
+            explanationMsg.textContent = '';
+            explanationMsg.style.display = 'none';
+            nextBtn.style.display = 'none';
+
+            // Zorg dat alle gaten volledig leeg en naar beneden zijn bij de start van een vraag
+            for (let i = 0; i < 7; i++) {
+                let hole = document.getElementById(`hole-${i}`);
+                let mole = hole.querySelector('.mole');
+                mole.textContent = "";
+                mole.className = "mole";
+                hole.classList.remove('active');
+            }
+
+            // Start direct met het tonen van willekeurige mollen elke 3 seconden
+            popRandomMole();
+            moleInterval = setInterval(popRandomMole, 3000);
+        }
+
+        function popRandomMole() {
+            if (answered) return;
+
+            // Verberg het vorige actieve gat en maak het leeg
+            if (activeHoleIndex !== null) {
+                document.getElementById(`hole-${activeHoleIndex}`).classList.remove('active');
+                let prevMole = document.getElementById(`hole-${activeHoleIndex}`).querySelector('.mole');
+                if(!prevMole.classList.contains('hit') && !prevMole.classList.contains('wrong')) {
+                    prevMole.textContent = "";
+                }
+            }
+
+            let qData = currentGameQuestions[currentQIndex];
+            
+            // Kies willekeurig één gat (0 t/m 6) dat omhoog komt
+            activeHoleIndex = Math.floor(Math.random() * 7);
+            
+            let activeMoleEl = document.getElementById(`hole-${activeHoleIndex}`).querySelector('.mole');
+            
+            // Reset klassen behalve hit/wrong
+            if (!activeMoleEl.classList.contains('hit') && !activeMoleEl.classList.contains('wrong')) {
+                activeMoleEl.className = "mole";
+            }
+
+            let wrongOptions = allWhWords.filter(w => w !== qData.ans);
+            let randomChosenWord = Math.random() < 0.35 ? qData.ans : wrongOptions[Math.floor(Math.random() * wrongOptions.length)];
+            
+            activeMoleEl.textContent = randomChosenWord;
+            
+            // Laat het gat omhoog komen
+            document.getElementById(`hole-${activeHoleIndex}`).classList.add('active');
+        }
+
+        function whackMole(index) {
+            if (!gameStarted || answered) return;
+            
+            let hole = document.getElementById(`hole-${index}`);
+            let mole = hole.querySelector('.mole');
+            
+            // Als er geen mole omhoog is in dit gat of hij is leeg, doe niets
+            if (!hole.classList.contains('active') || mole.textContent === "") return;
+
+            answered = true;
+            clearInterval(moleInterval);
+
+            let qData = currentGameQuestions[currentQIndex];
+            let feedback = document.getElementById('feedback-msg');
+
+            // Verberg alle gaten
+            for(let i=0; i<7; i++) {
+                document.getElementById(`hole-${i}`).classList.remove('active');
+            }
+
+            const isCorrect = (mole.textContent === qData.ans);
+
+            if (isCorrect) {
+                score++;
+                scoreElement.textContent = score;
+                mole.classList.add('hit');
+                hole.classList.add('active');
+                feedback.innerHTML = '<span style="color:var(--hero-cyan);">WHACK! Correct! 🌟</span>';
+            } else {
+                mole.classList.add('wrong');
+                hole.classList.add('active');
+                
+                // Laat het juiste woord ergens oplichten voor de uitleg
+                for(let i=0; i<7; i++) {
+                    let h = document.getElementById(`hole-${i}`);
+                    let m = h.querySelector('.mole');
+                    if(m.textContent === qData.ans) {
+                        h.classList.add('active');
+                        m.classList.add('hit');
+                    }
+                }
+                feedback.innerHTML = `<span style="color:var(--hero-red);">MISS! Correct answer was ${qData.ans}</span>`;
+                explanationMsg.textContent = qData.explanation;
+                explanationMsg.style.display = 'block';
+            }
+
+            nextBtn.style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQIndex++;
+            if (currentQIndex < totalQPerGame) {
+                loadQuestion();
+            } else {
+                document.getElementById('final-score-text').textContent = `You got ${score} out of ${totalQPerGame} questions correct!`;
+                document.getElementById('result-modal').style.display = 'flex';
+            }
+        }
+    </script>
+</body>
+</html>

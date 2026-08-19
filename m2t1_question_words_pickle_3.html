@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EngliForce Academy: Crack The Vault</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Lexend:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hero-purple-main: #7b2cbf;
+            --hero-purple-dark: #3c096c;
+            --hero-yellow: #ffb703;
+            --hero-cyan: #00f5d4;
+            --hero-red: #d32f2f;
+            --header-bg: #ff7043;
+            --header-border: var(--hero-yellow);
+        }
+        html, body { 
+            font-family: 'Lexend', sans-serif; 
+            background: #05101a; 
+            background: radial-gradient(circle at center, #1a102a 0%, #05101a 100%); 
+            color: white; 
+            margin: 0; 
+            height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            overflow: hidden; 
+            box-sizing: border-box;
+        }
+        *, *::before, *::after { box-sizing: border-box; }
+        
+        header { 
+            background: var(--header-bg); 
+            padding: 1.2rem 1rem; 
+            text-align: center; 
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%); 
+            border-bottom: 6px solid var(--header-border); 
+            flex-shrink: 0;
+        }
+        h1 { 
+            font-family: 'Bangers', cursive; 
+            font-size: 2.3rem; 
+            letter-spacing: 2px; 
+            margin: 0; 
+            text-shadow: 3px 3px 0px var(--hero-purple-dark); 
+        }
+        header p { margin: 4px 0 0 0; font-size: 1rem; font-weight: bold; }
+        
+        main { 
+            max-width: 800px; 
+            margin: 6px auto; 
+            padding: 0 15px; 
+            flex: 1; 
+            width: 100%; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between;
+        }
+
+        .briefing-box { 
+            background: rgba(26, 16, 42, 0.9); 
+            border: 2px solid var(--hero-cyan); 
+            border-radius: 12px; 
+            padding: 8px 16px; 
+            flex-shrink: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .briefing-content h2 {
+            margin: 0 0 3px 0;
+            font-family: 'Bangers', cursive;
+            font-size: 1.2rem;
+            color: var(--hero-yellow);
+            letter-spacing: 1px;
+        }
+        .explanation-text { 
+            font-size: 0.95rem; 
+            line-height: 1.35; 
+            margin: 0; 
+            border-left: 3px solid var(--hero-cyan); 
+            padding-left: 10px; 
+            background: rgba(0, 245, 212, 0.05); 
+        }
+        .highlight { color: var(--hero-cyan); font-weight: bold; }
+        
+        .game-stats {
+            display: flex;
+            justify-content: space-around;
+            background: #1a102a;
+            border: 2px solid var(--hero-yellow);
+            border-radius: 10px;
+            padding: 6px;
+            font-family: 'Bangers', cursive;
+            font-size: 1.15rem;
+            flex-shrink: 0;
+            align-items: center;
+        }
+        .stat-item span { color: var(--hero-yellow); }
+        
+        .quiz-card {
+            background: #1a102a;
+            border: 3px solid var(--hero-purple-dark);
+            border-radius: 15px;
+            padding: 12px 20px;
+            position: relative;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin: 6px 0;
+        }
+
+        .question-title {
+            font-family: 'Bangers', cursive;
+            font-size: 1.25rem;
+            color: var(--hero-yellow);
+            margin-bottom: 4px;
+            letter-spacing: 1px;
+        }
+        .sentence-box {
+            font-size: 1.15rem;
+            background: rgba(0,0,0,0.3);
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 6px;
+            border-left: 4px solid var(--hero-purple-main);
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        
+        .mystery-container {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin: 8px 0;
+        }
+        .clue-safe {
+            background: rgba(0, 245, 212, 0.1);
+            border: 2px solid var(--hero-cyan);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            width: 100%;
+            max-width: 500px;
+        }
+        .clue-safe p { margin: 0 0 4px 0; font-size: 1.05rem; color: var(--hero-yellow); }
+        .mystery-input-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            width: 100%;
+            max-width: 400px;
+        }
+        .mystery-input {
+            flex: 1;
+            background: #12091f;
+            border: 2px solid var(--hero-yellow);
+            border-radius: 30px;
+            padding: 10px 20px;
+            color: white;
+            font-family: 'Lexend', sans-serif;
+            font-size: 1.15rem;
+            outline: none;
+            text-align: center;
+        }
+        .mystery-input::placeholder { color: rgba(255,255,255,0.4); }
+        
+        .feedback-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 50px;
+            gap: 4px;
+        }
+        .feedback-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+        .feedback-msg { font-weight: bold; font-size: 1.05rem; }
+        .explanation-msg { font-size: 0.9rem; color: var(--hero-yellow); display: none; background: rgba(255, 183, 3, 0.08); padding: 6px 10px; border-radius: 6px; border-left: 3px solid var(--hero-yellow); }
+        
+        .btn-action {
+            background: var(--hero-yellow);
+            color: var(--hero-purple-dark);
+            border: none;
+            padding: 6px 20px;
+            border-radius: 50px;
+            font-family: 'Bangers', cursive;
+            font-size: 1.15rem;
+            cursor: pointer;
+            border-bottom: 4px solid #d99a00;
+            transition: 0.15s;
+        }
+        .btn-action:hover { transform: translateY(-2px); background: var(--hero-cyan); }
+
+        .btn-start {
+            background: var(--hero-cyan);
+            color: var(--hero-purple-dark);
+            border: none;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-family: 'Bangers', cursive;
+            font-size: 1.2rem;
+            cursor: pointer;
+            border-bottom: 4px solid #00b4d8;
+            transition: 0.15s;
+            margin-left: 15px;
+            white-space: nowrap;
+        }
+        .btn-start:hover { transform: translateY(-2px); background: var(--hero-yellow); border-bottom-color: #d99a00; }
+        
+        /* Modal & Vault Dial Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(5, 16, 26, 0.95);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        .modal-content {
+            background: #1a102a;
+            border: 4px solid var(--hero-yellow);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            max-width: 480px;
+            width: 90%;
+        }
+        .modal-content h2 {
+            font-family: 'Bangers', cursive;
+            font-size: 2.1rem;
+            color: var(--hero-yellow);
+            margin-top: 0;
+            text-shadow: 2px 2px 0px var(--hero-purple-dark);
+        }
+        .modal-content p { font-size: 1.1rem; margin-bottom: 15px; }
+
+        .vault-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .digits-display {
+            background: #05101a;
+            border: 2px solid var(--hero-cyan);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-family: 'Bangers', cursive;
+            font-size: 1.2rem;
+            color: var(--hero-cyan);
+            letter-spacing: 1px;
+            width: 100%;
+        }
+        .dial-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            width: 100%;
+        }
+        .dial-box {
+            background: #12091f;
+            border: 2px solid var(--hero-purple-main);
+            border-radius: 8px;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .dial-box span { font-size: 0.8rem; color: #aaa; font-weight: bold; }
+        .dial-input {
+            width: 45px;
+            height: 45px;
+            background: #05101a;
+            border: 2px solid var(--hero-yellow);
+            border-radius: 6px;
+            color: white;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.6rem;
+            font-weight: bold;
+            text-align: center;
+            outline: none;
+        }
+        .prize-box {
+            background: rgba(255, 183, 3, 0.1);
+            border: 2px dashed var(--hero-yellow);
+            border-radius: 10px;
+            padding: 10px;
+            width: 100%;
+        }
+        .prize-box h3 { margin: 0 0 2px 0; font-family: 'Bangers', cursive; color: var(--hero-yellow); font-size: 1.3rem; }
+        .prize-box .amount { font-family: 'Bangers', cursive; font-size: 1.9rem; color: var(--hero-cyan); }
+
+        footer { 
+            text-align: center; 
+            padding: 6px; 
+            background: rgba(0,0,0,0.3); 
+            font-family: 'Bangers', cursive; 
+            font-size: 0.95rem; 
+            flex-shrink: 0;
+        }
+        .footer-highlight { color: var(--hero-yellow); }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>ENGLIFORCE ACADEMY</h1>
+        <p>CRACK THE VAULT</p>
+    </header>
+    <main>
+        <section class="briefing-box">
+            <div class="briefing-content">
+                <h2>🚨 CHALLENGE INSTRUCTION</h2>
+                <div class="explanation-text">
+                    <p>Answer 10 questions. After each correctly answered question you get a <span class="highlight">digit</span>. Remember or write them down carefully! At the end, open the <span class="highlight">£1,000,000</span> vault using your digits (wrong answer = - £100,000).</p>
+                </div>
+            </div>
+            <button class="btn-start" onclick="startNewGame()">START 🚀</button>
+        </section>
+
+        <div class="game-stats">
+            <div class="stat-item">Challenge: <span id="current-q">1</span> / 10</div>
+            <div class="stat-item">Correct: <span id="score">0</span> / 10</div>
+            <div class="stat-item">Vault Value: <span id="vault-value" style="color:var(--hero-cyan);">€1,000,000</span></div>
+        </div>
+
+        <div class="quiz-card" id="quiz-card">
+            <div>
+                <div class="question-title" id="q-title">Challenge 1</div>
+                <div class="sentence-box">
+                    <span id="q-sentence">Press START to begin your challenge!</span> 
+                    <small id="q-hint" style="color:var(--hero-cyan); font-size: 0.95rem; font-weight: bold;"></small>
+                </div>
+            </div>
+            
+            <div class="mystery-container" id="mystery-container">
+                <div class="clue-safe">
+                    <p>🔒 Crack the Safe Code!</p>
+                    <span style="font-size: 0.95rem; color: #ccc;" id="agency-subtext">Type the exact WH-word needed to complete the sentence.</span>
+                </div>
+                <div class="mystery-input-group">
+                    <input type="text" id="agency-input" class="mystery-input" placeholder="Type Who, What, Where..." autocomplete="off">
+                    <button class="btn-action" id="submit-btn" onclick="submitAgencyAnswer()">CRACK 🔓</button>
+                    <button class="btn-action" id="next-btn" style="display:none;" onclick="nextQuestion()">NEXT ➔</button>
+                </div>
+            </div>
+
+            <div class="feedback-container">
+                <div class="feedback-row">
+                    <div class="feedback-msg" id="feedback-msg"></div>
+                </div>
+                <div class="explanation-msg" id="explanation-msg"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal voor cijfer-melding na elke vraag -->
+    <div class="modal" id="digit-modal">
+        <div class="modal-content">
+            <h2 id="modal-digit-title">UNLOCKED DIGIT! 🔓</h2>
+            <p id="modal-digit-text">Your digit for this question is:</p>
+            <div style="font-family: 'Share Tech Mono', monospace; font-size: 4.5rem; font-weight: bold; color: var(--hero-cyan); margin: 5px 0; letter-spacing: 5px;" id="awarded-digit-box">7</div>
+            <p id="modal-digit-sub" style="font-size: 0.95rem; color: #aaa; margin-bottom: 15px;">Note this digit down carefully! You will need 10 in total.</p>
+            <button class="btn-action" onclick="closeDigitModal()">NEXT QUESTION ➔</button>
+        </div>
+    </div>
+
+    <!-- Eindscherm met Draaischijf / Kluis -->
+    <div class="modal" id="vault-modal">
+        <div class="modal-content" style="max-width: 520px;">
+            <h2>THE VAULT DIAL 🔐</h2>
+            <p>Challenge completed! Enter your 10 collected digits below in the correct order to open the vault.</p>
+            
+            <div class="vault-container">
+                <div class="prize-box">
+                    <h3>CURRENT VAULT VALUE</h3>
+                    <div class="amount" id="final-vault-amount">€1,000,000</div>
+                    <small id="penalty-info" style="color: #ff7043; font-weight: bold; display: block; margin-top: 2px;"></small>
+                </div>
+                
+                <div class="digits-display">Questions 1 to 5:</div>
+                <div class="dial-grid" id="dial-grid-1"></div>
+
+                <div class="digits-display" style="margin-top: 5px;">Questions 6 to 10:</div>
+                <div class="dial-grid" id="dial-grid-2"></div>
+                
+                <div class="feedback-msg" id="vault-feedback" style="margin-top: 5px;"></div>
+                
+                <button class="btn-action" style="font-size: 1.25rem; padding: 8px 30px; margin-top: 5px;" onclick="tryOpenVault()">OPEN VAULT 🔓</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Victorie / Gefeliciteerd Scherm -->
+    <div class="modal" id="victory-modal">
+        <div class="modal-content">
+            <h2>🎉 VAULT CRACKED! 🎉</h2>
+            <p id="victory-text">Fantastic! You successfully opened the vault and secured the prize:</p>
+            <div style="font-family: 'Bangers', cursive; font-size: 2.8rem; color: var(--hero-cyan); margin: 10px 0;" id="won-amount-display">€1,000,000</div>
+            <button class="btn-action" onclick="startNewGame()"> PLAY AGAIN 🔄</button>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-text">&copy; 2026, EngliForce: <span class="footer-highlight">Make English Your Superpower!</span></div>
+    </footer>
+
+    <script>
+        const questionDatabase = [
+            // WHO (1-15)
+            {q: "___ is your best friend?", ans: "Who", hint: "Answer: Michal", explanation: "Use 'Who' when asking about a person."},
+            {q: "___ plays the guitar in the school band?", ans: "Who", hint: "Answer: Tom", explanation: "Use 'Who' when asking about a person."},
+            {q: "___ won the gold medal in the science competition?", ans: "Who", hint: "Answer: Sarah", explanation: "Use 'Who' to ask about people."},
+            {q: "___ is knocking loudly at the front door?", ans: "Who", hint: "Answer: the postman", explanation: "Use 'Who' for individuals."},
+            {q: "___ teaches you mathematics at school?", ans: "Who", hint: "Answer: Mr. Smith", explanation: "Use 'Who' when referring to a teacher."},
+            {q: "___ left their red school bag on the back of the bus?", ans: "Who", hint: "Answer: David", explanation: "Use 'Who' to find out the person responsible."},
+            {q: "___ invited you personally to the weekend birthday party?", ans: "Who", hint: "Answer: Anna", explanation: "Use 'Who' for the person performing an action."},
+            {q: "___ is your absolute favorite pop singer?", ans: "Who", hint: "Answer: Taylor Swift", explanation: "Use 'Who' when asking about artists."},
+            {q: "___ can help me carry these extremely heavy wooden boxes?", ans: "Who", hint: "Answer: John", explanation: "Use 'Who' to ask for a person's help."},
+            {q: "___ knows the secret solution to this difficult math puzzle?", ans: "Who", hint: "Answer: Emma", explanation: "Use 'Who' when asking about individuals."},
+            {q: "___ is organizing the annual school talent show?", ans: "Who", hint: "Answer: the principal", explanation: "Use 'Who' when asking about the person in charge."},
+            {q: "___ found my lost smartphone near the cafeteria?", ans: "Who", hint: "Answer: Liam", explanation: "Use 'Who' to identify someone who did an action."},
+            {q: "___ wants to join the basketball team this season?", ans: "Who", hint: "Answer: Noah", explanation: "Use 'Who' when inquiring about individuals' intentions."},
+            {q: "___ is going to bake a cake for the party?", ans: "Who", hint: "Answer: Grandma", explanation: "Use 'Who' for persons performing tasks."},
+            {q: "___ wrote this amazing adventure story?", ans: "Who", hint: "Answer: J.K. Rowling", explanation: "Use 'Who' to ask about authors."},
+
+            // WHAT (16-30)
+            {q: "___ do you like to eat for your morning breakfast?", ans: "What", hint: "Answer: pancakes", explanation: "Use 'What' when asking about a thing or food."},
+            {q: "___ book are you reading right now before sleeping?", ans: "What", hint: "Answer: an adventure book", explanation: "Use 'What' for things like books."},
+            {q: "___ is your absolute favorite school subject?", ans: "What", hint: "Answer: history", explanation: "Use 'What' for subjects or ideas."},
+            {q: "___ did you get wrapped as a surprise for your birthday?", ans: "What", hint: "Answer: a new bicycle", explanation: "Use 'What' to ask about physical objects."},
+            {q: "___ are you planning to do this sunny weekend?", ans: "What", hint: "Answer: playing football", explanation: "Use 'What' for activities or plans."},
+            {q: "___ is the official capital city of France?", ans: "What", hint: "Answer: Paris", explanation: "Use 'What' when asking for factual names."},
+            {q: "___ color is your brand new winter jacket?", ans: "What", hint: "Answer: dark blue", explanation: "Use 'What' when asking about colors."},
+            {q: "___ language do the local people speak in Brazil?", ans: "What", hint: "Answer: Portuguese", explanation: "Use 'What' when asking about languages."},
+            {q: "___ happened in the school playground earlier today?", ans: "What", hint: "Answer: a football match", explanation: "Use 'What' to ask about events."},
+            {q: "___ are you looking for inside your deep backpack?", ans: "What", hint: "Answer: my pencil case", explanation: "Use 'What' for missing items."},
+            {q: "___ time is it on your wristwatch right now?", ans: "What", hint: "Answer: three o'clock", explanation: "Use 'What' when asking for clock time."},
+            {q: "___ movie are we going to watch tonight?", ans: "What", hint: "Answer: a comedy", explanation: "Use 'What' when choosing media."},
+            {q: "___ kind of music do you listen to?", ans: "What", hint: "Answer: pop music", explanation: "Use 'What' for categories or genres."},
+            {q: "___ did the teacher write on the board?", ans: "What", hint: "Answer: grammar rules", explanation: "Use 'What' for written information."},
+            {q: "___ animal is known as man's best friend?", ans: "What", hint: "Answer: dog", explanation: "Use 'What' for general categories of things or animals."},
+
+            // WHERE (31-45)
+            {q: "___ do you live with your family?", ans: "Where", hint: "Answer: in Amsterdam", explanation: "Use 'Where' when the answer is a city or place."},
+            {q: "___ did you put my heavy winter jacket?", ans: "Where", hint: "Answer: on the coat rack", explanation: "Use 'Where' to ask about a physical position."},
+            {q: "___ are my shiny metal car keys?", ans: "Where", hint: "Answer: on the kitchen table", explanation: "Use 'Where' to locate missing objects."},
+            {q: "___ are you going on holiday for summer vacation?", ans: "Where", hint: "Answer: to Spain", explanation: "Use 'Where' for destinations and travel spots."},
+            {q: "___ did you buy those nice stylish shoes?", ans: "Where", hint: "Answer: at the shopping mall", explanation: "Use 'Where' to ask about stores."},
+            {q: "___ is the nearest local supermarket located?", ans: "Where", hint: "Answer: around the corner", explanation: "Use 'Where' when inquiring about positions."},
+            {q: "___ do wild penguins live naturally in the world?", ans: "Where", hint: "Answer: in Antarctica", explanation: "Use 'Where' for geographical habitats."},
+            {q: "___ did you park and lock your bicycle?", ans: "Where", hint: "Answer: in the bike shed", explanation: "Use 'Where' to ask about parking spots."},
+            {q: "___ can I find a clean public restroom here?", ans: "Where", hint: "Answer: near the entrance", explanation: "Use 'Where' when asking for directions."},
+            {q: "___ were you born many years ago?", ans: "Where", hint: "Answer: in Utrecht", explanation: "Use 'Where' for birthplaces and towns."},
+            {q: "___ did you leave your science notebook?", ans: "Where", hint: "Answer: on the desk", explanation: "Use 'Where' for locations of objects."},
+            {q: "___ are we spending our school trip this year?", ans: "Where", hint: "Answer: at the museum", explanation: "Use 'Where' for destinations."},
+            {q: "___ do you usually store your winter clothes?", ans: "Where", hint: "Answer: in the attic", explanation: "Use 'Where' for storage spots."},
+            {q: "___ did you hide the birthday presents?", ans: "Where", hint: "Answer: in the closet", explanation: "Use 'Where' for hiding spots."},
+            {q: "___ can we buy fresh bread around here?", ans: "Where", hint: "Answer: at the bakery", explanation: "Use 'Where' to find establishments."},
+
+            // WHEN (46-60)
+            {q: "___ does the English grammar class begin?", ans: "When", hint: "Answer: at 11 o'clock", explanation: "Use 'When' when the answer is a specific time."},
+            {q: "___ is your exact calendar birthday?", ans: "When", hint: "Answer: on May 12th", explanation: "Use 'When' to ask about dates."},
+            {q: "___ did you finally arrive home yesterday evening?", ans: "When", hint: "Answer: at 5 PM", explanation: "Use 'When' for past times."},
+            {q: "___ are we going to sit down and eat hot dinner?", ans: "When", hint: "Answer: in ten minutes", explanation: "Use 'When' to ask about schedule timings."},
+            {q: "___ does the long summer holiday officially begin?", ans: "When", hint: "Answer: next Friday", explanation: "Use 'When' for periods and vacation starts."},
+            {q: "___ did human astronauts first land on the moon?", ans: "When", hint: "Answer: in 1969", explanation: "Use 'When' for historical years."},
+            {q: "___ will you finish all your difficult homework?", ans: "When", hint: "Answer: before bedtime", explanation: "Use 'When' to ask about future completion."},
+            {q: "___ do the local shops close their doors on Saturdays?", ans: "When", hint: "Answer: at 6 PM", explanation: "Use 'When' for closing hours."},
+            {q: "___ was your baby sister born?", ans: "When", hint: "Answer: last year", explanation: "Use 'When' for dates of birth."},
+            {q: "___ should we water the dry indoor plants?", ans: "When", hint: "Answer: every morning", explanation: "Use 'When' for routine timing."},
+            {q: "___ does the train to London depart?", ans: "When", hint: "Answer: at noon", explanation: "Use 'When' for departure times."},
+            {q: "___ are you planning to clean your room?", ans: "When", hint: "Answer: this afternoon", explanation: "Use 'When' for scheduling chores."},
+            {q: "___ did you start learning English?", ans: "When", hint: "Answer: two years ago", explanation: "Use 'When' for past starting points."},
+            {q: "___ will the new movie come out in cinemas?", ans: "When", hint: "Answer: next month", explanation: "Use 'When' for future releases."},
+            {q: "___ do you usually eat lunch at school?", ans: "When", hint: "Answer: at 12:30", explanation: "Use 'When' for everyday timing."},
+
+            // WHY (61-75)
+            {q: "___ are you wearing a thick woolen jacket indoors?", ans: "Why", hint: "Answer: because it is freezing outside", explanation: "Use 'Why' when the answer gives a reason (because)."},
+            {q: "___ did you miss school yesterday completely?", ans: "Why", hint: "Answer: because I had a bad flu", explanation: "Use 'Why' to ask for a reason."},
+            {q: "___ are you laughing so loudly in the quiet library?", ans: "Why", hint: "Answer: because the joke was funny", explanation: "Use 'Why' to ask about causes of laughter."},
+            {q: "___ did you bring an open umbrella today?", ans: "Why", hint: "Answer: because it might rain soon", explanation: "Use 'Why' to ask about cautious choices."},
+            {q: "___ are you studying so hard tonight for hours?", ans: "Why", hint: "Answer: because I have a big test", explanation: "Use 'Why' for motivations."},
+            {q: "___ did the little baby start crying suddenly?", ans: "Why", hint: "Answer: because he was hungry", explanation: "Use 'Why' to discover causes."},
+            {q: "___ are you running fast down the hallway?", ans: "Why", hint: "Answer: because I am late for class", explanation: "Use 'Why' for urgent actions."},
+            {q: "___ did you choose this specific blue notebook?", ans: "Why", hint: "Answer: because blue is my favorite color", explanation: "Use 'Why' for personal preferences."},
+            {q: "___ is the computer monitor turned off completely?", ans: "Why", hint: "Answer: because the battery is dead", explanation: "Use 'Why' to explain technical faults."},
+            {q: "___ did you eat all the chocolate cookies?", ans: "Why", hint: "Answer: because they were delicious", explanation: "Use 'Why' to ask about actions taken."},
+            {q: "___ are you wearing sunglasses inside the house?", ans: "Why", hint: "Answer: because it's a costume party", explanation: "Use 'Why' to ask for explanations."},
+            {q: "___ did you turn off the loud music?", ans: "Why", hint: "Answer: because it was too noisy", explanation: "Use 'Why' for reasoning."},
+            {q: "___ are you carrying that heavy coat?", ans: "Why", hint: "Answer: because it might get cold", explanation: "Use 'Why' for preventative actions."},
+            {q: "___ did you buy so many apples?", ans: "Why", hint: "Answer: because I want to bake a pie", explanation: "Use 'Why' for intentions."},
+            {q: "___ are you smiling so brightly today?", ans: "Why", hint: "Answer: because I passed my exam", explanation: "Use 'Why' for emotional causes."},
+
+            // HOW (76-90)
+            {q: "___ do you spell your first name correctly?", ans: "How", hint: "Answer: M-I-C-H-A-L", explanation: "Use 'How' when asking about spelling."},
+            {q: "___ do you bake a delicious chocolate cake?", ans: "How", hint: "Answer: by mixing flour, sugar and cocoa", explanation: "Use 'How' to ask for instructions or recipes."},
+            {q: "___ do you get to school every single morning?", ans: "How", hint: "Answer: by bicycle", explanation: "Use 'How' for transportation methods."},
+            {q: "___ old is your little brother today?", ans: "How", hint: "Answer: seven years old", explanation: "Use 'How' when asking about age."},
+            {q: "___ much does this comic book cost in the shop?", ans: "How", hint: "Answer: five euros", explanation: "Use 'How' when asking about prices."},
+            {q: "___ are you feeling today after resting?", ans: "How", hint: "Answer: very happy", explanation: "Use 'How' when inquiring about feelings."},
+            {q: "___ do you solve this tricky paper puzzle?", ans: "How", hint: "Answer: by turning the pieces around", explanation: "Use 'How' for methods and solutions."},
+            {q: "___ tall is the highest ancient tree in the park?", ans: "How", hint: "Answer: twenty meters", explanation: "Use 'How' for measurements."},
+            {q: "___ many students are registered in your class?", ans: "How", hint: "Answer: twenty-four", explanation: "Use 'How' with 'many' to count items."},
+            {q: "___ long does the express train ride take?", ans: "How", hint: "Answer: forty-five minutes", explanation: "Use 'How' with 'long' for durations."},
+            {q: "___ often do you practice playing the piano?", ans: "How", hint: "Answer: every day", explanation: "Use 'How' with 'often' for frequency."},
+            {q: "___ well do you speak the French language?", ans: "How", hint: "Answer: quite well", explanation: "Use 'How' to ask about skill or degree."},
+            {q: "___ fast can that racing car drive?", ans: "How", hint: "Answer: 300 km/h", explanation: "Use 'How' with 'fast' for speed."},
+            {q: "___ heavy is this large wooden box?", ans: "How", hint: "Answer: ten kilograms", explanation: "Use 'How' with adjectives for properties."},
+            {q: "___ safe is it to swim in this river?", ans: "How", hint: "Answer: not very safe", explanation: "Use 'How' to ask about safety or condition."},
+
+            // WHICH (91-100)
+            {q: "___ fruit do you prefer to eat: an apple or a banana?", ans: "Which", hint: "Answer: the banana", explanation: "Use 'Which' when choosing between specific options."},
+            {q: "___ jacket is yours in the cloakroom: the red one or the blue one?", ans: "Which", hint: "Answer: the blue one", explanation: "Use 'Which' when selecting from a limited set."},
+            {q: "___ pet do you like more: a dog or a cat?", ans: "Which", hint: "Answer: the cat", explanation: "Use 'Which' for choices between alternatives."},
+            {q: "___ specific road leads directly to the city centre?", ans: "Which", hint: "Answer: the left road", explanation: "Use 'Which' when picking between routes."},
+            {q: "___ pair of shoes are you wearing today: trainers or boots?", ans: "Which", hint: "Answer: my white trainers", explanation: "Use 'Which' to specify an item."},
+            {q: "___ hand writes better for you, your left or right?", ans: "Which", hint: "Answer: my right hand", explanation: "Use 'Which' for binary choices."},
+            {q: "___ season do you like best of all: summer or winter?", ans: "Which", hint: "Answer: summer", explanation: "Use 'Which' when selecting from categories."},
+            {q: "___ door should we open to enter the grand hall?", ans: "Which", hint: "Answer: the double doors", explanation: "Use 'Which' to identify a specific choice."},
+            {q: "___ flavour of ice cream do you want: vanilla or chocolate?", ans: "Which", hint: "Answer: chocolate", explanation: "Use 'Which' for picking specific flavors."},
+            {q: "___ textbook is on your desk: the math book or history book?", ans: "Which", hint: "Answer: the math book", explanation: "Use 'Which' to specify between distinct objects."}
+        ];
+
+        let currentGameQuestions = [];
+        let score = 0;
+        let currentQIndex = 0;
+        const totalQPerGame = 10;
+        let answered = false;
+        let gameStarted = false;
+        let collectedDigits = [];
+        let mistakesCount = 0;
+
+        const questionContainer = document.getElementById("q-sentence");
+        const scoreElement = document.getElementById("score");
+        const submitBtn = document.getElementById("submit-btn");
+        const nextBtn = document.getElementById("next-btn");
+        const hintElement = document.getElementById("q-hint");
+        const explanationMsg = document.getElementById("explanation-msg");
+
+        function startNewGame() {
+            gameStarted = true;
+            document.getElementById('digit-modal').style.display = 'none';
+            document.getElementById('vault-modal').style.display = 'none';
+            document.getElementById('victory-modal').style.display = 'none';
+            score = 0;
+            currentQIndex = 0;
+            mistakesCount = 0;
+            collectedDigits = [];
+            scoreElement.textContent = score;
+            updateVaultDisplay();
+            
+            let shuffled = [...questionDatabase].sort(() => 0.5 - Math.random());
+            currentGameQuestions = shuffled.slice(0, totalQPerGame);
+            
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            answered = false;
+            let qData = currentGameQuestions[currentQIndex];
+            
+            document.getElementById('current-q').textContent = currentQIndex + 1;
+            document.getElementById('q-title').textContent = `Challenge ${currentQIndex + 1}`;
+            questionContainer.textContent = qData.q;
+            
+            hintElement.textContent = qData.hint;
+            hintElement.style.display = 'block';
+
+            document.getElementById('feedback-msg').textContent = '';
+            explanationMsg.textContent = '';
+            explanationMsg.style.display = 'none';
+            submitBtn.style.display = 'inline-block';
+            nextBtn.style.display = 'none';
+
+            let agencyInput = document.getElementById('agency-input');
+            agencyInput.value = '';
+            agencyInput.disabled = false;
+            agencyInput.focus();
+        }
+
+        function submitAgencyAnswer() {
+            if (!gameStarted || answered) return;
+            
+            let inputField = document.getElementById('agency-input');
+            let userVal = inputField.value.trim().toLowerCase();
+            if (!userVal) return;
+
+            answered = true;
+            inputField.disabled = true;
+            let qData = currentGameQuestions[currentQIndex];
+            let feedback = document.getElementById('feedback-msg');
+            let correctVal = qData.ans.toLowerCase();
+
+            let randomDigit = Math.floor(Math.random() * 10);
+            collectedDigits.push({ questionNum: currentQIndex + 1, digit: randomDigit });
+
+            if (userVal === correctVal) {
+                score++;
+                scoreElement.textContent = score;
+                feedback.innerHTML = '<span style="color:var(--hero-cyan);">CORRECT! Digit earned! 🔓🌟</span>';
+                showDigitModal(currentQIndex + 1, randomDigit, true);
+            } else {
+                mistakesCount++;
+                updateVaultDisplay();
+                feedback.innerHTML = `<span style="color:var(--hero-red);">WRONG! Correct answer: <strong>${qData.ans}</strong> (-€100k)</span>`;
+                explanationMsg.textContent = `Explanation: ${qData.explanation}`;
+                explanationMsg.style.display = 'block';
+                
+                submitBtn.style.display = 'none';
+                nextBtn.style.display = 'inline-block';
+            }
+        }
+
+        function nextQuestion() {
+            let randomDigit = collectedDigits[collectedDigits.length - 1].digit;
+            showDigitModal(currentQIndex + 1, randomDigit, false);
+        }
+
+        function showDigitModal(qNum, digit, isCorrect) {
+            document.getElementById('modal-digit-title').textContent = isCorrect ? "CORRECT ANSWER! 🔓" : "WRONG ANSWER... BUT DIGIT EARNED!";
+            document.getElementById('awarded-digit-box').textContent = digit;
+            document.getElementById('modal-digit-sub').textContent = `This is your digit for challenge ${qNum}. Note or remember it well!`;
+            document.getElementById('digit-modal').style.display = 'flex';
+        }
+
+        function closeDigitModal() {
+            document.getElementById('digit-modal').style.display = 'none';
+            
+            currentQIndex++;
+            if (currentQIndex < totalQPerGame) {
+                loadQuestion();
+            } else {
+                showVaultDialModal();
+            }
+        }
+
+        document.getElementById('agency-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                if (!answered) {
+                    submitAgencyAnswer();
+                } else if (nextBtn.style.display !== 'none') {
+                    nextQuestion();
+                }
+            }
+        });
+
+        function updateVaultDisplay() {
+            let currentVal = Math.max(0, 1000000 - (mistakesCount * 100000));
+            document.getElementById('vault-value').textContent = '€' + currentVal.toLocaleString('en-US');
+        }
+
+        function showVaultDialModal() {
+            let currentVal = Math.max(0, 1000000 - (mistakesCount * 100000));
+            document.getElementById('final-vault-amount').textContent = '€' + currentVal.toLocaleString('en-US');
+            
+            if (mistakesCount > 0) {
+                document.getElementById('penalty-info').textContent = `(${mistakesCount} mistake(s) = €${(mistakesCount * 100000).toLocaleString('en-US')} deducted)`;
+            } else {
+                document.getElementById('penalty-info').textContent = `(No mistakes! Full amount retained!)`;
+            }
+
+            let grid1 = document.getElementById('dial-grid-1');
+            let grid2 = document.getElementById('dial-grid-2');
+            grid1.innerHTML = '';
+            grid2.innerHTML = '';
+
+            for (let i = 0; i < 5; i++) {
+                grid1.innerHTML += `
+                    <div class="dial-box">
+                        <span># ${i+1}</span>
+                        <input type="text" maxlength="1" class="dial-input" id="dial-${i}" autocomplete="off">
+                    </div>
+                `;
+            }
+            for (let i = 5; i < 10; i++) {
+                grid2.innerHTML += `
+                    <div class="dial-box">
+                        <span># ${i+1}</span>
+                        <input type="text" maxlength="1" class="dial-input" id="dial-${i}" autocomplete="off">
+                    </div>
+                `;
+            }
+
+            document.getElementById('vault-feedback').textContent = '';
+            document.getElementById('vault-modal').style.display = 'flex';
+        }
+
+        function tryOpenVault() {
+            let allCorrect = true;
+            for (let i = 0; i < 10; i++) {
+                let inputVal = document.getElementById(`dial-${i}`).value.trim();
+                let expectedVal = collectedDigits[i].digit.toString();
+                if (inputVal !== expectedVal) {
+                    allCorrect = false;
+                    break;
+                }
+            }
+
+            let feedbackEl = document.getElementById('vault-feedback');
+            if (allCorrect) {
+                document.getElementById('vault-modal').style.display = 'none';
+                let currentVal = Math.max(0, 1000000 - (mistakesCount * 100000));
+                document.getElementById('won-amount-display').textContent = '€' + currentVal.toLocaleString('en-US');
+                document.getElementById('victory-modal').style.display = 'flex';
+            } else {
+                feedbackEl.innerHTML = '<span style="color:var(--hero-red);">WRONG DIGITS! Check your notes and try again.</span>';
+            }
+        }
+    </script>
+</body>
+</html>
