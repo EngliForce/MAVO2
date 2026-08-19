@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EngliForce Headquarters</title>
+    <title>ENGLIFORCE: MISSION CONTROL</title>
+    
     <script src="https://cdn.counter.dev/script.js" data-id="0eed7a4e-ef67-4086-a7e5-429c47941b67" data-utcoffset="1"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Lexend:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
         :root {
             --hero-blue-main: #0288d1;
@@ -14,69 +16,147 @@
             --hero-yellow: #ffb703;
             --hero-cyan: #81d4fa;
         }
-        body, html { 
-            margin: 0; padding: 0; height: 100%; overflow: hidden;
-            font-family: 'Lexend', sans-serif; 
-            background: radial-gradient(circle at center, #102a43 0%, #05101a 100%); 
-            color: white;
-            display: flex; flex-direction: column;
-        }
-        header { 
-            background: var(--hero-blue-main); padding: 1.5rem 1rem; text-align: center; 
-            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%); 
-            border-bottom: 5px solid var(--hero-yellow); box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
-        }
-        h1 { font-family: 'Bangers', cursive; font-size: 3rem; margin: 0; text-shadow: 4px 4px 0px var(--hero-blue-dark); }
-        header p { font-weight: bold; letter-spacing: 2px; margin-top: 5px; }
 
-        main { 
-            flex: 1;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            padding: 20px;
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: radial-gradient(circle at center, #102a43 0%, #05101a 100%);
+            color: white;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
-        .section-title { font-family: 'Bangers', cursive; font-size: 2.5rem; color: var(--hero-yellow); margin-bottom: 30px; letter-spacing: 2px; }
+
+        header {
+            background: var(--hero-blue-main);
+            padding: 2.5rem 1rem;
+            text-align: center;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            border-bottom: 5px solid var(--hero-yellow);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        h1 { font-family: 'Bangers', cursive; font-size: 3.5rem; letter-spacing: 3px; margin: 0; text-shadow: 4px 4px 0px var(--hero-blue-dark); }
+
+        main { max-width: 1200px; margin: 20px auto; padding: 20px; flex: 1; width: 100%; box-sizing: border-box; }
         
-        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; max-width: 600px; width: 100%; }
-        .card { 
-            background: #102a43; border: 3px solid #243b53; border-radius: 20px; padding: 20px; 
-            display: flex; flex-direction: column; transition: all 0.3s ease; text-decoration: none; color: white; cursor: pointer; 
+        .section-title { font-family: 'Bangers', cursive; font-size: 2.8rem; color: var(--hero-yellow); text-align: center; margin: 40px 0; }
+
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+            gap: 20px; 
+            width: 100%;
         }
+
+        .card {
+            background: #102a43;
+            border: 3px solid #243b53;
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: white;
+            cursor: pointer;
+        }
+
         .card:hover { border-color: var(--hero-yellow); transform: translateY(-8px); }
-        .power-icon { font-size: 3rem; margin-bottom: 15px; text-align: center; }
-        .name { font-weight: bold; font-size: 1.5rem; text-align: center; margin-bottom: 10px; }
-        .btn { 
-            background: #243b53; border: none; color: white; padding: 12px; border-radius: 12px; 
-            cursor: pointer; font-family: 'Bangers', cursive; font-size: 1.2rem; margin-top: 10px; 
+        .power-icon { font-size: 2.5rem; background: rgba(255,255,255,0.05); width: 65px; height: 65px; display: flex; align-items: center; justify-content: center; border-radius: 15px; margin-bottom: 15px; }
+        .name { font-weight: bold; font-size: 1.3rem; margin-bottom: 8px; }
+        .desc { font-size: 0.9rem; color: #94a3b8; margin-bottom: 15px; text-align: center; }
+        
+        .btn {
+            background: #243b53;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: 'Bangers', cursive;
+            font-size: 1rem;
+            width: 100%;
+            transition: 0.3s;
         }
-        .card.done { border-color: var(--hero-yellow); background: #05101a; }
+
+        .card.done { border-color: var(--hero-yellow); background: #05101a; box-shadow: 0 0 20px rgba(255, 183, 3, 0.2); }
         .card.done .btn { background: var(--hero-yellow); color: var(--hero-blue-dark); }
         
-        footer { padding: 20px; text-align: center; opacity: 0.5; font-size: 0.9rem; }
+        /* Video & Toggle Button */
+        .video-wrapper { text-align: center; margin: 50px 0; }
+        .toggle-btn { 
+            background: var(--hero-blue-main);
+            color: white; 
+            padding: 15px 30px; 
+            font-size: 1.2rem; 
+            border: 3px solid var(--hero-yellow); 
+            border-radius: 50px; 
+            cursor: pointer; 
+            font-family: 'Bangers', cursive;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: 0.3s;
+        }
+        .toggle-btn:hover { background: var(--hero-blue-dark); }
+        
+        #video-section { display: none; margin-top: 30px; }
+        .video-title { font-family: 'Bangers', cursive; font-size: 1.8rem; color: var(--hero-cyan); margin-bottom: 15px; }
+        iframe { border-radius: 12px; max-width: 100%; border: 3px solid #243b53; }
 
         .star { position: fixed; pointer-events: none; font-size: 3rem; z-index: 1000; animation: starFly 0.8s forwards; }
         @keyframes starFly { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(2) translateY(-150px); opacity: 0; } }
+
+        footer { text-align: center; padding: 40px; opacity: 0.7; font-size: 0.9rem; margin-top: auto; }
     </style>
 </head>
 <body>
+
 <header>
     <h1>WELCOME</h1>
-    <p>ENGLIFORCE HEADQUARTERS</p>
+    <p>ENGLIFORCE HEADQUARTERS M2</p>
 </header>
+
 <main>
-    <h2 class="section-title">CHOOSE YOUR MISSION</h2>
-    <div class="grid" id="module-grid"></div>
+    <h2 class="section-title">🚀 CHOOSE YOUR MISSION</h2>
+    <div class="grid" id="theme-grid"></div>
+
+    <div class="video-wrapper">
+        <button class="toggle-btn" onclick="toggleVideo()" id="toggle-btn">📺 Easy Tips To Improve Your English</button>
+        <div id="video-section">
+            <h2 class="section-title">📺 Easy Tips To Improve Your English</h2>
+            <iframe width="480" height="270" src="https://www.youtube.com/embed/aX_SStTRKqc" allowfullscreen></iframe>
+        </div>
+    </div>
 </main>
+
 <footer>
-    &copy; 2025 EngliForce – Make English Your Superpower!
+    &copy; 2026 EngliForce – Make English Your Superpower!
 </footer>
+
 <script>
-    const moduleData = [
-        { id: 'mh1', name: 'MH1', icon: '🛡️', url: 'indexmh1.html' },
-        { id: 'm2', name: 'M2', icon: '⚡', url: 'indexm2.html' }
+    function toggleVideo() {
+        const section = document.getElementById('video-section');
+        const btn = document.getElementById('toggle-btn');
+        if (section.style.display === 'block') {
+            section.style.display = 'none';
+            btn.innerText = '📺 SHOW: Easy Tips To Improve Your English';
+        } else {
+            section.style.display = 'block';
+            btn.innerText = '📺 HIDE: Easy Tips To Improve Your English';
+        }
+    }
+
+    const themeData = [
+        { id: 'mission1', name: 'Mission 1', desc: 'Crime', icon: '👤', url: 'm2_mission_1.html' },
+        { id: 'mission2', name: 'Mission 2', desc: 'Under Construction', icon: '🎮', url: 'm2_mission_2.html' },
+        { id: 'mission3', name: 'Mission 3', desc: 'Under Construction', icon: '🇬🇧', url: 'm2_mission_3.html' },
+        { id: 'mission4', name: 'Mission 4', desc: 'Under Construction', icon: '🍔', url: 'm2_mission_4.html' },
+        { id: 'mission5', name: 'Mission 5', desc: 'Under Construction', icon: '📟', url: 'm2_mission_5.html' }
     ];
 
-    function createCard(item) {
-        const grid = document.getElementById('module-grid');
+    const grid = document.getElementById('theme-grid');
+    themeData.forEach(item => {
         const card = document.createElement('a');
         card.className = 'card';
         card.id = item.id;
@@ -84,21 +164,22 @@
         card.innerHTML = `
             <div class="power-icon">${item.icon}</div>
             <div class="name">${item.name}</div>
-            <button class="btn" onclick="completeTask(event, '${item.id}')">MISSION COMPLETED</button>
+            <div class="desc">${item.desc}</div>
+            <button class="btn" onclick="completeTask(event, '${item.id}')">MISSION ACCOMPLISHED</button>
         `;
         grid.appendChild(card);
-    }
-
-    moduleData.forEach(createCard);
+    });
 
     function completeTask(event, id) {
         event.preventDefault();
         event.stopPropagation();
         const card = document.getElementById(id);
         const isDone = card.classList.toggle('done');
+        
         const saved = JSON.parse(localStorage.getItem('hero_progress_main') || '{}');
         saved[id] = isDone;
         localStorage.setItem('hero_progress_main', JSON.stringify(saved));
+        
         if(isDone) {
             confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#81d4fa', '#ffb703'] });
             const s = document.createElement('div'); s.className = 'star'; s.innerHTML = '⚡';
@@ -115,5 +196,6 @@
         });
     });
 </script>
+
 </body>
 </html>
