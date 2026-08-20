@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EngliForce Academy - Past Simple Hero ⏳</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Lexend:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hero-orange-main: #ff7043;
+            --hero-orange-dark: #e65c30;
+            --hero-orange-glow: rgba(255, 112, 67, 0.4);
+            --hero-yellow: #ffb703;
+            --dark-bg: #0b1a2a;
+            --card-bg: #102a43;
+            --card-border: #243b53;
+            --card-bg-done: #05101a;
+            --wrong-red: #ef4444;
+            --correct-green: #22c55e;
+        }
+
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: radial-gradient(circle at center, #102a43 0%, #05101a 100%);
+            color: white;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: var(--hero-orange-main);
+            padding: 2.5rem 1rem;
+            text-align: center;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            border-bottom: 5px solid var(--hero-yellow);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            color: white;
+        }
+
+        h1 { 
+            font-family: 'Bangers', cursive; 
+            font-size: 3.5rem; 
+            letter-spacing: 3px; 
+            margin: 0; 
+            text-shadow: 4px 4px 0px var(--hero-orange-dark); 
+        }
+
+        header p { 
+            font-size: 1.2rem; 
+            font-weight: bold; 
+            margin-top: 5px; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+        }
+
+        main { 
+            flex: 1;
+            max-width: 650px; 
+            width: 90%;
+            margin: 40px auto; 
+            padding: 20px; 
+            box-sizing: border-box;
+        }
+
+        .panel { 
+            background: var(--card-bg); 
+            padding: 40px; 
+            border-radius: 20px; 
+            border: 3px solid var(--card-border);
+            text-align: center; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); 
+        }
+
+        .panel h2 {
+            font-family: 'Bangers', cursive;
+            font-size: 2rem;
+            color: var(--hero-yellow);
+            letter-spacing: 1px;
+            margin-top: 0;
+        }
+
+        .toggle-wrapper { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin: 15px 0; 
+            padding: 10px 0; 
+            border-bottom: 1px solid var(--card-border); 
+            font-size: 1.1rem;
+        }
+
+        .switch { position: relative; width: 50px; height: 26px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        
+        .slider { 
+            position: absolute; 
+            cursor: pointer; 
+            top: 0; left: 0; right: 0; bottom: 0; 
+            background: var(--card-border); 
+            transition: .4s; 
+            border-radius: 34px; 
+        }
+
+        .slider:before { 
+            position: absolute; 
+            content: ""; 
+            height: 20px; 
+            width: 20px; 
+            left: 3px; 
+            bottom: 3px; 
+            background: white; 
+            border-radius: 50%; 
+            transition: .4s; 
+        }
+
+        input:checked + .slider { background: var(--hero-orange-main); }
+        input:checked + .slider:before { transform: translateX(24px); }
+
+        .sentence { 
+            font-size: 1.3rem; 
+            margin: 30px 0; 
+            color: #f8fafc; 
+            font-weight: bold; 
+            min-height: 60px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        input[type="text"] { 
+            padding: 15px; 
+            font-size: 1.1rem; 
+            font-family: 'Lexend', sans-serif;
+            border-radius: 12px; 
+            border: 2px solid var(--card-border); 
+            width: 80%; 
+            background: var(--dark-bg); 
+            color: white; 
+            text-align: center; 
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--hero-orange-main);
+        }
+
+        .btn { 
+            background: var(--hero-orange-main); 
+            color: white; 
+            border: none; 
+            padding: 15px 40px; 
+            border-radius: 50px; 
+            font-family: 'Bangers', cursive;
+            font-size: 1.4rem; 
+            letter-spacing: 1px;
+            cursor: pointer; 
+            margin-top: 20px; 
+            transition: 0.3s; 
+            box-shadow: 0 4px 15px rgba(255, 112, 67, 0.4);
+        }
+
+        .btn:hover { 
+            background: var(--hero-orange-dark); 
+            transform: translateY(-2px);
+        }
+
+        .hidden { display: none; }
+        #badge { font-size: 80px; display: none; animation: spin 4s linear infinite; }
+        #status { color: var(--hero-yellow); font-weight: bold; font-size: 1.1rem; }
+
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .recap-container {
+            margin-top: 20px;
+            text-align: left;
+            max-height: 250px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        .recap-item {
+            background: var(--dark-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+        .recap-q { font-weight: bold; margin-bottom: 5px; color: #f8fafc; }
+        .recap-given { color: var(--wrong-red); }
+        .recap-correct { color: var(--correct-green); font-weight: bold; }
+
+        footer {
+            text-align: center; 
+            opacity: 0.5; 
+            padding: 40px 0 20px 0;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>ENGLIFORCE ACADEMY</h1>
+        <p>PAST SIMPLE HERO ⏳</p>
+    </header>
+
+    <main>
+        <div class="panel">
+            <div id="start">
+                <h2>Wat wil je oefenen?</h2>
+                <div class="toggle-wrapper">
+                    <span>Bevestigen</span> 
+                    <label class="switch"><input type="checkbox" class="cat" value="pos" checked><span class="slider"></span></label>
+                </div>
+                <div class="toggle-wrapper">
+                    <span>Ontkennen</span> 
+                    <label class="switch"><input type="checkbox" class="cat" value="neg"><span class="slider"></span></label>
+                </div>
+                <div class="toggle-wrapper">
+                    <span>Vragen</span> 
+                    <label class="switch"><input type="checkbox" class="cat" value="que"><span class="slider"></span></label>
+                </div>
+                <button class="btn" onclick="start()">START QUEST</button>
+            </div>
+
+            <div id="quiz" class="hidden">
+                <div id="status">Vraag 1/10</div>
+                <div class="sentence" id="sentence">---</div>
+                <input type="text" id="answer" placeholder="Typ je antwoord..." autocomplete="off" onkeypress="handleKeyPress(event)">
+                <br><button class="btn" onclick="check()">CHECK</button>
+            </div>
+
+            <div id="end" class="hidden">
+                <div id="badge">⏳</div>
+                <h2 id="msg"></h2>
+                <div id="recap" class="recap-container hidden"></div>
+                <button class="btn" onclick="location.reload()">OPNIEUW</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 EngliForce – Make English Your Superpower!</p>
+    </footer>
+
+    <script>
+    const db = {
+        pos: [
+            {s: "I (play) ___ soccer yesterday.", a: "played"}, {s: "She (cook) ___ dinner for us.", a: "cooked"},
+            {s: "We (walk) ___ to the park.", a: "walked"}, {s: "He (watch) ___ a movie.", a: "watched"},
+            {s: "They (clean) ___ the kitchen.", a: "cleaned"}, {s: "You (work) ___ in the garden.", a: "worked"},
+            {s: "She (paint) ___ the fence.", a: "painted"}, {s: "We (visit) ___ our friends.", a: "visited"},
+            {s: "He (wash) ___ his hands.", a: "washed"}, {s: "I (help) ___ my sister.", a: "helped"},
+            {s: "They (jump) ___ high.", a: "jumped"}, {s: "She (phone) ___ her grandma.", a: "phoned"},
+            {s: "We (climb) ___ the hill.", a: "climbed"}, {s: "He (dance) ___ well.", a: "danced"},
+            {s: "I (open) ___ the box.", a: "opened"}, {s: "They (look) ___ at the stars.", a: "looked"},
+            {s: "She (smile) ___ at me.", a: "smiled"}, {s: "We (wait) ___ for the bus.", a: "waited"},
+            {s: "I (shut) ___ the window.", a: "shut"}, {s: "It (cost) ___ ten pounds.", a: "cost"},
+            {s: "He (let) ___ us enter.", a: "let"}, {s: "She (read) ___ a great book.", a: "read"},
+            {s: "I (put) ___ the dish away.", a: "put"}, {s: "His leg (hurt) ___ yesterday.", a: "hurt"},
+            {s: "He (hit) ___ the ball.", a: "hit"}, {s: "She (cut) ___ the paper.", a: "cut"},
+            {s: "They (quit) ___ the game.", a: "quit"}, {s: "We (split) ___ the bill.", a: "split"},
+            {s: "They (beat) ___ the other team.", a: "beat"}, {s: "He (come) ___ back home.", a: "came"},
+            {s: "She (become) ___ a doctor.", a: "became"}, {s: "I (run) ___ five kilometers.", a: "ran"},
+            {s: "He (dig) ___ a hole.", a: "dug"}, {s: "We (get) ___ a new dog.", a: "got"},
+            {s: "She (lay) ___ the book down.", a: "laid"}, {s: "I (pay) ___ for the drinks.", a: "paid"},
+            {s: "He (say) ___ goodbye.", a: "said"}, {s: "They (sit) ___ on the bench.", a: "sat"},
+            {s: "We (win) ___ the cup.", a: "won"}, {s: "I (buy) ___ some snacks.", a: "bought"},
+            {s: "He (bend) ___ the metal wire.", a: "bent"}, {s: "I (feel) ___ very tired.", a: "felt"},
+            {s: "They (find) ___ a treasure.", a: "found"}, {s: "She (hang) ___ her coat up.", a: "hung"},
+            {s: "We (have) ___ a good time.", a: "had"}, {s: "He (hear) ___ a strange noise.", a: "heard"},
+            {s: "I (hold) ___ her hand.", a: "held"}, {s: "She (keep) ___ the secret.", a: "kept"},
+            {s: "They (lead) ___ the group.", a: "led"}, {s: "He (lend) ___ me a pen.", a: "lent"}
+        ],
+        neg: [
+            {s: "I played soccer. (maak ontkennend)", a: "i did not play soccer"},
+            {s: "She cooked dinner. (maak ontkennend)", a: "she did not cook dinner"},
+            {s: "We walked home. (maak ontkennend)", a: "we did not walk home"},
+            {s: "He watched TV. (maak ontkennend)", a: "he did not watch tv"},
+            {s: "They cleaned up. (maak ontkennend)", a: "they did not clean up"},
+            {s: "You worked hard. (maak ontkennend)", a: "you did not work hard"},
+            {s: "She painted it. (maak ontkennend)", a: "she did not paint it"},
+            {s: "We visited them. (maak ontkennend)", a: "we did not visit them"},
+            {s: "He washed his car. (maak ontkennend)", a: "he did not wash his car"},
+            {s: "I helped her. (maak ontkennend)", a: "i did not help her"},
+            {s: "They jumped far. (maak ontkennend)", a: "they did not jump far"},
+            {s: "She phoned me. (maak ontkennend)", a: "she did not phone me"},
+            {s: "We climbed up. (maak ontkennend)", a: "we did not climb up"},
+            {s: "He danced well. (maak ontkennend)", a: "he did not dance well"},
+            {s: "I opened it. (maak ontkennend)", a: "i did not open it"},
+            {s: "They looked there. (maak ontkennend)", a: "they did not look there"},
+            {s: "She smiled at him. (maak ontkennend)", a: "she did not smile at him"},
+            {s: "We waited long. (maak ontkennend)", a: "we did not wait long"},
+            {s: "I lost my key. (maak ontkennend)", a: "i did not lose my key"},
+            {s: "He meant that. (maak ontkennend)", a: "he did not mean that"},
+            {s: "She met him. (maak ontkennend)", a: "she did not meet him"},
+            {s: "They sold the car. (maak ontkennend)", a: "they did not sell the car"},
+            {s: "We sent a text. (maak ontkennend)", a: "we did not send a text"},
+            {s: "I made lunch. (maak ontkennend)", a: "i did not make lunch"},
+            {s: "He told a joke. (maak ontkennend)", a: "he did not tell a joke"},
+            {s: "She brought food. (maak ontkennend)", a: "she did not bring food"},
+            {s: "They built a house. (maak ontkennend)", a: "they did not build a house"},
+            {s: "I caught the ball. (maak ontkennend)", a: "i did not catch the ball"},
+            {s: "We dreamt a lot. (maak ontkennend)", a: "we did not dream a lot"},
+            {s: "He fought back. (maak ontkennend)", a: "he did not fight back"},
+            {s: "They learnt English. (maak ontkennend)", a: "they did not learn english"},
+            {s: "She left early. (maak ontkennend)", a: "she did not leave early"},
+            {s: "It smelt bad. (maak ontkennend)", a: "it did not smell bad"},
+            {s: "I spent money. (maak ontkennend)", a: "i did not spend money"},
+            {s: "We stood outside. (maak ontkennend)", a: "we did not stand outside"},
+            {s: "It stuck there. (maak ontkennend)", a: "it did not stick there"},
+            {s: "A bee stung me. (maak ontkennend)", a: "a bee did not sting me"},
+            {s: "He swept the floor. (maak ontkennend)", a: "he did not sweep the floor"},
+            {s: "She taught math. (maak ontkennend)", a: "she did not teach math"},
+            {s: "I thought so. (maak ontkennend)", a: "i did not think so"},
+            {s: "They slept well. (maak ontkennend)", a: "they did not sleep well"},
+            {s: "We did the work. (maak ontkennend)", a: "we did not do the work"},
+            {s: "He went away. (maak ontkennend)", a: "he did not go away"},
+            {s: "She ate cake. (maak ontkennend)", a: "she did not eat cake"},
+            {s: "I saw him. (maak ontkennend)", a: "i did not see him"},
+            {s: "They flew to Rome. (maak ontkennend)", a: "they did not fly to rome"},
+            {s: "He lay in bed. (maak ontkennend)", a: "he did not lie in bed"},
+            {s: "It bit my finger. (maak ontkennend)", a: "it did not bite my finger"},
+            {s: "The wind blew hard. (maak ontkennend)", a: "the wind did not blow hard"},
+            {s: "She drew a cat. (maak ontkennend)", a: "she did not draw a cat"}
+        ],
+        que: [
+            {s: "I played soccer. (maak vragend)", a: "did i play soccer?"},
+            {s: "She cooked dinner. (maak vragend)", a: "did she cook dinner?"},
+            {s: "We walked home. (maak vragend)", a: "did we walk home?"},
+            {s: "He watched TV. (maak vragend)", a: "did he watch tv?"},
+            {s: "They cleaned up. (maak vragend)", a: "did they clean up?"},
+            {s: "You worked hard. (maak vragend)", a: "did you work hard?"},
+            {s: "She painted it. (maak vragend)", a: "did she paint it?"},
+            {s: "We visited them. (maak vragend)", a: "did we visit them?"},
+            {s: "He washed his car. (maak vragend)", a: "did he wash his car?"},
+            {s: "I helped her. (maak vragend)", a: "did i help her?"},
+            {s: "They jumped far. (maak vragend)", a: "did they jump far?"},
+            {s: "She phoned me. (maak vragend)", a: "did she phone me?"},
+            {s: "We climbed up. (maak vragend)", a: "did we climb up?"},
+            {s: "He danced well. (maak vragend)", a: "did he dance well?"},
+            {s: "I opened it. (maak vragend)", a: "did i open it?"},
+            {s: "They looked there. (maak vragend)", a: "did they look there?"},
+            {s: "She smiled at him. (maak vragend)", a: "did she smile at him?"},
+            {s: "We waited long. (maak vragend)", a: "did we wait long?"},
+            {s: "He fell down. (maak vragend)", a: "did he fall down?"},
+            {s: "She gave a gift. (maak vragend)", a: "did she give a gift?"},
+            {s: "They grew fast. (maak vragend)", a: "did they grow fast?"},
+            {s: "You knew that. (maak vragend)", a: "did you know that?"},
+            {s: "The bell rang. (maak vragend)", a: "did the bell ring?"},
+            {s: "He rode a horse. (maak vragend)", a: "did he ride a horse?"},
+            {s: "She sang a song. (maak vragend)", a: "did she sing a song?"},
+            {s: "The ship sank. (maak vragend)", a: "did the ship sink?"},
+            {s: "We swam far. (maak vragend)", a: "did we swim far?"},
+            {s: "I took the bus. (maak vragend)", a: "did i take the bus?"},
+            {s: "He tore the paper. (maak vragend)", a: "did he tear the paper?"},
+            {s: "She wore a dress. (maak vragend)", a: "did she wear a dress?"},
+            {s: "It began late. (maak vragend)", a: "did it begin late?"},
+            {s: "They broke it. (maak vragend)", a: "did they break it?"},
+            {s: "We chose option A. (maak vragend)", a: "did we choose option a?"},
+            {s: "He drank water. (maak vragend)", a: "did he drink water?"},
+            {s: "She drove home. (maak vragend)", a: "did she drive home?"},
+            {s: "I forgot my lunch. (maak vragend)", a: "did i forget my lunch?"},
+            {s: "Water froze solid. (maak vragend)", a: "did water freeze solid?"},
+            {s: "They spoke clearly. (maak vragend)", a: "did they speak clearly?"},
+            {s: "He stole money. (maak vragend)", a: "did he steal money?"},
+            {s: "She threw the ball. (maak vragend)", a: "did she throw the ball?"},
+            {s: "I wrote a note. (maak vragend)", a: "did i write a note?"},
+            {s: "He woke up early. (maak vragend)", a: "did he wake up early?"},
+            {s: "They read the book. (maak vragend)", a: "did they read the book?"},
+            {s: "We came home. (maak vragend)", a: "did we come home?"},
+            {s: "I got a letter. (maak vragend)", a: "did i get a letter?"},
+            {s: "She bought shoes. (maak vragend)", a: "did she buy shoes?"},
+            {s: "He found the key. (maak vragend)", a: "did he find the key?"},
+            {s: "They made dinner. (maak vragend)", a: "did they make dinner?"},
+            {s: "We went home. (maak vragend)", a: "did we go home?"},
+            {s: "I saw the movie. (maak vragend)", a: "did i see the movie?"}
+        ]
+    };
+
+    let q = [], i = 0, score = 0;
+    let mistakes = [];
+
+    function start() {
+        let active = Array.from(document.querySelectorAll('.cat')).filter(c => c.checked).map(c => c.value);
+        if(!active.length) return alert("Kies minimaal 1 categorie!");
+        
+        q = [];
+        mistakes = [];
+        active.forEach(c => q.push(...db[c]));
+        q = q.sort(() => 0.5 - Math.random()).slice(0, 10);
+        
+        document.getElementById('start').classList.add('hidden');
+        document.getElementById('quiz').classList.remove('hidden');
+        show();
+    }
+
+    function show() {
+        document.getElementById('status').innerText = `Vraag ${i + 1}/10`;
+        document.getElementById('sentence').innerText = q[i].s;
+        document.getElementById('answer').value = "";
+        document.getElementById('answer').focus();
+    }
+
+    function handleKeyPress(e) {
+        if (e.key === "Enter") {
+            check();
+        }
+    }
+
+    function check() {
+        let val = document.getElementById('answer').value.toLowerCase().trim();
+        let correct = q[i].a;
+
+        if (val === correct) {
+            score++;
+        } else {
+            mistakes.push({
+                question: q[i].s,
+                given: val === "" ? "(Niets ingevuld)" : val,
+                correct: correct
+            });
+        }
+
+        if (++i < 10) {
+            show();
+        } else {
+            document.getElementById('quiz').classList.add('hidden');
+            document.getElementById('end').classList.remove('hidden');
+            
+            if(score === 10) {
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#ff7043', '#ffb703', '#ffffff'] });
+                document.getElementById('badge').style.display = 'block';
+                document.getElementById('msg').innerHTML = "LEGENDARY! <br>Time Traveler Badge behaald!";
+            } else {
+                document.getElementById('msg').innerText = `Score: ${score}/10. Haal 10/10 voor de badge!`;
+                
+                let recapDiv = document.getElementById('recap');
+                recapDiv.innerHTML = "<h3>Recap van je fouten:</h3>";
+                mistakes.forEach(m => {
+                    recapDiv.innerHTML += `
+                        <div class="recap-item">
+                            <div class="recap-q">${m.question}</div>
+                            <div>Jouw antwoord: <span class="recap-given">${m.given}</span></div>
+                            <div>Juiste antwoord: <span class="recap-correct">${m.correct}</span></div>
+                        </div>
+                    `;
+                });
+                recapDiv.classList.remove('hidden');
+            }
+        }
+    }
+    </script>
+</body>
+</html>

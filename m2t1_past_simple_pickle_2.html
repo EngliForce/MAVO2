@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EngliForce Mega Typ-Quiz: Past Simple</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Lexend:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hero-orange-main: #ff7043;
+            --hero-orange-dark: #e65c30;
+            --hero-purple-main: #7b2cbf;
+            --hero-purple-dark: #3c096c;
+            --hero-yellow: #ffb703;
+            --hero-cyan: #00f5d4;
+            --dark-bg: #05101a;
+            --hero-orange: #ff5722;
+            --hero-green: #4caf50;
+            --hero-blue: #4361ee;
+            --hero-red: #d32f2f;
+        }
+
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: radial-gradient(circle at center, #1a102a 0%, #05101a 100%);
+            color: white;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: var(--hero-orange-main);
+            padding: 2.5rem 1rem;
+            text-align: center;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            border-bottom: 5px solid var(--hero-yellow);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            color: white;
+        }
+
+        header h1 {
+            font-family: 'Bangers', cursive;
+            font-size: 3.5rem;
+            letter-spacing: 3px;
+            margin: 0;
+            text-shadow: 4px 4px 0px var(--hero-orange-dark);
+        }
+
+        header p {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: white;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .quiz-container {
+            width: 100%;
+            max-width: 700px;
+            background: rgba(26, 16, 42, 0.9);
+            border: 3px solid var(--hero-blue);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.7);
+            margin-top: 20px;
+            box-sizing: border-box;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--hero-cyan);
+            font-family: 'Bangers', cursive;
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+        }
+
+        .score-box {
+            color: var(--hero-yellow);
+            font-weight: bold;
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            background: rgba(255,255,255,0.03);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--hero-cyan);
+        }
+
+        .type-area {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            font-size: 1rem;
+            color: var(--hero-yellow);
+            font-weight: bold;
+        }
+
+        .text-input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--hero-purple-main);
+            color: white;
+            padding: 15px;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            font-family: 'Lexend', sans-serif;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .text-input:focus {
+            border-color: var(--hero-cyan);
+        }
+
+        .text-input:disabled {
+            background: rgba(255,255,255,0.05);
+            color: #aaa;
+        }
+
+        .feedback-box {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 12px;
+            background: rgba(67, 97, 238, 0.1);
+            border-left: 5px solid var(--hero-blue);
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .feedback-title {
+            font-family: 'Bangers', cursive;
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+        }
+
+        .feedback-box.correct-style {
+            border-left-color: var(--hero-green);
+            background: rgba(76, 175, 80, 0.1);
+        }
+
+        .feedback-box.wrong-style {
+            border-left-color: var(--hero-red);
+            background: rgba(211, 47, 47, 0.1);
+        }
+
+        .action-btn {
+            width: 100%;
+            background: var(--hero-orange);
+            color: white;
+            border: none;
+            border-bottom: 5px solid #e64a19;
+            padding: 15px;
+            font-family: 'Bangers', cursive;
+            font-size: 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: 0.1s;
+        }
+
+        .action-btn:active {
+            transform: translateY(3px);
+            border-bottom-width: 2px;
+        }
+
+        .check-btn {
+            background: var(--hero-blue);
+            border-bottom-color: #273fc4;
+        }
+
+        .result-screen {
+            text-align: center;
+            display: none;
+        }
+
+        .result-title {
+            font-family: 'Bangers', cursive;
+            font-size: 3rem;
+            color: var(--hero-yellow);
+            margin-bottom: 20px;
+        }
+
+        .final-score {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .recap-box {
+            text-align: left;
+            margin-top: 20px;
+            max-height: 250px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .recap-item {
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed rgba(255,255,255,0.2);
+            font-size: 0.95rem;
+        }
+
+        .recap-q { font-weight: bold; color: var(--hero-cyan); }
+        .recap-given { color: var(--hero-red); }
+        .recap-correct { color: var(--hero-green); font-weight: bold; }
+
+        footer {
+            text-align: center;
+            opacity: 0.5;
+            padding: 40px 0 20px 0;
+            font-size: 0.9rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>ENGLIFORCE ACADEMY</h1>
+        <p>PAST SIMPLE PICKLE ⏳</p>
+    </header>
+
+    <main>
+        <div class="quiz-container">
+            <div class="subtitle">MEGA TIME TRAVEL QUIZ (10 RANDOM MISSIONS)</div>
+
+            <div id="quiz-screen">
+                <div class="status-bar">
+                    <span id="question-number">Missie: 1 / 10</span>
+                    <span class="score-box" id="score-display">⚡ Score: 0</span>
+                </div>
+                
+                <div class="question-text" id="question-text">Zin laadt...</div>
+                
+                <div class="type-area">
+                    <div class="input-label" id="input-instruction">Typ het ontbrekende stukje:</div>
+                    <input type="text" id="user-answer" class="text-input" placeholder="Typ hier je antwoord..." autocomplete="off" autocapitalize="none" autocorrect="off">
+                </div>
+
+                <button class="action-btn check-btn" id="check-btn" onclick="checkTypedAnswer()">CONTROLEER ANTWOORD!</button>
+                <button class="action-btn" id="next-btn" style="display: none;" onclick="nextQuestion()">VOLGENDE ZIN POOOW!</button>
+
+                <div class="feedback-box" id="feedback-box">
+                    <div class="feedback-title" id="feedback-title">RESULTAAT</div>
+                    <div id="feedback-text">Uitleg...</div>
+                </div>
+            </div>
+
+            <div id="result-screen" class="result-screen">
+                <div class="result-title" id="result-title">MISSIE VOLBRACHT!</div>
+                <div class="final-score" id="final-score">Jouw score: 0 / 10</div>
+                <p id="result-comment">Ben jij de nieuwe Master of Time?</p>
+                <div id="recap-container" class="recap-box" style="display: none;"></div>
+                <button class="action-btn" onclick="restartQuiz()">SPEEL NOG EEN RONDE (NIEUWE VRAGEN!)</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 EngliForce – Make English Your Superpower!</p>
+    </footer>
+
+<script>
+    const masterQuestionDatabase = [
+        // ONTKENNINGEN (50 stuks)
+        { sentence: "I _______________ TV yesterday. <br><br>⚠️ Maak <b>ontkennend</b>: <b>watch</b>", correctAnswer: "didn't watch", alternativeAnswers: ["did not watch"], rationale: "Recept: didn't + hele werkwoord." },
+        { sentence: "She _______________ hard. <br><br>⚠️ Maak <b>ontkennend</b>: <b>study</b>", correctAnswer: "didn't study", alternativeAnswers: ["did not study"], rationale: "Na 'didn't' het hele werkwoord gebruiken." },
+        { sentence: "We _______________ at home. <br><br>⚠️ Maak <b>ontkennend</b>: <b>stay</b>", correctAnswer: "didn't stay", alternativeAnswers: ["did not stay"], rationale: "Gebruik 'didn't' + hele werkwoord." },
+        { sentence: "They _______________ football. <br><br>⚠️ Maak <b>ontkennend</b>: <b>play</b>", correctAnswer: "didn't play", alternativeAnswers: ["did not play"], rationale: "Zodra 'didn't' er staat, geen -ed toevoegen." },
+        { sentence: "He _______________ his room. <br><br>⚠️ Maak <b>ontkennend</b>: <b>clean</b>", correctAnswer: "didn't clean", alternativeAnswers: ["did not clean"], rationale: "didn't + hele werkwoord." },
+        { sentence: "You _______________ the train. <br><br>⚠️ Maak <b>ontkennend</b>: <b>miss</b>", correctAnswer: "didn't miss", alternativeAnswers: ["did not miss"], rationale: "didn't + hele werkwoord." },
+        { sentence: "My parents _______________ to Paris. <br><br>⚠️ Maak <b>ontkennend</b>: <b>travel</b>", correctAnswer: "didn't travel", alternativeAnswers: ["did not travel"], rationale: "didn't + hele werkwoord." },
+        { sentence: "The bus _______________ here. <br><br>⚠️ Maak <b>ontkennend</b>: <b>stop</b>", correctAnswer: "didn't stop", alternativeAnswers: ["did not stop"], rationale: "didn't + hele werkwoord." },
+        { sentence: "We _______________ our friends. <br><br>⚠️ Maak <b>ontkennend</b>: <b>visit</b>", correctAnswer: "didn't visit", alternativeAnswers: ["did not visit"], rationale: "didn't + hele werkwoord." },
+        { sentence: "I _______________ the heavy box. <br><br>⚠️ Maak <b>ontkennend</b>: <b>lift</b>", correctAnswer: "didn't lift", alternativeAnswers: ["did not lift"], rationale: "didn't + hele werkwoord." },
+        { sentence: "She _______________ the door. <br><br>⚠️ Maak <b>ontkennend</b>: <b>open</b>", correctAnswer: "didn't open", alternativeAnswers: ["did not open"], rationale: "didn't + hele werkwoord." },
+        { sentence: "They _______________ the window. <br><br>⚠️ Maak <b>ontkennend</b>: <b>close</b>", correctAnswer: "didn't close", alternativeAnswers: ["did not close"], rationale: "didn't + hele werkwoord." },
+        { sentence: "He _______________ the soup. <br><br>⚠️ Maak <b>ontkennend</b>: <b>cook</b>", correctAnswer: "didn't cook", alternativeAnswers: ["did not cook"], rationale: "didn't + hele werkwoord." },
+        { sentence: "I _______________ to the music. <br><br>⚠️ Maak <b>ontkennend</b>: <b>listen</b>", correctAnswer: "didn't listen", alternativeAnswers: ["did not listen"], rationale: "didn't + hele werkwoord." },
+        { sentence: "She _______________ the house. <br><br>⚠️ Maak <b>ontkennend</b>: <b>paint</b>", correctAnswer: "didn't paint", alternativeAnswers: ["did not paint"], rationale: "didn't + hele werkwoord." },
+        { sentence: "He _______________ the question. <br><br>⚠️ Maak <b>ontkennend</b>: <b>answer</b>", correctAnswer: "didn't answer", alternativeAnswers: ["did not answer"], rationale: "didn't + hele werkwoord." },
+        { sentence: "You _______________ the door. <br><br>⚠️ Maak <b>ontkennend</b>: <b>lock</b>", correctAnswer: "didn't lock", alternativeAnswers: ["did not lock"], rationale: "didn't + hele werkwoord." },
+        { sentence: "They _______________ the game. <br><br>⚠️ Maak <b>ontkennend</b>: <b>finish</b>", correctAnswer: "didn't finish", alternativeAnswers: ["did not finish"], rationale: "didn't + hele werkwoord." },
+        { sentence: "I _______________ my keys. <br><br>⚠️ Maak <b>ontkennend</b>: <b>lose</b>", correctAnswer: "didn't lose", alternativeAnswers: ["did not lose"], rationale: "didn't + hele werkwoord (lose)." },
+        { sentence: "He _______________ that joke. <br><br>⚠️ Maak <b>ontkennend</b>: <b>mean</b>", correctAnswer: "didn't mean", alternativeAnswers: ["did not mean"], rationale: "didn't + hele werkwoord (mean)." },
+        { sentence: "She _______________ him yesterday. <br><br>⚠️ Maak <b>ontkennend</b>: <b>meet</b>", correctAnswer: "didn't meet", alternativeAnswers: ["did not meet"], rationale: "didn't + hele werkwoord (meet)." },
+        { sentence: "They _______________ their old car. <br><br>⚠️ Maak <b>ontkennend</b>: <b>sell</b>", correctAnswer: "didn't sell", alternativeAnswers: ["did not sell"], rationale: "didn't + hele werkwoord (sell)." },
+        { sentence: "We _______________ an email. <br><br>⚠️ Maak <b>ontkennend</b>: <b>send</b>", correctAnswer: "didn't send", alternativeAnswers: ["did not send"], rationale: "didn't + hele werkwoord (send)." },
+        { sentence: "I _______________ lunch today. <br><br>⚠️ Maak <b>ontkennend</b>: <b>make</b>", correctAnswer: "didn't make", alternativeAnswers: ["did not make"], rationale: "didn't + hele werkwoord (make)." },
+        { sentence: "He _______________ the secret. <br><br>⚠️ Maak <b>ontkennend</b>: <b>tell</b>", correctAnswer: "didn't tell", alternativeAnswers: ["did not tell"], rationale: "didn't + hele werkwoord (tell)." },
+        { sentence: "She _______________ snacks. <br><br>⚠️ Maak <b>ontkennend</b>: <b>bring</b>", correctAnswer: "didn't bring", alternativeAnswers: ["did not bring"], rationale: "didn't + hele werkwoord (bring)." },
+        { sentence: "They _______________ a hut. <br><br>⚠️ Maak <b>ontkennend</b>: <b>build</b>", correctAnswer: "didn't build", alternativeAnswers: ["did not build"], rationale: "didn't + hele werkwoord (build)." },
+        { sentence: "I _______________ the ball. <br><br>⚠️ Maak <b>ontkennend</b>: <b>catch</b>", correctAnswer: "didn't catch", alternativeAnswers: ["did not catch"], rationale: "didn't + hele werkwoord (catch)." },
+        { sentence: "We _______________ last night. <br><br>⚠️ Maak <b>ontkennend</b>: <b>dream</b>", correctAnswer: "didn't dream", alternativeAnswers: ["did not dream"], rationale: "didn't + hele werkwoord (dream)." },
+        { sentence: "He _______________ back. <br><br>⚠️ Maak <b>ontkennend</b>: <b>fight</b>", correctAnswer: "didn't fight", alternativeAnswers: ["did not fight"], rationale: "didn't + hele werkwoord (fight)." },
+        { sentence: "They _______________ French. <br><br>⚠️ Maak <b>ontkennend</b>: <b>learn</b>", correctAnswer: "didn't learn", alternativeAnswers: ["did not learn"], rationale: "didn't + hele werkwoord (learn)." },
+        { sentence: "She _______________ early. <br><br>⚠️ Maak <b>ontkennend</b>: <b>leave</b>", correctAnswer: "didn't leave", alternativeAnswers: ["did not leave"], rationale: "didn't + hele werkwoord (leave)." },
+        { sentence: "It _______________ fresh. <br><br>⚠️ Maak <b>ontkennend</b>: <b>smell</b>", correctAnswer: "didn't smell", alternativeAnswers: ["did not smell"], rationale: "didn't + hele werkwoord (smell)." },
+        { sentence: "I _______________ money. <br><br>⚠️ Maak <b>ontkennend</b>: <b>spend</b>", correctAnswer: "didn't spend", alternativeAnswers: ["did not spend"], rationale: "didn't + hele werkwoord (spend)." },
+        { sentence: "We _______________ in line. <br><br>⚠️ Maak <b>ontkennend</b>: <b>stand</b>", correctAnswer: "didn't stand", alternativeAnswers: ["did not stand"], rationale: "didn't + hele werkwoord (stand)." },
+        { sentence: "He _______________ the floor. <br><br>⚠️ Maak <b>ontkennend</b>: <b>sweep</b>", correctAnswer: "didn't sweep", alternativeAnswers: ["did not sweep"], rationale: "didn't + hele werkwoord (sweep)." },
+        { sentence: "She _______________ us math. <br><br>⚠️ Maak <b>ontkennend</b>: <b>teach</b>", correctAnswer: "didn't teach", alternativeAnswers: ["did not teach"], rationale: "didn't + hele werkwoord (teach)." },
+        { sentence: "I _______________ about it. <br><br>⚠️ Maak <b>ontkennend</b>: <b>think</b>", correctAnswer: "didn't think", alternativeAnswers: ["did not think"], rationale: "didn't + hele werkwoord (think)." },
+        { sentence: "They _______________ well. <br><br>⚠️ Maak <b>ontkennend</b>: <b>sleep</b>", correctAnswer: "didn't sleep", alternativeAnswers: ["did not sleep"], rationale: "didn't + hele werkwoord (sleep)." },
+        { sentence: "We _______________ our best. <br><br>⚠️ Maak <b>ontkennend</b>: <b>do</b>", correctAnswer: "didn't do", alternativeAnswers: ["did not do"], rationale: "didn't + hele werkwoord (do)." },
+        { sentence: "He _______________ home. <br><br>⚠️ Maak <b>ontkennend</b>: <b>go</b>", correctAnswer: "didn't go", alternativeAnswers: ["did not go"], rationale: "didn't + hele werkwoord (go)." },
+        { sentence: "She _______________ apples. <br><br>⚠️ Maak <b>ontkennend</b>: <b>eat</b>", correctAnswer: "didn't eat", alternativeAnswers: ["did not eat"], rationale: "didn't + hele werkwoord (eat)." },
+        { sentence: "I _______________ the sign. <br><br>⚠️ Maak <b>ontkennend</b>: <b>see</b>", correctAnswer: "didn't see", alternativeAnswers: ["did not see"], rationale: "didn't + hele werkwoord (see)." },
+        { sentence: "They _______________ by plane. <br><br>⚠️ Maak <b>ontkennend</b>: <b>fly</b>", correctAnswer: "didn't fly", alternativeAnswers: ["did not fly"], rationale: "didn't + hele werkwoord (fly)." },
+        { sentence: "He _______________ in bed. <br><br>⚠️ Maak <b>ontkennend</b>: <b>lie</b>", correctAnswer: "didn't lie", alternativeAnswers: ["did not lie"], rationale: "didn't + hele werkwoord (lie)." },
+        { sentence: "It _______________ me. <br><br>⚠️ Maak <b>ontkennend</b>: <b>bite</b>", correctAnswer: "didn't bite", alternativeAnswers: ["did not bite"], rationale: "didn't + hele werkwoord (bite)." },
+        { sentence: "She _______________ a picture. <br><br>⚠️ Maak <b>ontkennend</b>: <b>draw</b>", correctAnswer: "didn't draw", alternativeAnswers: ["did not draw"], rationale: "didn't + hele werkwoord (draw)." },
+        { sentence: "We _______________ down. <br><br>⚠️ Maak <b>ontkennend</b>: <b>fall</b>", correctAnswer: "didn't fall", alternativeAnswers: ["did not fall"], rationale: "didn't + hele werkwoord (fall)." },
+
+        // VRAGEN (50 stuks)
+        { sentence: "_______________ you _______________ your room? <br><br>⚠️ Maak een <b>vraag</b>: <b>clean</b>", correctAnswer: "did you clean", alternativeAnswers: ["did clean"], rationale: "Did + persoon + hele werkwoord." },
+        { sentence: "_______________ they _______________ yesterday? <br><br>⚠️ Maak een <b>vraag</b>: <b>dance</b>", correctAnswer: "did they dance", alternativeAnswers: ["did dance"], rationale: "Did + persoon + hele werkwoord." },
+        { sentence: "_______________ Sam _______________ the car? <br><br>⚠️ Maak een <b>vraag</b>: <b>stop</b>", correctAnswer: "did sam stop", alternativeAnswers: ["did stop"], rationale: "Did + persoon + hele werkwoord." },
+        { sentence: "_______________ you _______________ the bus? <br><br>⚠️ Maak een <b>vraag</b>: <b>miss</b>", correctAnswer: "did you miss", alternativeAnswers: ["did miss"], rationale: "Did + persoon + hele werkwoord." },
+        { sentence: "_______________ he _______________ to the radio? <br><br>⚠️ Maak een <b>vraag</b>: <b>listen</b>", correctAnswer: "did he listen", alternativeAnswers: ["did listen"], rationale: "Did + persoon + hele werkwoord." },
+        { sentence: "_______________ you _______________ your family? <br><br>⚠️ Maak een <b>vraag</b>: <b>visit</b>", correctAnswer: "did you visit", alternativeAnswers: ["did visit"], rationale: "Did + persoon + hele werkwoord." },
+        { sentence: "_______________ they _______________ the tree? <br><br>⚠️ Maak een <b>vraag</b>: <b>climb</b>", correctAnswer: "did they climb", alternativeAnswers: ["did climb"], rationale: "Did + persoon + hele werkwoord." },
+        { sentence: "_______________ she _______________ her work? <br><br>⚠️ Maak een <b>vraag</b>: <b>finish</b>", correctAnswer: "did she finish", alternativeAnswers: ["did finish"], rationale: "Did + persoon + hele werkwoord." },
+        { sentence: "_______________ you _______________ for the test? <br><br>⚠️ Maak een <b>vraag</b>: <b>study</b>", correctAnswer: "did you study", alternativeAnswers: ["did study"], rationale: "Did + persoon + hele werkwoord." },
+        { sentence: "_______________ they _______________ overseas? <br><br>⚠️ Maak een <b>vraag</b>: <b>travel</b>", correctAnswer: "did they travel", alternativeAnswers: ["did travel"], rationale: "Did + persoon + hele werkwoord." },
+        { sentence: "_______________ the show _______________ on time? <br><br>⚠️ Maak een <b>vraag</b>: <b>start</b>", correctAnswer: "did the show start", alternativeAnswers: ["did start"], rationale: "Did + persoon + hele werkwoord." },
+        { sentence: "_______________ he _______________ the door? <br><br>⚠️ Maak een <b>vraag</b>: <b>lock</b>", correctAnswer: "did he lock", alternativeAnswers: ["did lock"], rationale: "Did + persoon + hele werkwoord." },
+        { sentence: "_______________ you _______________ dinner? <br><br>⚠️ Maak een <b>vraag</b>: <b>cook</b>", correctAnswer: "did you cook", alternativeAnswers: ["did cook"], rationale: "Did + persoon + hele werkwoord." },
+        { sentence: "_______________ she _______________ the window? <br><br>⚠️ Maak een <b>vraag</b>: <b>open</b>", correctAnswer: "did she open", alternativeAnswers: ["did open"], rationale: "Did + persoon + hele werkwoord." },
+        { sentence: "_______________ they _______________ the door? <br><br>⚠️ Maak een <b>vraag</b>: <b>close</b>", correctAnswer: "did they close", alternativeAnswers: ["did close"], rationale: "Did + persoon + hele werkwoord." },
+        { sentence: "_______________ it _______________ yesterday? <br><br>⚠️ Maak een <b>vraag</b>: <b>rain</b>", correctAnswer: "did it rain", alternativeAnswers: ["did rain"], rationale: "Did + persoon + hele werkwoord." },
+        { sentence: "_______________ you _______________ tennis? <br><br>⚠️ Maak een <b>vraag</b>: <b>play</b>", correctAnswer: "did you play", alternativeAnswers: ["did play"], rationale: "Did + persoon + hele werkwoord." },
+        { sentence: "_______________ he _______________ the fence? <br><br>⚠️ Maak een <b>vraag</b>: <b>paint</b>", correctAnswer: "did he paint", alternativeAnswers: ["did paint"], rationale: "Did + persoon + hele werkwoord." },
+        { sentence: "_______________ she _______________ a gift? <br><br>⚠️ Maak een <b>vraag</b>: <b>give</b>", correctAnswer: "did she give", alternativeAnswers: ["did give"], rationale: "Did + persoon + hele werkwoord (give)." },
+        { sentence: "_______________ they _______________ fast? <br><br>⚠️ Maak een <b>vraag</b>: <b>grow</b>", correctAnswer: "did they grow", alternativeAnswers: ["did grow"], rationale: "Did + persoon + hele werkwoord (grow)." },
+        { sentence: "_______________ you _______________ the answer? <br><br>⚠️ Maak een <b>vraag</b>: <b>know</b>", correctAnswer: "did you know", alternativeAnswers: ["did know"], rationale: "Did + persoon + hele werkwoord (know)." },
+        { sentence: "_______________ the bell _______________? <br><br>⚠️ Maak een <b>vraag</b>: <b>ring</b>", correctAnswer: "did the bell ring", alternativeAnswers: ["did ring"], rationale: "Did + onderwerp + hele werkwoord (ring)." },
+        { sentence: "_______________ he _______________ a bike? <br><br>⚠️ Maak een <b>vraag</b>: <b>ride</b>", correctAnswer: "did he ride", alternativeAnswers: ["did ride"], rationale: "Did + persoon + hele werkwoord (ride)." },
+        { sentence: "_______________ she _______________ a song? <br><br>⚠️ Maak een <b>vraag</b>: <b>sing</b>", correctAnswer: "did she sing", alternativeAnswers: ["did sing"], rationale: "Did + persoon + hele werkwoord (sing)." },
+        { sentence: "_______________ the boat _______________? <br><br>⚠️ Maak een <b>vraag</b>: <b>sink</b>", correctAnswer: "did the boat sink", alternativeAnswers: ["did sink"], rationale: "Did + onderwerp + hele werkwoord (sink)." },
+        { sentence: "_______________ we _______________ in the lake? <br><br>⚠️ Maak een <b>vraag</b>: <b>swim</b>", correctAnswer: "did we swim", alternativeAnswers: ["did swim"], rationale: "Did + persoon + hele werkwoord (swim)." },
+        { sentence: "_______________ I _______________ the key? <br><br>⚠️ Maak een <b>vraag</b>: <b>take</b>", correctAnswer: "did i take", alternativeAnswers: ["did take"], rationale: "Did + persoon + hele werkwoord (take)." },
+        { sentence: "_______________ he _______________ his pants? <br><br>⚠️ Maak een <b>vraag</b>: <b>tear</b>", correctAnswer: "did he tear", alternativeAnswers: ["did tear"], rationale: "Did + persoon + hele werkwoord (tear)." },
+        { sentence: "_______________ she _______________ a coat? <br><br>⚠️ Maak een <b>vraag</b>: <b>wear</b>", correctAnswer: "did she wear", alternativeAnswers: ["did wear"], rationale: "Did + persoon + hele werkwoord (wear)." },
+        { sentence: "_______________ it _______________ early? <br><br>⚠️ Maak een <b>vraag</b>: <b>begin</b>", correctAnswer: "did it begin", alternativeAnswers: ["did begin"], rationale: "Did + onderwerp + hele werkwoord (begin)." },
+        { sentence: "_______________ they _______________ the cup? <br><br>⚠️ Maak een <b>vraag</b>: <b>break</b>", correctAnswer: "did they break", alternativeAnswers: ["did break"], rationale: "Did + persoon + hele werkwoord (break)." },
+        { sentence: "_______________ we _______________ this one? <br><br>⚠️ Maak een <b>vraag</b>: <b>choose</b>", correctAnswer: "did we choose", alternativeAnswers: ["did choose"], rationale: "Did + persoon + hele werkwoord (choose)." },
+        { sentence: "_______________ he _______________ milk? <br><br>⚠️ Maak een <b>vraag</b>: <b>drink</b>", correctAnswer: "did he drink", alternativeAnswers: ["did drink"], rationale: "Did + persoon + hele werkwoord (drink)." },
+        { sentence: "_______________ she _______________ home? <br><br>⚠️ Maak een <b>vraag</b>: <b>drive</b>", correctAnswer: "did she drive", alternativeAnswers: ["did drive"], rationale: "Did + persoon + hele werkwoord (drive)." },
+        { sentence: "_______________ I _______________ your name? <br><br>⚠️ Maak een <b>vraag</b>: <b>forget</b>", correctAnswer: "did i forget", alternativeAnswers: ["did forget"], rationale: "Did + persoon + hele werkwoord (forget)." },
+        { sentence: "_______________ the lake _______________? <br><br>⚠️ Maak een <b>vraag</b>: <b>freeze</b>", correctAnswer: "did the lake freeze", alternativeAnswers: ["did freeze"], rationale: "Did + onderwerp + hele werkwoord (freeze)." },
+        { sentence: "_______________ they _______________ English? <br><br>⚠️ Maak een <b>vraag</b>: <b>speak</b>", correctAnswer: "did they speak", alternativeAnswers: ["did speak"], rationale: "Did + persoon + hele werkwoord (speak)." },
+        { sentence: "_______________ he _______________ the wallet? <br><br>⚠️ Maak een <b>vraag</b>: <b>steal</b>", correctAnswer: "did he steal", alternativeAnswers: ["did steal"], rationale: "Did + persoon + hele werkwoord (steal)." },
+        { sentence: "_______________ she _______________ the ball? <br><br>⚠️ Maak een <b>vraag</b>: <b>throw</b>", correctAnswer: "did she throw", alternativeAnswers: ["did throw"], rationale: "Did + persoon + hele werkwoord (throw)." },
+        { sentence: "_______________ I _______________ a story? <br><br>⚠️ Maak een <b>vraag</b>: <b>write</b>", correctAnswer: "did i write", alternativeAnswers: ["did write"], rationale: "Did + persoon + hele werkwoord (write)." },
+        { sentence: "_______________ he _______________ up early? <br><br>⚠️ Maak een <b>vraag</b>: <b>wake</b>", correctAnswer: "did he wake", alternativeAnswers: ["did wake"], rationale: "Did + persoon + hele werkwoord (wake)." },
+        { sentence: "_______________ they _______________ the book? <br><br>⚠️ Maak een <b>vraag</b>: <b>read</b>", correctAnswer: "did they read", alternativeAnswers: ["did read"], rationale: "Did + persoon + hele werkwoord (read)." },
+        { sentence: "_______________ we _______________ home? <br><br>⚠️ Maak een <b>vraag</b>: <b>come</b>", correctAnswer: "did we come", alternativeAnswers: ["did come"], rationale: "Did + persoon + hele werkwoord (come)." },
+        { sentence: "_______________ I _______________ a prize? <br><br>⚠️ Maak een <b>vraag</b>: <b>get</b>", correctAnswer: "did i get", alternativeAnswers: ["did get"], rationale: "Did + persoon + hele werkwoord (get)." },
+        { sentence: "_______________ she _______________ shoes? <br><br>⚠️ Maak een <b>vraag</b>: <b>buy</b>", correctAnswer: "did she buy", alternativeAnswers: ["did buy"], rationale: "Did + persoon + hele werkwoord (buy)." },
+        { sentence: "_______________ he _______________ the key? <br><br>⚠️ Maak een <b>vraag</b>: <b>find</b>", correctAnswer: "did he find", alternativeAnswers: ["did find"], rationale: "Did + persoon + hele werkwoord (find)." },
+        { sentence: "_______________ they _______________ dinner? <br><br>⚠️ Maak een <b>vraag</b>: <b>make</b>", correctAnswer: "did they make", alternativeAnswers: ["did make"], rationale: "Did + persoon + hele werkwoord (make)." },
+        { sentence: "_______________ we _______________ to town? <br><br>⚠️ Maak een <b>vraag</b>: <b>go</b>", correctAnswer: "did we go", alternativeAnswers: ["did go"], rationale: "Did + persoon + hele werkwoord (go)." },
+        { sentence: "_______________ I _______________ you? <br><br>⚠️ Maak een <b>vraag</b>: <b>see</b>", correctAnswer: "did i see", alternativeAnswers: ["did see"], rationale: "Did + persoon + hele werkwoord (see)." },
+        { sentence: "_______________ she _______________ a movie? <br><br>⚠️ Maak een <b>vraag</b>: <b>watch</b>", correctAnswer: "did she watch", alternativeAnswers: ["did watch"], rationale: "Did + persoon + hele werkwoord (watch)." }
+    ];
+
+    let currentQuestions = [];
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let userMistakes = [];
+
+    const questionNumberEl = document.getElementById("question-number");
+    const scoreDisplayEl = document.getElementById("score-display");
+    const questionTextEl = document.getElementById("question-text");
+    const userInputEl = document.getElementById("user-answer");
+    const feedbackBoxEl = document.getElementById("feedback-box");
+    const feedbackTitleEl = document.getElementById("feedback-title");
+    const feedbackTextEl = document.getElementById("feedback-text");
+    const checkBtnEl = document.getElementById("check-btn");
+    const nextBtnEl = document.getElementById("next-btn");
+    
+    const quizScreenEl = document.getElementById("quiz-screen");
+    const resultScreenEl = document.getElementById("result-screen");
+    const finalScoreEl = document.getElementById("final-score");
+    const resultTitleEl = document.getElementById("result-title");
+    const resultCommentEl = document.getElementById("result-comment");
+    const recapContainerEl = document.getElementById("recap-container");
+
+    userInputEl.addEventListener("keyup", function(event) {
+        if (event.key === "Enter" && checkBtnEl.style.display !== "none") {
+            checkTypedAnswer();
+        } else if (event.key === "Enter" && nextBtnEl.style.display !== "none") {
+            nextQuestion();
+        }
+    });
+
+    function normalizeApostrophe(text) {
+        return text.replace(/[‘’'’`´‘]/g, "'");
+    }
+
+    function setupQuizQuestions() {
+        let shuffled = [...masterQuestionDatabase];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        currentQuestions = shuffled.slice(0, 10);
+    }
+
+    function loadQuestion() {
+        feedbackBoxEl.style.display = "none";
+        feedbackBoxEl.className = "feedback-box";
+        nextBtnEl.style.display = "none";
+        checkBtnEl.style.display = "block";
+        
+        userInputEl.disabled = false;
+        userInputEl.value = "";
+        
+        const currentQuestion = currentQuestions[currentQuestionIndex];
+        questionNumberEl.innerText = `Missie: ${currentQuestionIndex + 1} / ${currentQuestions.length}`;
+        questionTextEl.innerHTML = currentQuestion.sentence;
+        
+        setTimeout(() => userInputEl.focus(), 100);
+    }
+
+    function checkTypedAnswer() {
+        const currentQuestion = currentQuestions[currentQuestionIndex];
+        
+        let studentAnswer = userInputEl.value.trim().toLowerCase().replace(/\s+/g, ' ');
+        studentAnswer = normalizeApostrophe(studentAnswer);
+        
+        if (studentAnswer === "") {
+            alert("Typ eerst een antwoord in de tijdmachine!");
+            return;
+        }
+
+        userInputEl.disabled = true;
+        checkBtnEl.style.display = "none";
+
+        const targetCorrect = normalizeApostrophe(currentQuestion.correctAnswer);
+        let isCorrect = (studentAnswer === targetCorrect);
+        
+        if (!isCorrect && currentQuestion.alternativeAnswers) {
+            isCorrect = currentQuestion.alternativeAnswers.some(alt => {
+                return studentAnswer === normalizeApostrophe(alt);
+            });
+        }
+
+        if (isCorrect) {
+            score++;
+            scoreDisplayEl.innerText = `⚡ Score: ${score}`;
+            feedbackTitleEl.innerText = "💥 ZAP! HELEMAAL GOED!";
+            feedbackBoxEl.classList.add("correct-style");
+        } else {
+            feedbackTitleEl.innerText = "🚨 SPELLING ALERT!";
+            feedbackBoxEl.classList.add("wrong-style");
+            userMistakes.push({
+                question: currentQuestion.sentence.replace(/<br>/g, ' ').replace(/⚠️/g, ''),
+                userAns: userInputEl.value,
+                correctAns: currentQuestion.correctAnswer
+            });
+        }
+
+        let correctDisplay = currentQuestion.correctAnswer;
+        if(currentQuestion.alternativeAnswers) {
+            currentQuestion.alternativeAnswers.forEach(alt => {
+                correctDisplay += ` óf ${alt}`;
+            });
+        }
+
+        feedbackTextEl.innerHTML = `Jouw antwoord: <b>${userInputEl.value}</b><br>Geaccepteerd: <b style="color: var(--hero-yellow); font-size: 1.1rem;">${correctDisplay}</b><br><br>${currentQuestion.rationale}`;
+        
+        feedbackBoxEl.style.display = "block";
+        nextBtnEl.style.display = "block";
+        nextBtnEl.focus();
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < currentQuestions.length) {
+            loadQuestion();
+        } else {
+            showResults();
+        }
+    }
+
+    function showResults() {
+        quizScreenEl.style.display = "none";
+        resultScreenEl.style.display = "block";
+        finalScoreEl.innerText = `Jouw score: ${score} / ${currentQuestions.length}`;
+        
+        if (score === 10) {
+            resultTitleEl.innerText = "👑 TIME LORD ALERT!";
+            resultCommentEl.innerText = "Perfect! Jij kunt vlekkeloos Engelse vragen en ontkenningen typen in het verleden!";
+            recapContainerEl.style.display = "none";
+        } else {
+            if (score >= 7) {
+                resultTitleEl.innerText = "⚡ SUPERHELD IN OPLEIDING!";
+                resultCommentEl.innerText = "Heel goed gedaan! Hier zijn de zinnen waar je nog even op moet letten:";
+            } else {
+                resultTitleEl.innerText = "⏳ TIJDLUS-GEVAAR...";
+                resultCommentEl.innerText = "Let goed op dat het hoofdwerkwoord na 'did' of 'didn't' GEEN -ed krijgt. Bekijk je fouten:";
+            }
+            
+            recapContainerEl.innerHTML = "<h3>Recap van je fouten:</h3>";
+            userMistakes.forEach(m => {
+                recapContainerEl.innerHTML += `
+                    <div class="recap-item">
+                        <div class="recap-q">${m.question}</div>
+                        <div>Jouw antwoord: <span class="recap-given">${m.userAns || '(Niets)'}</span></div>
+                        <div>Juiste antwoord: <span class="recap-correct">${m.correctAns}</span></div>
+                    </div>
+                `;
+            });
+            recapContainerEl.style.display = "block";
+        }
+    }
+
+    function restartQuiz() {
+        currentQuestionIndex = 0;
+        score = 0;
+        userMistakes = [];
+        scoreDisplayEl.innerText = `⚡ Score: ${score}`;
+        quizScreenEl.style.display = "block";
+        resultScreenEl.style.display = "none";
+        setupQuizQuestions();
+        loadQuestion();
+    }
+
+    setupQuizQuestions();
+    loadQuestion();
+</script>
+</body>
+</html>

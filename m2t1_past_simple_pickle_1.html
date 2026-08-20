@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EngliForce Mega Typ-Quiz: Past Simple</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Lexend:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hero-orange-main: #ff7043;
+            --hero-orange-dark: #e65c30;
+            --hero-purple-main: #7b2cbf;
+            --hero-purple-dark: #3c096c;
+            --hero-yellow: #ffb703;
+            --hero-cyan: #00f5d4;
+            --dark-bg: #05101a;
+            --hero-orange: #ff5722;
+            --hero-green: #4caf50;
+            --hero-blue: #4361ee;
+            --hero-red: #d32f2f;
+            --wa-bg: #0b141a;
+            --wa-bubble-in: #202c33;
+            --wa-bubble-out: #005c4b;
+        }
+
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: radial-gradient(circle at center, #1a102a 0%, #05101a 100%);
+            color: white;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: var(--hero-orange-main);
+            padding: 2.5rem 1rem;
+            text-align: center;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            border-bottom: 5px solid var(--hero-yellow);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            color: white;
+        }
+
+        header h1 {
+            font-family: 'Bangers', cursive;
+            font-size: 3.5rem;
+            letter-spacing: 3px;
+            margin: 0;
+            text-shadow: 4px 4px 0px var(--hero-orange-dark);
+        }
+
+        header p {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: white;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .quiz-container {
+            width: 100%;
+            max-width: 700px;
+            background: rgba(26, 16, 42, 0.9);
+            border: 3px solid var(--hero-blue);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.7);
+            margin-top: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--hero-cyan);
+            font-family: 'Bangers', cursive;
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+        }
+
+        .score-box {
+            color: var(--hero-yellow);
+            font-weight: bold;
+        }
+
+        #chat-window {
+            flex: 1;
+            background: var(--wa-bg);
+            background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
+            background-blend-mode: overlay;
+            border-radius: 10px;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #333;
+            min-height: 300px;
+            max-height: 380px;
+        }
+
+        .bubble {
+            max-width: 85%;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 1rem;
+            line-height: 1.4;
+            position: relative;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .bubble-in { background: var(--wa-bubble-in); align-self: flex-start; border-bottom-left-radius: 2px; color: #e9edef; }
+        .bubble-out { background: var(--wa-bubble-out); align-self: flex-end; border-bottom-right-radius: 2px; color: #fff; }
+
+        .sender { color: var(--hero-cyan); font-size: 0.8rem; font-weight: bold; display: block; margin-bottom: 4px; font-family: 'Share Tech Mono', monospace; }
+
+        .type-area {
+            display: flex;
+            gap: 10px;
+            background: rgba(0,0,0,0.4);
+            padding: 10px;
+            border-radius: 30px;
+            align-items: center;
+            border: 1px solid var(--hero-purple-main);
+        }
+
+        .text-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            font-size: 1.1rem;
+            font-family: 'Lexend', sans-serif;
+            outline: none;
+        }
+
+        .text-input:disabled {
+            opacity: 0.5;
+        }
+
+        .action-btn {
+            width: 100%;
+            background: var(--hero-orange);
+            color: white;
+            border: none;
+            border-bottom: 5px solid #e64a19;
+            padding: 15px;
+            font-family: 'Bangers', cursive;
+            font-size: 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: 0.1s;
+        }
+
+        .action-btn:active {
+            transform: translateY(3px);
+            border-bottom-width: 2px;
+        }
+
+        .check-btn {
+            background: #00a884;
+            border-bottom-color: #008f6f;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            padding: 0;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .result-screen {
+            text-align: center;
+            display: none;
+        }
+
+        .result-title {
+            font-family: 'Bangers', cursive;
+            font-size: 3rem;
+            color: var(--hero-yellow);
+            margin-bottom: 20px;
+        }
+
+        .final-score {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .recap-box {
+            text-align: left;
+            margin-top: 20px;
+            max-height: 250px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .recap-item {
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed rgba(255,255,255,0.2);
+            font-size: 0.95rem;
+        }
+
+        .recap-q { font-weight: bold; color: var(--hero-cyan); }
+        .recap-given { color: var(--hero-red); }
+        .recap-correct { color: var(--hero-green); font-weight: bold; }
+
+        footer {
+            text-align: center;
+            opacity: 0.5;
+            padding: 40px 0 20px 0;
+            font-size: 0.9rem;
+        }
+
+        .flash-effect { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; opacity: 0; pointer-events: none; z-index: 1999; }
+        .shake { animation: shake 0.2s ease-in-out; }
+        @keyframes shake { 0%, 100% { transform: translate(0,0); } 25% { transform: translate(-5px, 5px); } 50% { transform: translate(5px, -5px); } }
+    </style>
+</head>
+<body>
+
+    <div class="flash-effect" id="flash"></div>
+
+    <header>
+        <h1>ENGLIFORCE ACADEMY</h1>
+        <p>PAST SIMPLE INTERCEPTOR ⏳</p>
+    </header>
+
+    <main>
+        <div class="quiz-container">
+            <div id="screen-intro" style="text-align: center;">
+                <div class="subtitle">🚨 WHATSAPP INTERCEPTOR</div>
+                <p style="font-size: 1.2rem;">Agent, decode the message by typing the correct <strong>Past Simple</strong> form!</p>
+                <p style="color: var(--hero-cyan);">Rule: Type only the missing verb!</p>
+                <button class="action-btn" onclick="startGame()">START MISSION</button>
+            </div>
+
+            <div id="quiz-screen" style="display: none;">
+                <div class="status-bar">
+                    <span id="question-number">Missie: 1 / 10</span>
+                    <span class="score-box" id="score-display">⚡ Score: 0</span>
+                </div>
+                
+                <div id="chat-window"></div>
+                
+                <div class="type-area">
+                    <input type="text" id="user-answer" class="text-input" placeholder="Typ alleen het werkwoord..." autocomplete="off" autocapitalize="none" autocorrect="off">
+                    <button class="action-btn check-btn" id="check-btn" onclick="checkAnswer()">➤</button>
+                </div>
+            </div>
+
+            <div id="result-screen" class="result-screen">
+                <div class="result-title" id="result-title">MISSIE VOLBRACHT!</div>
+                <div class="final-score" id="final-score">Jouw score: 0 / 10</div>
+                <p id="result-comment">Ben jij de nieuwe Master of Time?</p>
+                <div id="recap-container" class="recap-box" style="display: none;"></div>
+                <button class="action-btn" onclick="restartQuiz()">SPEEL NOG EEN RONDE (NIEUWE VRAGEN!)</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 EngliForce – Make English Your Superpower!</p>
+    </footer>
+
+<script>
+    const masterQuestionDatabase = [
+        // --- 50 REGELMATIGE WERKWOORDEN ---
+        { q: "Mister Sebel (correct) ___ the test yesterday.", a: ["corrected"] },
+        { q: "Agent Smith (watch) ___ the base last night.", a: ["watched"] },
+        { q: "Miss Lane (call) ___ the boss at 5 o'clock.", a: ["called"] },
+        { q: "The robot (carry) ___ the heavy suitcase.", a: ["carried"] },
+        { q: "The guards (close) ___ the main gate.", a: ["closed"] },
+        { q: "Iker (play) ___ football in the garden.", a: ["played"] },
+        { q: "The students (visit) ___ the museum.", a: ["visited"] },
+        { q: "My father (wash) ___ the car yesterday.", a: ["washed"] },
+        { q: "Miss Parker (open) ___ the secret safe.", a: ["opened"] },
+        { q: "Those men (climb) ___ over the wall.", a: ["climbed"] },
+        { q: "The tech expert (fix) ___ the laser.", a: ["fixed"] },
+        { q: "The Queen (visit) ___ the park last week.", a: ["visited"] },
+        { q: "The general (start) ___ the attack at dawn.", a: ["started"] },
+        { q: "The driver (stop) ___ the car at the red light.", a: ["stopped"] },
+        { q: "The chef (cook) ___ a delicious dinner.", a: ["cooked"] },
+        { q: "The thief (drop) ___ the stolen bag.", a: ["dropped"] },
+        { q: "The mechanic (repair) ___ the van.", a: ["repaired"] },
+        { q: "The artist (paint) ___ a beautiful picture.", a: ["painted"] },
+        { q: "The actor (learn) ___ all his lines.", a: ["learned", "learnt"] },
+        { q: "The team (enjoy) ___ their great victory.", a: ["enjoyed"] },
+        { q: "The audience (clap) ___ very loud.", a: ["clapped"] },
+        { q: "The dancer (dance) ___ on the stage.", a: ["danced"] },
+        { q: "The student (pass) ___ the difficult exam.", a: ["passed"] },
+        { q: "The teacher (explain) ___ the grammar rule.", a: ["explained"] },
+        { q: "The doctor (help) ___ the sick patient.", a: ["helped"] },
+        { q: "The police officer (arrest) ___ the thief.", a: ["arrested"] },
+        { q: "The firefighter (stop) ___ the big fire.", a: ["stopped"] },
+        { q: "The pilot (land) ___ the plane safely.", a: ["landed"] },
+        { q: "The sailor (cross) ___ the wild sea.", a: ["crossed"] },
+        { q: "The driver (turn) ___ left at the corner.", a: ["turned"] },
+        { q: "The passenger (wait) ___ for the bus.", a: ["waited"] },
+        { q: "The player (score) ___ a great goal.", a: ["scored"] },
+        { q: "The coach (shout) ___ at the referee.", a: ["shouted"] },
+        { q: "The runner (finish) ___ the long race.", a: ["finished"] },
+        { q: "The climber (reach) ___ the top.", a: ["reached"] },
+        { q: "The hiker (walk) ___ through the woods.", a: ["walked"] },
+        { q: "The builder (mix) ___ the cement.", a: ["mixed"] },
+        { q: "The gardener (plant) ___ the new seeds.", a: ["planted"] },
+        { q: "The hunter (watch) ___ the quiet forest.", a: ["watched"] },
+        { q: "The soldier (march) ___ all day long.", a: ["marched"] },
+        { q: "The princess (brush) ___ her long hair.", a: ["brushed"] },
+        { q: "The ghost (scare) ___ the little kids.", a: ["scared"] },
+        { q: "The heavy rain (stop) ___ at noon.", a: ["stopped"] },
+        { q: "The storm (destroy) ___ the old tree.", a: ["destroyed"] },
+        { q: "The hot water (boil) ___ very fast.", a: ["boiled"] },
+        { q: "The light (flicker) ___ in the room.", a: ["flickered"] },
+        { q: "The kids (shout) ___ with joy.", a: ["shouted"] },
+        { q: "The friend (help) ___ us with work.", a: ["helped"] },
+        { q: "The mother (tidy) ___ the whole house.", a: ["tidied"] },
+        { q: "The boy (kick) ___ the ball away.", a: ["kicked"] },
+
+        // --- 50 ONREGELMATIGE WERKWOORDEN ---
+        { q: "The villain (shut) ___ the heavy door.", a: ["shut"] },
+        { q: "The book (cost) ___ ten euros.", a: ["cost"] },
+        { q: "The agent (let) ___ him go.", a: ["let"] },
+        { q: "The princess (read) ___ the secret note.", a: ["read"] },
+        { q: "The spy (put) ___ the key away.", a: ["put"] },
+        { q: "The fallen hero (hurt) ___ his leg.", a: ["hurt"] },
+        { q: "The player (hit) ___ the ball hard.", a: ["hit"] },
+        { q: "The chef (cut) ___ the fresh bread.", a: ["cut"] },
+        { q: "The villains (beat) ___ the other team.", a: ["beat"] },
+        { q: "Agent Miller (come) ___ home late.", a: ["came"] },
+        { q: "Toby (become) ___ a true hero.", a: ["became"] },
+        { q: "The mouse (run) ___ away fast.", a: ["ran"] },
+        { q: "The dog (dig) ___ a hole in the garden.", a: ["dug"] },
+        { q: "I (get) ___ a new map yesterday.", a: ["got"] },
+        { q: "The customer (pay) ___ the bill.", a: ["paid"] },
+        { q: "The host (say) ___ hello to everyone.", a: ["said"] },
+        { q: "The man (sit) ___ down on the chair.", a: ["sat"] },
+        { q: "The hero (win) ___ the final fight.", a: ["won"] },
+        { q: "The spy (buy) ___ a new mask.", a: ["bought"] },
+        { q: "I (feel) ___ very happy yesterday.", a: ["felt"] },
+        { q: "The detective (find) ___ a clue.", a: ["found"] },
+        { q: "We (have) ___ a great time.", a: ["had"] },
+        { q: "The general (hear) ___ a loud noise.", a: ["heard"] },
+        { q: "The guard (keep) ___ the secret.", a: ["kept"] },
+        { q: "The agent (lose) ___ the secret file.", a: ["lost"] },
+        { q: "The spies (meet) ___ in the park.", a: ["met"] },
+        { q: "The hackers (sell) ___ the data.", a: ["sold"] },
+        { q: "The base (send) ___ a clear signal.", a: ["sent"] },
+        { q: "The scientist (make) ___ a magic potion.", a: ["made"] },
+        { q: "The commander (tell) ___ us the truth.", a: ["told"] },
+        { q: "The waiter (bring) ___ the food.", a: ["brought"] },
+        { q: "The team (build) ___ a new lab.", a: ["built"] },
+        { q: "The fisherman (catch) ___ a big fish.", a: ["caught"] },
+        { q: "The spy (leave) ___ the room quietly.", a: ["left"] },
+        { q: "We (spend) ___ all our money.", a: ["spent"] },
+        { q: "The soldier (stand) ___ at the gate.", a: ["stood"] },
+        { q: "The teacher (teach) ___ us English.", a: ["taught"] },
+        { q: "I (think) ___ about the right answer.", a: ["thought"] },
+        { q: "The baby (sleep) ___ all night long.", a: ["slept"] },
+        { q: "The agents (do) ___ their job well.", a: ["did"] },
+        { q: "The enemy (go) ___ away in the dark.", a: ["went"] },
+        { q: "The lion (eat) ___ the meat.", a: ["ate"] },
+        { q: "I (see) ___ a strange light.", a: ["saw"] },
+        { q: "The pilot (fly) ___ the helicopter.", a: ["flew"] },
+        { q: "The snake (bite) ___ his boots.", a: ["bit"] },
+        { q: "The girl (draw) ___ a nice picture.", a: ["drew"] },
+        { q: "The big tree (fall) ___ down.", a: ["fell"] },
+        { q: "The nurse (give) ___ him medicine.", a: ["gave"] },
+        { q: "The band (sing) ___ a great song.", a: ["sang"] },
+        { q: "The writer (write) ___ a long story.", a: ["wrote"] }
+    ];
+
+    let currentQuestions = [];
+    let qIndex = 0;
+    let score = 0;
+    let userMistakes = [];
+
+    function startGame() {
+        document.getElementById('screen-intro').style.display = 'none';
+        document.getElementById('quiz-screen').style.display = 'block';
+        
+        let shuffled = [...masterQuestionDatabase];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        currentQuestions = shuffled.slice(0, 10);
+        
+        qIndex = 0;
+        score = 0;
+        userMistakes = [];
+        document.getElementById('chat-window').innerHTML = '';
+        document.getElementById('score-display').innerText = `⚡ Score: ${score}`;
+        showQuestion();
+    }
+
+    function addBubble(text, type, sender = "") {
+        const chatWindow = document.getElementById('chat-window');
+        const bubble = document.createElement('div');
+        bubble.className = `bubble ${type === 'in' ? 'bubble-in' : 'bubble-out'}`;
+        
+        let html = "";
+        if (sender) html += `<span class="sender">${sender}</span>`;
+        html += `<span>${text}</span>`;
+        
+        bubble.innerHTML = html;
+        chatWindow.appendChild(bubble);
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
+    function showQuestion() {
+        const q = currentQuestions[qIndex];
+        document.getElementById('question-number').innerText = `Missie: ${qIndex + 1} / 10`;
+        
+        const input = document.getElementById('user-answer');
+        input.disabled = false;
+        input.value = "";
+        input.placeholder = "Typ alleen het werkwoord...";
+        
+        addBubble(q.q, 'in', 'COMMANDER');
+        setTimeout(() => input.focus(), 100);
+    }
+
+    function checkAnswer() {
+        const input = document.getElementById('user-answer');
+        let val = input.value.trim();
+        if (!val || input.disabled) return;
+
+        addBubble(val, 'out');
+        input.disabled = true;
+
+        const processedInput = val.toLowerCase().trim();
+        const correctAnswers = currentQuestions[qIndex].a;
+        const isCorrect = correctAnswers.some(ans => processedInput === ans.toLowerCase().trim());
+
+        setTimeout(() => {
+            if (isCorrect) {
+                score++;
+                addBubble("✅ ACCESS GRANTED! Signal decoded.", "in", "COMMANDER");
+                document.getElementById('flash').style.opacity = '0.2';
+                setTimeout(() => document.getElementById('flash').style.opacity = '0', 150);
+            } else {
+                addBubble(`❌ ACCESS DENIED! Correct signal: "${correctAnswers[0]}"`, "in", "COMMANDER");
+                document.body.classList.add('shake');
+                setTimeout(() => document.body.classList.remove('shake'), 200);
+
+                userMistakes.push({
+                    question: currentQuestions[qIndex].q,
+                    given: val,
+                    correct: correctAnswers[0]
+                });
+            }
+            document.getElementById('score-display').innerText = `⚡ Score: ${score}`;
+
+            setTimeout(() => {
+                nextQuestion();
+            }, 1200);
+
+        }, 400);
+    }
+
+    function nextQuestion() {
+        qIndex++;
+        if (qIndex < 10) {
+            showQuestion();
+        } else {
+            document.getElementById('quiz-screen').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'block';
+            document.getElementById('final-score').innerText = `Jouw score: ${score} / 10`;
+
+            const recapDiv = document.getElementById('recap-container');
+            if(score === 10) {
+                document.getElementById('result-title').innerText = "👑 MISSION ACCOMPLISHED!";
+                document.getElementById('result-comment').innerText = "Perfect! Jij kent de verleden tijd als een echte superheld!";
+                recapDiv.style.display = 'none';
+            } else {
+                document.getElementById('result-title').innerText = "🚨 MISSION FINISHED";
+                document.getElementById('result-comment').innerText = "Bekijk hieronder de zinnen die je nog even moet oefenen:";
+                recapDiv.innerHTML = "<h3>Recap van je fouten:</h3>";
+                userMistakes.forEach(m => {
+                    recapDiv.innerHTML += `
+                        <div class="recap-item">
+                            <div class="recap-q">${m.question}</div>
+                            <div>Jouw antwoord: <span class="recap-given">${m.given}</span></div>
+                            <div>Juiste antwoord: <span class="recap-correct">${m.correct}</span></div>
+                        </div>
+                    `;
+                });
+                recapDiv.style.display = 'block';
+            }
+        }
+    }
+
+    function restartQuiz() {
+        document.getElementById('result-screen').style.display = 'none';
+        startGame();
+    }
+
+    document.getElementById('user-answer').addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            checkAnswer();
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EngliForce Academy: Past Simple Masterclass</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Lexend:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hero-purple-main: #7b2cbf;
+            --hero-purple-dark: #3c096c;
+            --hero-yellow: #ffb703;
+            --hero-cyan: #00f5d4;
+            --dark-bg: #05101a;
+            --hero-orange: #ff5722;
+            --hero-orange-dark: #bf360c;
+            --hero-green: #4caf50;
+            --hero-blue: #4361ee;
+            --hero-red: #d32f2f;
+        }
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: #05101a;
+            background: radial-gradient(circle at center, #1a102a 0%, #05101a 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+        header {
+            background: var(--hero-orange);
+            padding: 2.5rem 1rem;
+            text-align: center;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            border-bottom: 5px solid var(--hero-yellow);
+        }
+        h1 {
+            font-family: 'Bangers', cursive;
+            font-size: 3.5rem;
+            letter-spacing: 3px;
+            margin: 0;
+            text-shadow: 4px 4px 0px var(--hero-orange-dark);
+        }
+        h2 {
+            font-family: 'Bangers', cursive;
+            color: var(--hero-yellow);
+            font-size: 2.2rem;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: var(--hero-cyan);
+            font-family: 'Bangers';
+            font-size: 1.8rem;
+            margin-top: 0;
+        }
+        main {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            flex: 1;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .briefing-box {
+            background: rgba(26, 16, 42, 0.9);
+            border: 2px solid var(--hero-blue);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+        .video-container {
+            background: #000;
+            border: 4px solid var(--hero-yellow);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            padding-top: 56.25%;
+            margin-bottom: 40px;
+            box-shadow: 0 0 40px rgba(255, 183, 3, 0.3);
+        }
+        .video-container iframe {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;
+        }
+        .explanation-text {
+            font-size: 1.1rem; line-height: 1.6; margin-bottom: 15px;
+            border-left: 4px solid var(--hero-blue); padding-left: 20px;
+            background: rgba(67, 97, 238, 0.05); padding-top: 15px; padding-bottom: 15px; padding-right: 20px;
+        }
+        .split-box-container {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .split-box {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 2px dashed var(--hero-cyan);
+        }
+        .split-box-title {
+            font-family: 'Bangers', cursive;
+            font-size: 2.2rem;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            color: var(--hero-cyan);
+        }
+        .example-box {
+            background: rgba(255,255,255,0.08);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-size: 1rem;
+            text-align: left;
+        }
+        .toggle-container {
+            display: flex; gap: 15px; justify-content: center; margin-bottom: 30px; flex-wrap: wrap;
+        }
+        .btn-toggle {
+            background: var(--hero-purple-main); color: white; border: none;
+            padding: 15px 30px; border-radius: 50px; font-family: 'Bangers', cursive;
+            font-size: 1.3rem; cursor: pointer; transition: 0.2s;
+            border-bottom: 5px solid var(--hero-purple-dark);
+        }
+        .btn-toggle:hover {
+            transform: translateY(-3px);
+            background: var(--hero-blue);
+            color: white;
+        }
+        .btn-video {
+            background: var(--hero-orange);
+            border-bottom: 5px solid var(--hero-orange-dark);
+        }
+        .content-section { display: none; animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .pickle-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 15px; 
+            margin-top: 20px; 
+        }
+        .card {
+            background: #1a102a;
+            border: 3px solid #3c096c;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .card:hover {
+            border-color: var(--hero-yellow);
+            transform: scale(1.05);
+        }
+        .flash-effect { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; opacity: 0; pointer-events: none; z-index: 1999; }
+        .boom-text { position: fixed; pointer-events: none; font-family: 'Bangers', cursive; color: var(--hero-yellow); font-size: 5rem; z-index: 2001; text-shadow: 5px 5px 0px #000; animation: boomAnim 0.6s ease-out forwards; }
+        @keyframes boomAnim {
+            0% { transform: scale(0) rotate(-20deg); opacity: 1; }
+            100% { transform: scale(2) rotate(10deg); opacity: 0; }
+        }
+        footer {
+            background: #05101a;
+            color: rgba(255,255,255,0.8);
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 2px solid var(--hero-purple-dark);
+            margin-top: 50px;
+        }
+        .highlight-ed { color: var(--hero-yellow); text-decoration: underline; }
+        .highlight-irreg { color: #ff60a8; font-weight: bold; }
+        .table-container { background: #1a102a; border-radius: 15px; overflow: hidden; margin-top: 15px; }
+        .table-container table { width: 100%; border-collapse: collapse; }
+        .table-container th { background: var(--hero-blue); padding: 15px; text-align: left; }
+        .table-container td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .waldy-list { list-style: none; padding-left: 0; font-size: 1.2rem; }
+        .waldy-list li { margin-bottom: 8px; }
+        .waldy-letter { font-family: 'Bangers'; font-size: 1.6rem; color: var(--hero-yellow); display: inline-block; width: 30px; }
+        @media (max-width: 900px) {
+            .split-box-container { flex-direction: column; }
+            .pickle-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="flash-effect" id="flash"></div>
+
+<header>
+    <h1>ENGLIFORCE ACADEMY</h1>
+    <p>TIME TRAVEL CENTER: PAST SIMPLE (REGULAR & IRREGULAR)</p>
+</header>
+
+<main>
+    <section class="briefing-box">
+        <h2>🚨 MISSION: THE PAST SIMPLE</h2>
+        <div class="explanation-text">
+            <p>Met de <strong>Past Simple</strong> reis je terug in de tijd. Je gebruikt deze tijd voor acties die in het verleden zijn gebeurd en nu helemaal <strong>afgelopen</strong> zijn. Denk aan acties van gisteren, vorige week of vorig jaar!</p>
+        </div>
+        <div class="example-box" style="border-left: 4px solid var(--hero-cyan); background: rgba(0, 245, 212, 0.1);">
+            <strong style="color: var(--hero-cyan); font-family: 'Bangers'; font-size: 1.4rem;">🕒 DE SIGNALEN VAN WALDY</strong><br>
+            Hoe weet je dat een zin in de Past Simple moet? Ontmoet <strong>WALDY</strong>! Als je een van deze signaalwoorden in de zin ziet, weet je hoe laat het is:
+            <ul class="waldy-list" style="margin-top: 15px;">
+                <li><span class="waldy-letter">W</span> <strong>When...</strong> <span style="color: rgba(255,255,255,0.6); font-size: 0.95rem;">(When I was young, ...)</span></li>
+                <li><span class="waldy-letter">A</span> <strong>... Ago</strong> <span style="color: rgba(255,255,255,0.6); font-size: 0.95rem;">(Two days ago, three years ago)</span></li>
+                <li><span class="waldy-letter">L</span> <strong>Last ...</strong> <span style="color: rgba(255,255,255,0.6); font-size: 0.95rem;">(Last week, last month, last night)</span></li>
+                <li><span class="waldy-letter">D</span> <strong>Days / Dates ...</strong> <span style="color: rgba(255,255,255,0.6); font-size: 0.95rem;">(Friday, on the first of April)</span></li>
+                <li><span class="waldy-letter">Y</span> <strong>Yesterday / Year</strong> <span style="color: rgba(255,255,255,0.6); font-size: 0.95rem;">(Yesterday morning, in 1999)</span></li>
+            </ul>
+        </div>
+    </section>
+
+    <div class="toggle-container">
+        <button class="btn-toggle" onclick="showSection(event, 'rules', 'ZAP!')">Checklist</button>
+        <button class="btn-toggle" onclick="showSection(event, 'bevestigen', 'POW!')">Bevestigen</button>
+        <button class="btn-toggle btn-video" onclick="showSection(event, 'video-bevestigen', 'ACTION 1!')">🎬 Video Bevestigen</button>
+        <button class="btn-toggle" onclick="showSection(event, 'vragen', 'QUESTION?')">Vragen</button>
+        <button class="btn-toggle" onclick="showSection(event, 'ontkennen', 'NOPE!')">Ontkennen</button>
+        <button class="btn-toggle btn-video" onclick="showSection(event, 'video-vragen-ontkennen', 'ACTION 2!')">🎬 Video Vragen & Ontkennen</button>
+    </div>
+
+    <div id="rules" class="content-section" style="display: block;">
+        <h3>Quick Scan Checklist</h3>
+        <div class="explanation-text">
+            <p>✅ <strong>WANNEER:</strong> De actie startte in het verleden en is nu helemaal klaar.</p>
+            <p>✅ <strong>REGELMATIG:</strong> Krijgt <strong style="color: var(--hero-yellow);">+ed</strong> achter het werkwoord in bevestigende zinnen.</p>
+            <p>✅ <strong>ONREGELMATIG:</strong> Verandert van vorm! Gebruik de <strong>2e vorm</strong> uit het werkwoordenlijstje (bijv. <em>go → went</em>).</p>
+            <p>✅ <strong>VRAGEN & ONTKENNEN:</strong> Gebruik <strong>Did / Didn't</strong> + het <u>hele werkwoord</u> (zowel bij regelmatige als onregelmatige werkwoorden!).</p>
+            <p>✅ <strong>HERKENNING:</strong> Gebruik de <strong>WALDY</strong>-signaalwoorden om de verleden tijd direct te spotten.</p>
+        </div>
+    </div>
+
+    <div id="bevestigen" class="content-section">
+        <h3>Time Travel Lab: Bevestigende zinnen</h3>
+        <div class="explanation-text">
+            <p>In bevestigende zinnen moet je goed opletten of het werkwoord <strong>regelmatig</strong> of <strong>onregelmatig</strong> is!</p>
+            <div class="split-box-container">
+                <div class="split-box">
+                    <div class="split-box-title">REGELMATIG</div>
+                    <p style="font-size: 1.3rem;">Hele werkwoord + <strong class="highlight-ed">ed</strong></p>
+                    <p style="font-size: 0.95rem; color: rgba(255,255,255,0.7);">work → worked<br>play → played</p>
+                </div>
+                <div class="split-box" style="border-color: #ff60a8;">
+                    <div class="split-box-title" style="color: #ff60a8;">ONREGELMATIG</div>
+                    <p style="font-size: 1.3rem;"><strong class="highlight-irreg">2e vorm</strong> van de lijst</p>
+                    <p style="font-size: 0.95rem; color: rgba(255,255,255,0.7);">go → went<br>see → saw<br>buy → bought</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="example-box" style="border-left: 4px solid var(--hero-orange); background: rgba(255, 87, 34, 0.1); margin-bottom: 20px;">
+            <strong style="color: var(--hero-orange); font-family: 'Bangers'; font-size: 1.3rem;">⚠️ SPELLING ALERTS (REGELMATIGE WERKWOORDEN)</strong><br>
+            Let op deze uitzonderingen bij het toevoegen van 'ed':
+            <ul style="margin-top: 10px; list-style-type: '⚡ '; padding-left: 20px;">
+                <li>Eindigt het werkwoord op een <strong>-e</strong>? Alleen een <strong style="color: var(--hero-yellow);">-d</strong> erbij. (Dance -> Dance<strong class="highlight-ed">d</strong>)</li>
+                <li>Eindigt het op <strong>medeklinker + y</strong>? De 'y' verandert in een <strong style="color: var(--hero-yellow);">i</strong>. (Study -> Stud<strong class="highlight-ed">ied</strong>)</li>
+                <li>Kort werkwoord (medeklinker-klinker-medeklinker)? <strong>Verdubbel</strong> de laatste letter. (Stop -> Stop<strong class="highlight-ed">ped</strong>)</li>
+            </ul>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr><th>Type</th><th>Person</th><th>Past Simple Sentence (Positive)</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Regelmatig</td><td>I</td><td>I <strong class="highlight-ed">worked</strong> hard yesterday.</td></tr>
+                    <tr><td>Regelmatig</td><td>She</td><td>She <strong class="highlight-ed">cleaned</strong> her room two days ago.</td></tr>
+                    <tr><td>Onregelmatig</td><td>We</td><td>We <strong class="highlight-irreg">went</strong> to school by bus lasy week. <em>(van 'go')</em></td></tr>
+                    <tr><td>Onregelmatig</td><td>They</td><td>They <strong class="highlight-irreg">bought</strong> a new game on Monday. <em>(van 'buy')</em></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="vragen" class="content-section">
+        <h3>Time Travel Lab: Vragende zinnen</h3>
+        <div class="explanation-text">
+            <p>Om een vraag te maken gebruik je het hulpwerkwoord <strong>Did</strong> vooraan de zin. Het hoofdwerkwoord blijft altijd het <strong>hele werkwoord (infinitief)</strong>!</p>
+            <p>💡 <strong>Superregel:</strong> Omdat <em>Did</em> al aangeeft dat het verleden tijd is, hoeft het werkwoord géén -ed te krijgen én gebruik je géén onregelmatige vorm!</p>
+            <div class="split-box-container">
+                <div class="split-box" style="border-color: var(--hero-cyan);">
+                    <div class="split-box-title" style="color: var(--hero-cyan);">HET RECEPT</div>
+                    <p style="font-size: 1.5rem;"><strong style="color: var(--hero-cyan);">Did</strong> + persoon + <strong style="color: var(--hero-yellow);">hele werkwoord</strong>?</p>
+                </div>
+            </div>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr><th>Type</th><th>Person</th><th>Past Simple Sentence (Question)</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Regelmatig</td><td>I</td><td><strong style="color: var(--hero-cyan);">Did</strong> I <strong style="color: var(--hero-yellow);">work</strong> hard yesterday?</td></tr>
+                    <tr><td>Regelmatig</td><td>She</td><td><strong style="color: var(--hero-cyan);">Did</strong> she <strong style="color: var(--hero-yellow);">clean</strong> her room two days ago?</td></tr>
+                    <tr><td>Onregelmatig</td><td>We</td><td><strong style="color: var(--hero-cyan);">Did</strong> we <strong style="color: var(--hero-yellow);">go</strong> to school last week? <em>(niet 'went'!)</em></td></tr>
+                    <tr><td>Onregelmatig</td><td>They</td><td><strong style="color: var(--hero-cyan);">Did</strong> they <strong style="color: var(--hero-yellow);">see</strong> that movie on Saturday? <em>(niet 'saw'!)</em></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="ontkennen" class="content-section">
+        <h3>Time Travel Lab: Ontkennende zinnen</h3>
+        <div class="explanation-text">
+            <p>Als iets niet is gebeurd, zet je <strong>didn't</strong> (of <em>did not</em>) voor het werkwoord. Ook hier blijft het hoofdwerkwoord gewoon het <strong>hele werkwoord</strong>!</p>
+            <p>💡 <strong>Superregel:</strong> Met <em>didn't</em> erin blijft het werkwoord in de basisvorm. Geen -ed en geen onregelmatige vormen!</p>
+            <div class="split-box-container">
+                <div class="split-box" style="border-color: var(--hero-orange);">
+                    <div class="split-box-title" style="color: var(--hero-orange);">HET RECEPT</div>
+                    <p style="font-size: 1.5rem;">Persoon + <strong style="color: var(--hero-orange);">didn't</strong> + <strong style="color: var(--hero-yellow);">hele werkwoord</strong></p>
+                </div>
+            </div>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr><th>Type</th><th>Person</th><th>Past Simple Sentence (Negative)</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Regelmatig</td><td>I</td><td>I <strong style="color: var(--hero-orange);">didn't work</strong> hard yesterday.</td></tr>
+                    <tr><td>Regelmatig</td><td>She</td><td>She <strong style="color: var(--hero-orange);">didn't clean</strong> her room two days ago.</td></tr>
+                    <tr><td>Onregelmatig</td><td>We</td><td>We <strong style="color: var(--hero-orange);">didn't go</strong> home early last night. <em>(niet 'went'!)</em></td></tr>
+                    <tr><td>Onregelmatig</td><td>You</td><td>You <strong style="color: var(--hero-orange);">didn't buy</strong> the ticket last month. <em>(niet 'bought'!)</em></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="video-bevestigen" class="content-section">
+        <h3>🎬 MISSION VIDEO: BEVESTIGEN</h3>
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/-KRwn6qmjGs" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <h2>⚔️ PICKLE MISSIONS</h2>
+    <div class="pickle-grid">
+        <div class="card" onclick="createExplosion(event, 'CRUNCH!', 'm1t5_past_simple_pickle_1.html')">
+            <span style="font-size: 2.5rem;">✅</span>
+            <div class="title" style="font-family: 'Bangers'; color: var(--hero-cyan);">Pickle 1</div>
+            <p>Bevestigen</p>
+        </div>
+        <div class="card" onclick="createExplosion(event, 'SMART!', 'm1t5_past_simple_pickle_2.html')">
+            <span style="font-size: 2.5rem;">❓❌</span>
+            <div class="title" style="font-family: 'Bangers'; color: var(--hero-yellow);">Pickle 2</div>
+            <p>Vragen & ontkennen</p>
+        </div>
+        <div class="card" onclick="createExplosion(event, 'BOOM!', 'm1t5_past_simple_pickle_3.html')">
+            <span style="font-size: 2.5rem;">🟡</span>
+            <div class="title" style="font-family: 'Bangers'; color: var(--hero-orange);">Pickle 3</div>
+            <p>Mix</p>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-text">&copy; 2026, EngliForce: <span style="color: var(--hero-yellow);">Make English Your Superpower!</span></div>
+</footer>
+
+<script>
+    function showSection(e, id, boomMessage) {
+        document.querySelectorAll('.content-section').forEach(s => s.style.display = 'none');
+        document.getElementById(id).style.display = 'block';
+        createExplosion(e, boomMessage);
+    }
+
+    function createExplosion(e, message, redirectUrl) {
+        const x = e.clientX, y = e.clientY;
+        const flash = document.getElementById('flash');
+        flash.style.opacity = '0.3';
+        setTimeout(() => flash.style.opacity = '0', 200);
+        
+        const txt = document.createElement('div');
+        txt.className = 'boom-text';
+        txt.innerText = message;
+        txt.style.left = (x - 50) + 'px'; txt.style.top = (y - 50) + 'px';
+        document.body.appendChild(txt);
+        setTimeout(() => txt.remove(), 600);
+        
+        // Als er een redirect URL is meegegeven, stuur de gebruiker er na 300ms naartoe
+        if (redirectUrl) {
+            setTimeout(() => {
+                window.location.href = redirectUrl;
+            }, 300);
+        }
+    }
+</script>
+
+</body>
+</html>
