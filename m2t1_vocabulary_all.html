@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EngliForce Academy: Flashcards & Typing Trainer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Lexend:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hero-orange: #ff5722;
+            --hero-orange-dark: #bf360c;
+            --hero-yellow: #ffb703;
+            --hero-cyan: #b39ddb;
+            --dark-bg: #0b101a;
+            --card-bg: #1a102a;
+            --success-green: #2ecc71;
+            --error-red: #e74c3c;
+            --text-light: #ffffff;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: radial-gradient(circle at center, #1a102a 0%, #05051a 100%);
+            color: var(--text-light);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background: var(--hero-orange);
+            padding: 2rem 1rem 2.5rem 1rem;
+            text-align: center;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            border-bottom: 5px solid var(--hero-yellow);
+        }
+        h1 {
+            font-family: 'Bangers', cursive;
+            font-size: 3.2rem;
+            letter-spacing: 2px;
+            margin: 0;
+            text-shadow: 4px 4px 0px var(--hero-orange-dark);
+        }
+        p.subtitle {
+            margin: 5px 0 0 0;
+            font-size: 1.1rem;
+            opacity: 0.95;
+            font-weight: 600;
+        }
+        main {
+            max-width: 1100px;
+            width: 100%;
+            margin: 20px auto;
+            padding: 0 20px;
+            flex: 1;
+        }
+        /* MODE SWITCHER BUTTONS */
+        .mode-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        .btn-mode {
+            background: var(--card-bg);
+            color: var(--text-light);
+            border: 2px solid var(--hero-cyan);
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-family: 'Bangers', cursive;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .btn-mode:hover {
+            transform: translateY(-2px);
+            border-color: var(--hero-yellow);
+            color: var(--hero-yellow);
+        }
+        .btn-mode.active {
+            background: var(--hero-orange);
+            border-color: var(--hero-yellow);
+            color: white;
+            box-shadow: 0 0 15px rgba(255, 87, 34, 0.6);
+        }
+        /* CONTROLS BAR */
+        .controls {
+            background: rgba(26, 16, 42, 0.85);
+            padding: 18px 25px;
+            border-radius: 15px;
+            border: 1px solid var(--hero-cyan);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+        .controls label {
+            font-family: 'Bangers', cursive;
+            font-size: 1.15rem;
+            color: var(--hero-yellow);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        .controls select {
+            background: #0b101a;
+            color: white;
+            border: 1px solid var(--hero-cyan);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-family: 'Lexend', sans-serif;
+            font-size: 0.95rem;
+            outline: none;
+        }
+        .btn-action {
+            background: var(--hero-orange);
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 10px;
+            font-family: 'Bangers', cursive;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            border-bottom: 3px solid var(--hero-orange-dark);
+        }
+        .btn-action:hover {
+            background: #ff7043;
+            transform: translateY(-1px);
+        }
+        .btn-action.btn-mistakes {
+            background: var(--error-red);
+            border-bottom-color: #922b21;
+        }
+        .btn-action.btn-mistakes:hover {
+            background: #ec7063;
+        }
+        /* FLIP CARD SECTION */
+        .flashcards-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 10px;
+            min-height: 300px;
+        }
+        .card {
+            width: 270px;
+            height: 250px;
+            perspective: 1000px;
+            position: relative;
+        }
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            border: 4px solid var(--hero-cyan);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+            font-family: 'Lexend', sans-serif;
+            font-weight: 700;
+        }
+        .card-front {
+            background: var(--hero-orange-dark);
+            color: white;
+            font-size: 1.6rem;
+            letter-spacing: 0.5px;
+        }
+        .card-back {
+            background: var(--hero-yellow);
+            color: var(--dark-bg);
+            transform: rotateY(180deg);
+            font-size: 1.4rem;
+        }
+        .list-badge {
+            position: absolute;
+            top: 12px;
+            right: 15px;
+            font-family: 'Lexend', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            background: rgba(0,0,0,0.3);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
+        .card-back .list-badge {
+            background: rgba(0,0,0,0.15);
+            color: var(--dark-bg);
+        }
+        .known-btn {
+            margin-top: 15px;
+            background: rgba(0,0,0,0.15);
+            color: var(--dark-bg);
+            border: 2px solid var(--dark-bg);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-family: 'Lexend', sans-serif;
+            font-weight: bold;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .known-btn:hover { background: rgba(0,0,0,0.3); }
+        .card.is-known .card-front {
+            border-color: var(--success-green);
+            box-shadow: 0 0 15px rgba(46, 204, 113, 0.6);
+        }
+        /* TYPING MODE SECTION */
+        .typing-wrapper {
+            max-width: 650px;
+            margin: 0 auto;
+            background: rgba(26, 16, 42, 0.9);
+            border: 3px solid var(--hero-cyan);
+            border-radius: 20px;
+            padding: 35px 25px;
+            text-align: center;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+        }
+        .typing-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .progress-text {
+            font-family: 'Bangers', cursive;
+            font-size: 1.3rem;
+            color: var(--hero-yellow);
+        }
+        .score-text {
+            font-family: 'Bangers', cursive;
+            font-size: 1.3rem;
+            color: var(--success-green);
+        }
+        .highscore-text {
+            font-family: 'Bangers', cursive;
+            font-size: 1.3rem;
+            color: var(--hero-cyan);
+        }
+        .prompt-box {
+            margin: 20px 0;
+            padding: 25px 15px;
+            background: #0b101a;
+            border-radius: 15px;
+            border: 2px solid var(--hero-yellow);
+        }
+        .prompt-label {
+            font-size: 0.9rem;
+            color: var(--hero-cyan);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        .prompt-word {
+            font-family: 'Lexend', sans-serif;
+            font-weight: 700;
+            font-size: 2.3rem;
+            color: #ffffff;
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+        .typing-input-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 25px;
+        }
+        .typing-input {
+            flex: 1;
+            max-width: 400px;
+            padding: 12px 18px;
+            border-radius: 10px;
+            border: 2px solid var(--hero-cyan);
+            background: #05051a;
+            color: white;
+            font-family: 'Lexend', sans-serif;
+            font-size: 1.1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .typing-input:focus { border-color: var(--hero-yellow); }
+        .btn-submit {
+            background: var(--hero-yellow);
+            color: var(--dark-bg);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-family: 'Bangers', cursive;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-submit:hover {
+            background: #ffc107;
+            transform: scale(1.03);
+        }
+        .feedback-box {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 12px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+            text-align: left;
+        }
+        .feedback-box.correct {
+            display: block;
+            background: rgba(46, 204, 113, 0.15);
+            border: 2px solid var(--success-green);
+            color: var(--success-green);
+        }
+        .feedback-box.incorrect {
+            display: block;
+            background: rgba(231, 76, 60, 0.15);
+            border: 2px solid var(--error-red);
+            color: #ff8a80;
+        }
+        .feedback-title {
+            font-family: 'Bangers', cursive;
+            font-size: 1.6rem;
+            margin: 0 0 5px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .feedback-details {
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #ffffff;
+        }
+        .feedback-list-info {
+            margin-top: 8px;
+            display: inline-block;
+            background: rgba(255, 87, 34, 0.25);
+            color: var(--hero-yellow);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border: 1px solid var(--hero-orange);
+        }
+        .btn-next {
+            margin-top: 20px;
+            background: var(--hero-orange);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 10px;
+            font-family: 'Bangers', cursive;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: none;
+        }
+        .btn-next:hover { background: #ff7043; }
+        /* MODAL STYLES FOR MISTAKES LIST */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+            padding: 20px;
+            animation: fadeIn 0.2s ease;
+        }
+        .modal-content {
+            background: var(--card-bg);
+            border: 3px solid var(--hero-yellow);
+            border-radius: 20px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            padding: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.7);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--hero-orange);
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+        }
+        .modal-title {
+            font-family: 'Bangers', cursive;
+            font-size: 1.8rem;
+            color: var(--hero-yellow);
+            margin: 0;
+        }
+        .modal-body {
+            overflow-y: auto;
+            flex: 1;
+            padding-right: 5px;
+        }
+        .modal-close {
+            background: var(--hero-orange);
+            color: white;
+            border: none;
+            font-family: 'Bangers', cursive;
+            font-size: 1.1rem;
+            padding: 6px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .modal-close:hover { background: #ff7043; }
+        .mistake-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0b101a;
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border: 1px solid var(--hero-cyan);
+        }
+        .mistake-word-en {
+            font-weight: bold;
+            color: var(--hero-yellow);
+            font-size: 1.1rem;
+        }
+        .mistake-word-nl {
+            color: white;
+            font-size: 1.05rem;
+        }
+        .flash-effect {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: white;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 1999;
+            transition: opacity 0.2s;
+        }
+        .boom-text {
+            position: fixed;
+            pointer-events: none;
+            font-family: 'Bangers', cursive;
+            color: var(--hero-yellow);
+            font-size: 3.5rem;
+            z-index: 2001;
+            text-shadow: 3px 3px 0px #000;
+            animation: boomAnim 0.6s ease-out forwards;
+        }
+        @keyframes boomAnim {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(1.4); opacity: 0; }
+        }
+        .shake { animation: shake 0.2s ease-in-out; }
+        @keyframes shake {
+            0%, 100% { transform: translate(0,0); }
+            25% { transform: translate(-5px, 5px); }
+            50% { transform: translate(5px, -5px); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.85rem;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div class="flash-effect" id="flash"></div>
+
+<!-- MODAL VOOR FOUTENLIJST -->
+<div class="modal-overlay" id="mistakes-modal" onclick="if(event.target === this) closeMistakesModal()">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title" id="modal-title-text">❌ Foutenlijst</h3>
+            <button class="modal-close" onclick="closeMistakesModal()">Sluiten ✖</button>
+        </div>
+        <div class="modal-body" id="modal-list-content"></div>
+    </div>
+</div>
+
+<header>
+    <h1>ENGLIFORCE ACADEMY</h1>
+    <p class="subtitle">⚡ FLASHCARD VOCAB TRAINER ⚡</p>
+</header>
+
+<main>
+    <!-- MODE SELECTION -->
+    <div class="mode-container">
+        <button class="btn-mode active" id="mode-flip-btn" onclick="switchMode('flip')">🎴 Flip Cards (Self-Check)</button>
+        <button class="btn-mode" id="mode-type-btn" onclick="switchMode('type')">⌨️ Typing (Enter Answer)</button>
+    </div>
+
+    <!-- GLOBAL CONTROLS BAR -->
+    <div class="controls">
+        <label>Select List:
+            <select id="list-filter" onchange="resetAndGenerate()">
+                <option value="all" selected>All Lists (1.1 - 1.4)</option>
+                <option value="Vocab 1.1">Vocab 1.1: Life Through The Ages</option>
+                <option value="Vocab 1.2">Vocab 1.2: Heroes & Vilains</option>
+                <option value="Vocab 1.3">Vocab 1.3: Inventions & Discoveries</option>
+                <option value="Vocab 1.4">Vocab 1.4: Disasters & Events</option>
+            </select>
+        </label>
+
+        <label>Status:
+            <select id="status-filter" onchange="resetAndGenerate()">
+                <option value="all" selected>All words</option>
+                <option value="unknown">Words to practice ❌</option>
+                <option value="known">Known words ✅</option>
+            </select>
+        </label>
+
+        <label>Word Count:
+            <select id="count-filter" onchange="resetAndGenerate()">
+                <option value="all" selected>All words</option>
+                <option value="5">5 words</option>
+                <option value="10">10 words</option>
+                <option value="15">15 words</option>
+            </select>
+        </label>
+
+        <label>Direction:
+            <select id="direction-select" onchange="resetAndGenerate()">
+                <option value="EN-NL" selected>English ➔ Dutch</option>
+                <option value="NL-EN">Dutch ➔ English</option>
+                <option value="MIX">Mixed (Random)</option>
+            </select>
+        </label>
+
+        <button class="btn-action" onclick="shuffleCurrentData()">Shuffle 🔄</button>
+        <button class="btn-action btn-mistakes" onclick="openMistakesModal()">📋 Bekijk Foutenlijst</button>
+    </div>
+
+    <!-- MODE 1: FLIP CARDS -->
+    <div id="flip-mode-section">
+        <div class="flashcards-container" id="flashcards-container"></div>
+    </div>
+
+    <!-- MODE 2: TYPING PRACTICE -->
+    <div id="type-mode-section" style="display: none;">
+        <div class="typing-wrapper">
+            <div class="typing-header">
+                <span class="progress-text" id="type-progress">Question 1 of 60</span>
+                <span class="score-text" id="type-score">Score: 0 / 0</span>
+                <span class="highscore-text" id="type-highscore">Highscore: 0</span>
+            </div>
+
+            <div class="prompt-box">
+                <div class="prompt-label" id="prompt-label">Translate to Dutch</div>
+                <h2 class="prompt-word" id="prompt-word">century</h2>
+            </div>
+
+            <form onsubmit="checkTypedAnswer(event)">
+                <div class="typing-input-group">
+                    <input type="text" id="typing-input" class="typing-input" placeholder="Type your answer here..." autocomplete="off">
+                    <button type="submit" class="btn-submit" id="btn-check">Check</button>
+                </div>
+            </form>
+
+            <div class="feedback-box" id="feedback-box">
+                <div class="feedback-title" id="feedback-title"></div>
+                <div class="feedback-details" id="feedback-details"></div>
+            </div>
+
+            <button class="btn-next" id="btn-next" onclick="nextTypingQuestion()">Next Question ➔</button>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2026 EngliForce Academy: Make English Your Superpower!</p>
+</footer>
+
+<script>
+    const fullVocabData = [
+        // Vocab 1.1: Daily Life
+        {"list": "Vocab 1.1", "en": "century", "nl": "eeuw"},
+        {"list": "Vocab 1.1", "en": "fashion", "nl": "mode"},
+        {"list": "Vocab 1.1", "en": "daily life", "nl": "dagelijks leven"},
+        {"list": "Vocab 1.1", "en": "custom", "nl": "gewoonte / gebruik"},
+        {"list": "Vocab 1.1", "en": "tradition", "nl": "traditie"},
+        {"list": "Vocab 1.1", "en": "household", "nl": "huishouden"},
+        {"list": "Vocab 1.1", "en": "equipment", "nl": "apparatuur / uitrusting"},
+        {"list": "Vocab 1.1", "en": "chore", "nl": "karwei / huishoudelijk klusje"},
+        {"list": "Vocab 1.1", "en": "clothes", "nl": "kleding"},
+        {"list": "Vocab 1.1", "en": "behavior", "nl": "gedrag"},
+        {"list": "Vocab 1.1", "en": "difference", "nl": "verschil"},
+        {"list": "Vocab 1.1", "en": "entertainment", "nl": "amusement / vermaak"},
+        {"list": "Vocab 1.1", "en": "comfortable", "nl": "comfortabel / prettig"},
+        {"list": "Vocab 1.1", "en": "to compare", "nl": "vergelijken"},
+        {"list": "Vocab 1.1", "en": "to change", "nl": "veranderen"},
+
+        // Vocab 1.2: Empire & History
+        {"list": "Vocab 1.2", "en": "empire", "nl": "rijk / imperium"},
+        {"list": "Vocab 1.2", "en": "leader", "nl": "leider"},
+        {"list": "Vocab 1.2", "en": "soldier", "nl": "soldaat"},
+        {"list": "Vocab 1.2", "en": "hero", "nl": "held"},
+        {"list": "Vocab 1.2", "en": "villain", "nl": "schurk / slechterik"},
+        {"list": "Vocab 1.2", "en": "battle", "nl": "veldslag"},
+        {"list": "Vocab 1.2", "en": "army", "nl": "leger"},
+        {"list": "Vocab 1.2", "en": "power", "nl": "macht"},
+        {"list": "Vocab 1.2", "en": "victory", "nl": "overwinning"},
+        {"list": "Vocab 1.2", "en": "defeat", "nl": "nederlaag"},
+        {"list": "Vocab 1.2", "en": "ruler", "nl": "heerser"},
+        {"list": "Vocab 1.2", "en": "enemy", "nl": "vijand"},
+        {"list": "Vocab 1.2", "en": "brave", "nl": "dapper / moedig"},
+        {"list": "Vocab 1.2", "en": "to rule", "nl": "regeren / heersen"},
+        {"list": "Vocab 1.2", "en": "to fight", "nl": "vechten"},
+
+        // Vocab 1.3: Inventions & Science
+        {"list": "Vocab 1.3", "en": "invention", "nl": "uitvinding"},
+        {"list": "Vocab 1.3", "en": "discovery", "nl": "ontdekking"},
+        {"list": "Vocab 1.3", "en": "inventor", "nl": "uitvinder"},
+        {"list": "Vocab 1.3", "en": "engine", "nl": "motor"},
+        {"list": "Vocab 1.3", "en": "steam engine", "nl": "stoommachine"},
+        {"list": "Vocab 1.3", "en": "workshop", "nl": "werkplaats"},
+        {"list": "Vocab 1.3", "en": "spacecraft", "nl": "ruimteschip"},
+        {"list": "Vocab 1.3", "en": "science", "nl": "wetenschap"},
+        {"list": "Vocab 1.3", "en": "impact", "nl": "invloed / impact"},
+        {"list": "Vocab 1.3", "en": "useful", "nl": "nuttig / handig"},
+        {"list": "Vocab 1.3", "en": "dangerous", "nl": "gevaarlijk"},
+        {"list": "Vocab 1.3", "en": "to build", "nl": "bouwen"},
+        {"list": "Vocab 1.3", "en": "to explore", "nl": "verkennen / onderzoeken"},
+        {"list": "Vocab 1.3", "en": "to improve", "nl": "verbeteren"},
+        {"list": "Vocab 1.3", "en": "to design", "nl": "ontwerpen"},
+
+        // Vocab 1.4: Disasters & Events
+        {"list": "Vocab 1.4", "en": "disaster", "nl": "ramp"},
+        {"list": "Vocab 1.4", "en": "accident", "nl": "ongeluk"},
+        {"list": "Vocab 1.4", "en": "damage", "nl": "schade"},
+        {"list": "Vocab 1.4", "en": "warning", "nl": "waarschuwing"},
+        {"list": "Vocab 1.4", "en": "event", "nl": "gebeurtenis"},
+        {"list": "Vocab 1.4", "en": "origin", "nl": "oorsprong"},
+        {"list": "Vocab 1.4", "en": "result", "nl": "resultaat / gevolg"},
+        {"list": "Vocab 1.4", "en": "safe", "nl": "veilig"},
+        {"list": "Vocab 1.4", "en": "terrible", "nl": "vreselijk"},
+        {"list": "Vocab 1.4", "en": "sudden", "nl": "plotseling"},
+        {"list": "Vocab 1.4", "en": "to escape", "nl": "ontsnappen / vluchten"},
+        {"list": "Vocab 1.4", "en": "to rescue", "nl": "redden"},
+        {"list": "Vocab 1.4", "en": "to cause", "nl": "veroorzaken"},
+        {"list": "Vocab 1.4", "en": "to rebuild", "nl": "herbouwen"},
+        {"list": "Vocab 1.4", "en": "to recover", "nl": "herstellen / genezen"}
+    ];
+
+    let activeData = [];
+    let currentMode = 'flip';
+
+    let knownWordsFlip = JSON.parse(localStorage.getItem('engliforce_known_flip_v4')) || [];
+    let knownWordsType = JSON.parse(localStorage.getItem('engliforce_known_type_v4')) || [];
+    let mistakesType = JSON.parse(localStorage.getItem('engliforce_mistakes_type_v4')) || [];
+
+    let highScore = parseInt(localStorage.getItem('engliforce_highscore_v4')) || 0;
+
+    let typeIndex = 0;
+    let typeScore = 0;
+    let typeTotal = 0;
+
+    function init() {
+        updateHighScoreDisplay();
+        resetAndGenerate();
+    }
+
+    function filterData() {
+        const listFilter = document.getElementById('list-filter').value;
+        const statusFilter = document.getElementById('status-filter').value;
+
+        let filtered = fullVocabData;
+
+        if (listFilter !== 'all') {
+            filtered = filtered.filter(item => item.list === listFilter);
+        }
+
+        if (statusFilter === 'unknown') {
+            if (currentMode === 'flip') {
+                filtered = filtered.filter(item => !knownWordsFlip.includes(item.en));
+            } else {
+                filtered = filtered.filter(item => mistakesType.includes(item.en));
+            }
+        } else if (statusFilter === 'known') {
+            const currentKnownList = (currentMode === 'flip') ? knownWordsFlip : knownWordsType;
+            filtered = filtered.filter(item => currentKnownList.includes(item.en));
+        }
+
+        return filtered;
+    }
+
+    function shuffleArray(array) {
+        let arr = [...array];
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    function resetAndGenerate() {
+        let data = shuffleArray(filterData());
+
+        const countFilter = document.getElementById('count-filter').value;
+        if (countFilter !== 'all') {
+            const limit = parseInt(countFilter, 10);
+            data = data.slice(0, limit);
+        }
+
+        activeData = data;
+
+        if (currentMode === 'flip') renderFlipCards();
+        else initTypingMode();
+    }
+
+    function shuffleCurrentData() {
+        activeData = shuffleArray(activeData);
+        if (currentMode === 'flip') renderFlipCards();
+        else initTypingMode();
+        createExplosion(null, 'SHUFFLED!');
+    }
+
+    function switchMode(mode) {
+        currentMode = mode;
+        document.getElementById('mode-flip-btn').classList.toggle('active', mode === 'flip');
+        document.getElementById('mode-type-btn').classList.toggle('active', mode === 'type');
+
+        document.getElementById('flip-mode-section').style.display = mode === 'flip' ? 'block' : 'none';
+        document.getElementById('type-mode-section').style.display = mode === 'type' ? 'block' : 'none';
+
+        resetAndGenerate();
+    }
+
+    function updateHighScoreDisplay() {
+        document.getElementById('type-highscore').innerText = `Highscore: ${highScore}`;
+    }
+
+    /* MISTAKES MODAL LOGIC */
+    function openMistakesModal() {
+        const modal = document.getElementById('mistakes-modal');
+        const titleElem = document.getElementById('modal-title-text');
+        const listElem = document.getElementById('modal-list-content');
+        const listFilter = document.getElementById('list-filter').value;
+        
+        listElem.innerHTML = '';
+
+        let wrongWords = [];
+
+        if (currentMode === 'flip') {
+            titleElem.innerText = '❌ Te oefenen woorden (Flip Cards)';
+            wrongWords = fullVocabData.filter(item => !knownWordsFlip.includes(item.en));
+        } else {
+            titleElem.innerText = '❌ Foute woorden (Typoefening)';
+            wrongWords = fullVocabData.filter(item => mistakesType.includes(item.en));
+        }
+
+        if (listFilter !== 'all') {
+            wrongWords = wrongWords.filter(item => item.list === listFilter);
+        }
+
+        if (wrongWords.length === 0) {
+            listElem.innerHTML = '<p style="text-align:center; color: var(--success-green); font-family: Bangers; font-size: 1.5rem; margin-top: 20px;">🎉 Geen fouten gevonden! Geweldig gedaan!</p>';
+        } else {
+            wrongWords.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'mistake-list-item';
+                div.innerHTML = `
+                    <div>
+                        <span class="mistake-word-en">${item.en}</span> = <span class="mistake-word-nl">${item.nl}</span>
+                    </div>
+                    <span class="list-badge">${item.list}</span>
+                `;
+                listElem.appendChild(div);
+            });
+        }
+
+        modal.style.display = 'flex';
+    }
+
+    function closeMistakesModal() {
+        document.getElementById('mistakes-modal').style.display = 'none';
+    }
+
+    /* FLIP CARDS LOGIC */
+    function renderFlipCards() {
+        const container = document.getElementById('flashcards-container');
+        const dir = document.getElementById('direction-select').value;
+        container.innerHTML = '';
+
+        if (activeData.length === 0) {
+            container.innerHTML = '<p style="font-family:Bangers; font-size:1.5rem; color:var(--hero-yellow);">No words found for this selection.</p>';
+            return;
+        }
+
+        activeData.forEach((wordObj, idx) => {
+            let isReversed = false;
+            if (dir === 'NL-EN') isReversed = true;
+            else if (dir === 'MIX') isReversed = (idx % 2 === 1);
+
+            const frontText = isReversed ? wordObj.nl : wordObj.en;
+            const backText = isReversed ? wordObj.en : wordObj.nl;
+            const isKnown = knownWordsFlip.includes(wordObj.en);
+
+            const cardWrap = document.createElement('div');
+            cardWrap.className = `card ${isKnown ? 'is-known' : ''}`;
+
+            const inner = document.createElement('div');
+            inner.className = 'card-inner';
+            inner.onclick = () => cardWrap.classList.toggle('flipped');
+
+            const front = document.createElement('div');
+            front.className = 'card-front';
+            front.innerHTML = `<span class="list-badge">${wordObj.list}</span><span>${frontText}</span>`;
+
+            const back = document.createElement('div');
+            back.className = 'card-back';
+            back.innerHTML = `<span class="list-badge">${wordObj.list}</span><span>${backText}</span>`;
+
+            const kBtn = document.createElement('button');
+            kBtn.className = 'known-btn';
+            updateKnownBtnStyle(kBtn, isKnown);
+
+            kBtn.onclick = (e) => {
+                e.stopPropagation();
+                toggleKnownFlip(e, wordObj.en, cardWrap, kBtn);
+            };
+
+            back.appendChild(kBtn);
+            inner.appendChild(front);
+            inner.appendChild(back);
+            cardWrap.appendChild(inner);
+            container.appendChild(cardWrap);
+        });
+    }
+
+    function toggleKnownFlip(e, wordEn, cardElem, btn) {
+        const index = knownWordsFlip.indexOf(wordEn);
+        if (index === -1) {
+            knownWordsFlip.push(wordEn);
+            cardElem.classList.add('is-known');
+            updateKnownBtnStyle(btn, true);
+            createExplosion(e, 'CHECK!');
+        } else {
+            knownWordsFlip.splice(index, 1);
+            cardElem.classList.remove('is-known');
+            updateKnownBtnStyle(btn, false);
+            createExplosion(e, 'RESET!');
+        }
+        localStorage.setItem('engliforce_known_flip_v4', JSON.stringify(knownWordsFlip));
+    }
+
+    function updateKnownBtnStyle(btn, isKnown) {
+        if (isKnown) {
+            btn.innerHTML = '✅ Known';
+            btn.style.background = 'var(--success-green)';
+            btn.style.color = 'white';
+        } else {
+            btn.innerHTML = '✔️ I know this';
+            btn.style.background = 'rgba(0,0,0,0.15)';
+            btn.style.color = 'var(--dark-bg)';
+        }
+    }
+
+    /* TYPING MODE LOGIC */
+    function initTypingMode() {
+        typeIndex = 0;
+        typeScore = 0;
+        typeTotal = activeData.length;
+
+        document.getElementById('feedback-box').style.display = 'none';
+        document.getElementById('btn-next').style.display = 'none';
+
+        if (typeTotal === 0) {
+            document.getElementById('prompt-word').innerText = "No Words";
+            document.getElementById('type-progress').innerText = "Question 0 of 0";
+            document.getElementById('type-score').innerText = "Score: 0 / 0";
+            document.getElementById('typing-input').disabled = true;
+            document.getElementById('btn-check').disabled = true;
+            return;
+        }
+
+        document.getElementById('typing-input').disabled = false;
+        document.getElementById('btn-check').disabled = false;
+        showTypingQuestion();
+    }
+
+    function showTypingQuestion() {
+        if (typeIndex >= typeTotal) {
+            showTypingSummary();
+            return;
+        }
+
+        const currentItem = activeData[typeIndex];
+        const dir = document.getElementById('direction-select').value;
+        let isReversed = false;
+
+        if (dir === 'NL-EN') isReversed = true;
+        else if (dir === 'MIX') isReversed = (typeIndex % 2 === 1);
+
+        currentItem._isReversed = isReversed;
+
+        document.getElementById('type-progress').innerText = `Question ${typeIndex + 1} of ${typeTotal}`;
+        document.getElementById('type-score').innerText = `Score: ${typeScore} / ${typeIndex}`;
+        
+        const label = document.getElementById('prompt-label');
+        const wordDisplay = document.getElementById('prompt-word');
+
+        if (isReversed) {
+            label.innerText = "Translate to English";
+            wordDisplay.innerText = currentItem.nl;
+        } else {
+            label.innerText = "Translate to Dutch";
+            wordDisplay.innerText = currentItem.en;
+        }
+
+        const input = document.getElementById('typing-input');
+        input.value = '';
+        input.disabled = false;
+        input.focus();
+
+        document.getElementById('feedback-box').style.display = 'none';
+        document.getElementById('btn-check').style.display = 'inline-block';
+        document.getElementById('btn-next').style.display = 'none';
+    }
+
+    function cleanString(str) {
+        return str.toLowerCase().replace(/[\(\)\/\.,]/g, ' ').replace(/\s+/g, ' ').trim();
+    }
+
+    function checkTypedAnswer(e) {
+        e.preventDefault();
+        const inputElem = document.getElementById('typing-input');
+        const userAns = inputElem.value;
+        if (!userAns.trim()) return;
+
+        const currentItem = activeData[typeIndex];
+        const isReversed = currentItem._isReversed;
+        const targetText = isReversed ? currentItem.en : currentItem.nl;
+
+        const uClean = cleanString(userAns);
+        const targetClean = cleanString(targetText);
+
+        const targetVariants = targetClean.split(' ').filter(w => w.length > 0);
+        const userWords = uClean.split(' ').filter(w => w.length > 0);
+
+        let isCorrect = (uClean === targetClean);
+
+        if (!isCorrect && targetText.includes('/')) {
+            const options = targetText.split('/').map(opt => cleanString(opt));
+            if (options.some(opt => opt === uClean)) isCorrect = true;
+        }
+
+        if (!isCorrect && targetVariants.length > 1) {
+            const matchedCount = userWords.filter(w => targetVariants.includes(w)).length;
+            if (matchedCount >= 1 && userWords.length >= 1 && Math.abs(userWords.length - targetVariants.length) <= 2) {
+                isCorrect = true;
+            }
+        }
+
+        const feedbackBox = document.getElementById('feedback-box');
+        const feedbackTitle = document.getElementById('feedback-title');
+        const feedbackDetails = document.getElementById('feedback-details');
+
+        inputElem.disabled = true;
+        document.getElementById('btn-check').style.display = 'none';
+        document.getElementById('btn-next').style.display = 'inline-block';
+        document.getElementById('btn-next').focus();
+
+        if (isCorrect) {
+            typeScore++;
+            feedbackBox.className = 'feedback-box correct';
+            feedbackTitle.innerHTML = '🎉 AWESOME! CORRECT!';
+            feedbackDetails.innerHTML = `Great job! <strong>${targetText}</strong> is correct.`;
+            createExplosion(e, 'SUPER!');
+
+            if (!knownWordsType.includes(currentItem.en)) {
+                knownWordsType.push(currentItem.en);
+                localStorage.setItem('engliforce_known_type_v4', JSON.stringify(knownWordsType));
+            }
+
+            const mIndex = mistakesType.indexOf(currentItem.en);
+            if (mIndex !== -1) {
+                mistakesType.splice(mIndex, 1);
+                localStorage.setItem('engliforce_mistakes_type_v4', JSON.stringify(mistakesType));
+            }
+
+        } else {
+            feedbackBox.className = 'feedback-box incorrect';
+            feedbackTitle.innerHTML = '❌ OOPS! NOT QUITE!';
+            feedbackDetails.innerHTML = `You typed: <span style="text-decoration:line-through; opacity:0.8">${userAns}</span><br>` +
+                                        `Correct answer: <strong style="color:var(--hero-yellow); font-size:1.2rem">${targetText}</strong>` +
+                                        `<br><span class="feedback-list-info">List: ${currentItem.list}</span>`;
+
+            document.querySelector('.typing-wrapper').classList.add('shake');
+            setTimeout(() => document.querySelector('.typing-wrapper').classList.remove('shake'), 300);
+
+            if (!mistakesType.includes(currentItem.en)) {
+                mistakesType.push(currentItem.en);
+                localStorage.setItem('engliforce_mistakes_type_v4', JSON.stringify(mistakesType));
+            }
+
+            const kIndex = knownWordsType.indexOf(currentItem.en);
+            if (kIndex !== -1) {
+                knownWordsType.splice(kIndex, 1);
+                localStorage.setItem('engliforce_known_type_v4', JSON.stringify(knownWordsType));
+            }
+        }
+
+        document.getElementById('type-score').innerText = `Score: ${typeScore} / ${typeIndex + 1}`;
+        feedbackBox.style.display = 'block';
+    }
+
+    function nextTypingQuestion() {
+        typeIndex++;
+        showTypingQuestion();
+    }
+
+    function showTypingSummary() {
+        document.getElementById('prompt-label').innerText = "Session Complete!";
+        document.getElementById('prompt-word').innerText = `Final Score: ${typeScore} / ${typeTotal}`;
+
+        document.getElementById('typing-input').style.display = 'none';
+        document.getElementById('btn-check').style.display = 'none';
+        document.getElementById('btn-next').style.display = 'none';
+
+        const feedbackBox = document.getElementById('feedback-box');
+        feedbackBox.className = 'feedback-box correct';
+        feedbackBox.style.display = 'block';
+
+        if (typeScore > highScore) {
+            highScore = typeScore;
+            localStorage.setItem('engliforce_highscore_v4', highScore);
+            updateHighScoreDisplay();
+            feedbackBox.innerHTML = `<div class="feedback-title">🏆 NEW HIGHSCORE!</div><div class="feedback-details">You scored ${typeScore} points! Outstanding work!</div>`;
+            createExplosion(null, 'NEW RECORD!');
+        } else {
+            feedbackBox.innerHTML = `<div class="feedback-title">👏 WELL DONE!</div><div class="feedback-details">You finished this session! Click Shuffle or select a new list to practice again.</div>`;
+        }
+    }
+
+    /* VISUAL EFFECTS */
+    function createExplosion(e, text) {
+        const flash = document.getElementById('flash');
+        flash.style.opacity = '0.25';
+        setTimeout(() => flash.style.opacity = '0', 150);
+
+        const boom = document.createElement('div');
+        boom.className = 'boom-text';
+        boom.innerText = text || 'BOOM!';
+
+        let x = window.innerWidth / 2;
+        let y = window.innerHeight / 2;
+
+        if (e && e.clientX) {
+            x = e.clientX;
+            y = e.clientY;
+        }
+
+        boom.style.left = (x - 80) + 'px';
+        boom.style.top = (y - 40) + 'px';
+
+        document.body.appendChild(boom);
+        setTimeout(() => boom.remove(), 600);
+    }
+
+    window.onload = init;
+</script>
+</body>
+</html>
