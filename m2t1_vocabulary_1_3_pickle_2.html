@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EngliForce Pickle: Inventions & Discoveries</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Lexend:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hero-purple-main: #ff5722;
+            --hero-purple-dark: #bf360c;
+            --hero-yellow: #ffb703;
+            --hero-cyan: #b39ddb;
+            --dark-bg: #0b101a;
+            --hero-orange: #ff5722;
+        }
+
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: radial-gradient(circle at center, #1a102a 0%, #05051a 100%);
+            color: white;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        header {
+            background: var(--hero-purple-main);
+            padding: 2rem 1rem;
+            text-align: center;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            border-bottom: 5px solid var(--hero-yellow);
+        }
+
+        h1 { 
+            font-family: 'Bangers', cursive; 
+            font-size: 3rem; 
+            margin: 0; 
+            text-shadow: 3px 3px 0px var(--hero-purple-dark); 
+        }
+
+        h2 { 
+            font-family: 'Bangers', cursive; 
+            color: var(--hero-yellow); 
+            text-align: center; 
+            margin-top: 20px; 
+        }
+
+        main { 
+            max-width: 800px; 
+            margin: 20px auto; 
+            padding: 20px; 
+            text-align: center; 
+        }
+
+        section {
+            background: rgba(26, 16, 42, 0.8);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 2px solid var(--hero-cyan);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* Setup Area */
+        .setup {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        select, input {
+            padding: 12px;
+            border-radius: 10px;
+            border: 2px solid var(--hero-purple-main);
+            background: #0b101a;
+            color: white;
+            font-family: 'Lexend', sans-serif;
+        }
+
+        /* The Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 15px;
+            justify-content: center;
+            margin: 30px auto;
+            max-width: 450px;
+        }
+
+        .card {
+            aspect-ratio: 1 / 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 0.95rem;
+            font-weight: bold;
+            background: var(--hero-purple-dark);
+            border: 3px solid var(--hero-cyan);
+            border-radius: 15px;
+            cursor: pointer;
+            padding: 6px;
+            transition: 0.3s;
+            color: white;
+            overflow: hidden;
+            word-break: normal;
+            overflow-wrap: break-word;
+            hyphens: auto;
+            line-height: 1.2;
+        }
+
+        .hiddenText { 
+            color: transparent !important; 
+            background: var(--hero-purple-main) !important; 
+        }
+
+        .correct { 
+            background-color: #4caf50 !important; 
+            border-color: #81c784 !important; 
+        }
+
+        .incorrect { 
+            background-color: var(--hero-orange) !important; 
+            border-color: #ff8a65 !important; 
+        }
+
+        /* UI Elements */
+        .turn { 
+            font-family: 'Bangers'; 
+            font-size: 1.8rem; 
+            color: var(--hero-yellow); 
+            margin: 20px 0; 
+            min-height: 40px; 
+        }
+
+        .score { 
+            font-size: 1.2rem; 
+            margin-top: 20px; 
+            color: var(--hero-cyan); 
+        }
+
+        .result { 
+            font-family: 'Bangers'; 
+            font-size: 2.5rem; 
+            margin-top: 20px; 
+            color: #fff; 
+        }
+
+        .btn {
+            background: var(--hero-orange);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-family: 'Bangers';
+            font-size: 1.5rem;
+            cursor: pointer;
+            border-bottom: 5px solid #bf360c;
+            transition: 0.2s;
+            margin: 10px;
+        }
+
+        .btn:hover:not(:disabled) { 
+            transform: translateY(-3px); 
+            filter: brightness(1.1); 
+        }
+
+        .btn:disabled { 
+            opacity: 0.5; 
+            cursor: not-allowed; 
+        }
+
+        .btn-start { 
+            background: var(--hero-purple-main); 
+            border-bottom-color: var(--hero-purple-dark); 
+        }
+
+        .confetti { 
+            font-size: 40px; 
+            animation: pop 0.5s ease-in-out; 
+            display: inline-block; 
+        }
+
+        @keyframes pop { 
+            0% { transform: scale(0); } 
+            100% { transform: scale(1); } 
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: rgba(255,255,255,0.5);
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>PICKLE 3: INVENTIONS & DISCOVERIES</h1>
+    <p>Onthoud de posities en vind het juiste woord!</p>
+</header>
+
+<main>
+    <section>
+        <div class="setup">
+            <select id="playerMode">
+                <option value="1">1 player</option>
+                <option value="2">2 players</option>
+            </select>
+            <input type="text" id="player1" placeholder="Name player 1" />
+            <input type="text" id="player2" placeholder="Name player 2" />
+            <select id="direction">
+                <option value="en-nl">English → Dutch</option>
+                <option value="nl-en">Dutch → English</option>
+            </select>
+            <button class="btn btn-start" onclick="startGame()">Start mission</button>
+        </div>
+
+        <div class="turn" id="turnDisplay"></div>
+        <div class="grid" id="grid"></div>
+
+        <div class="controls">
+            <button class="btn" onclick="showQuestion()" id="readyBtn" disabled>Ready!!</button>
+            <button class="btn" onclick="nextRound()" id="nextBtn" style="display: none;">Next round</button>
+        </div>
+
+        <div class="score" id="scoreDisplay"></div>
+        <div class="result" id="resultDisplay"></div>
+    </section>
+</main>
+
+<footer>
+    &copy; 2026 EngliForce: Make English Your Superpower!
+</footer>
+
+<script>
+    const wordList = [
+        { en: "invention", nl: "uitvinding" },
+        { en: "discovery", nl: "ontdekking" },
+        { en: "inventor", nl: "uitvinder" },
+        { en: "engine", nl: "motor" },
+        { en: "steam engine", nl: "stoommachine" },
+        { en: "workshop", nl: "werkplaats" },
+        { en: "spacecraft", nl: "ruimteschip" },
+        { en: "science", nl: "wetenschap" },
+        { en: "impact", nl: "invloed / impact" },
+        { en: "useful", nl: "nuttig / handig" },
+        { en: "dangerous", nl: "gevaarlijk" },
+        { en: "to build", nl: "bouwen" },
+        { en: "to explore", nl: "verkennen / onderzoeken" },
+        { en: "to improve", nl: "verbeteren" },
+        { en: "to design", nl: "ontwerpen" }
+    ];
+
+    let currentGrid = [];
+    let correctIndex = -1;
+    let currentPlayer = 0;
+    let players = [];
+    let scores = [];
+    let rounds = [];
+    let mode = 1;
+    let direction = "en-nl";
+    const totalRounds = 5;
+
+    function getRandomWords(count) {
+        return [...wordList].sort(() => 0.5 - Math.random()).slice(0, count);
+    }
+
+    function adjustCardFontSize(element, text) {
+        const len = text.length;
+        if (len > 25) {
+            element.style.fontSize = "0.65rem";
+        } else if (len > 18) {
+            element.style.fontSize = "0.72rem";
+        } else if (len > 12) {
+            element.style.fontSize = "0.82rem";
+        } else if (len > 9) {
+            element.style.fontSize = "0.88rem";
+        } else {
+            element.style.fontSize = "0.98rem";
+        }
+    }
+
+    function startGame() {
+        mode = parseInt(document.getElementById("playerMode").value);
+        direction = document.getElementById("direction").value;
+
+        const p1 = document.getElementById("player1").value.trim() || "agent 1";
+        const p2 = document.getElementById("player2").value.trim() || "agent 2";
+
+        players = mode === 2 ? [p1, p2] : [p1];
+        scores = Array(players.length).fill(0);
+        rounds = Array(players.length).fill(0);
+        currentPlayer = 0;
+
+        document.getElementById("resultDisplay").innerHTML = "";
+        document.getElementById("nextBtn").style.display = "none";
+        document.getElementById("readyBtn").disabled = false;
+
+        newGrid();
+    }
+
+    function newGrid() {
+        if (players.length === 0) return;
+        currentGrid = getRandomWords(9);
+        correctIndex = -1;
+
+        const grid = document.getElementById("grid");
+        grid.innerHTML = "";
+        currentGrid.forEach((word, i) => {
+            const div = document.createElement("div");
+            div.className = "card";
+            const text = direction === "en-nl" ? word.en : word.nl;
+            div.textContent = text;
+            div.dataset.index = i;
+            adjustCardFontSize(div, text);
+            grid.appendChild(div);
+        });
+
+        updateTurn();
+    }
+
+    function showQuestion() {
+        if (players.length === 0) return;
+        correctIndex = Math.floor(Math.random() * 9);
+        const targetWord = direction === "en-nl"
+            ? currentGrid[correctIndex].nl
+            : currentGrid[correctIndex].en;
+
+        document.getElementById("turnDisplay").innerHTML =
+            `missie: waar zit "<strong>${targetWord}</strong>"?`;
+
+        document.querySelectorAll(".card").forEach(card => {
+            card.classList.remove("correct", "incorrect");
+            card.classList.add("hiddenText");
+            card.onclick = () => checkAnswer(parseInt(card.dataset.index), card);
+        });
+
+        document.getElementById("nextBtn").style.display = "none";
+        document.getElementById("readyBtn").disabled = true;
+    }
+
+    function checkAnswer(index, card) {
+        const all = document.querySelectorAll(".card");
+        all.forEach(c => {
+            c.classList.remove("hiddenText");
+            c.onclick = null;
+        });
+
+        if (index === correctIndex) {
+            card.classList.add("correct");
+            scores[currentPlayer]++;
+        } else {
+            card.classList.add("incorrect");
+            all[correctIndex].classList.add("correct");
+        }
+
+        rounds[currentPlayer]++;
+        updateScore();
+        document.getElementById("nextBtn").style.display = "inline-block";
+    }
+
+    function nextRound() {
+        document.getElementById("nextBtn").style.display = "none";
+
+        if ((mode === 2 && rounds[0] >= totalRounds && rounds[1] >= totalRounds) ||
+            (mode === 1 && rounds[0] >= totalRounds)) {
+            showWinner();
+        } else {
+            currentPlayer = (currentPlayer + 1) % players.length;
+            newGrid();
+            document.getElementById("readyBtn").disabled = false;
+        }
+    }
+
+    function updateTurn() {
+        if (players.length > 0) {
+            document.getElementById("turnDisplay").innerHTML = `turn: ${players[currentPlayer]}`;
+        }
+        updateScore();
+    }
+
+    function updateScore() {
+        if (players.length === 0) return;
+        const html = players.map((name, i) =>
+            `🎯 ${name}: ${scores[i]} (${rounds[i]}/${totalRounds})`
+        ).join(" | ");
+        document.getElementById("scoreDisplay").innerHTML = html;
+    }
+
+    function showWinner() {
+        const res = document.getElementById("resultDisplay");
+        document.getElementById("turnDisplay").innerHTML = "mission accomplished!";
+        if (mode === 1) {
+            res.innerHTML = `🎉 score: ${scores[0]} / ${totalRounds} <span class="confetti">🎊</span>`;
+        } else if (scores[0] > scores[1]) {
+            res.innerHTML = `🏆 ${players[0]} wins! <span class="confetti">🎊</span>`;
+        } else if (scores[1] > scores[0]) {
+            res.innerHTML = `🏆 ${players[1]} wins! <span class="confetti">🎊</span>`;
+        } else {
+            res.innerHTML = `🤝 IT'S A TIE! <span class="confetti">🎊</span>`;
+        }
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EngliForce Pickle 1.2: Empires & Leaders</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Lexend:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --hero-purple-main: #6a1b9a; --hero-purple-dark: #4a148c; --hero-yellow: #ffb703; --hero-cyan: #b39ddb; --dark-bg: #0b101a; --hero-orange: #ff5722; }
+        body { font-family: 'Lexend', sans-serif; background: radial-gradient(circle at center, #1a102a 0%, #05051a 100%); color: white; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+        header { width: 100%; background: var(--hero-orange); padding: 2rem 0; text-align: center; clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%); border-bottom: 5px solid var(--hero-yellow); margin-bottom: 20px; }
+        h1 { font-family: 'Bangers', cursive; font-size: 3rem; margin: 0; text-shadow: 3px 3px 0px #bf360c; color: white; }
+        .container { max-width: 700px; width: 90%; margin: 20px auto; }
+        .section { background: rgba(26, 16, 42, 0.8); border-radius: 20px; padding: 2rem; border: 2px solid var(--hero-cyan); box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-bottom: 20px; }
+        .instructions { font-size: 0.9rem; color: var(--hero-cyan); line-height: 1.5; margin-bottom: 20px; text-align: left; }
+        label { display: block; margin-top: 1rem; font-family: 'Bangers'; color: var(--hero-yellow); font-size: 1.2rem; }
+        input, select { width: 100%; padding: 12px; margin-top: 5px; border-radius: 10px; border: 2px solid var(--hero-purple-main); background: #0b101a; color: white; box-sizing: border-box; font-family: 'Lexend', sans-serif; }
+        .btn { background: var(--hero-orange); color: white; border: none; padding: 15px 25px; border-radius: 50px; font-family: 'Bangers'; font-size: 1.4rem; cursor: pointer; border-bottom: 5px solid #bf360c; transition: 0.2s; margin: 10px 5px 0 0; width: 100%; }
+        .btn:hover { transform: translateY(-3px); filter: brightness(1.1); }
+        .btn-purple { background: var(--hero-purple-main); border-bottom-color: var(--hero-purple-dark); }
+        .turn { font-family: 'Bangers'; font-size: 2.2rem; color: var(--hero-yellow); text-align: center; margin-bottom: 10px; }
+        .scoreboard { display: flex; justify-content: space-around; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid var(--hero-purple-main); }
+        .word-card { background: #1a102a; border: 3px solid var(--hero-purple-main); border-radius: 15px; padding: 25px; text-align: center; }
+        .hint-text { font-size: 1.2rem; min-height: 60px; display: flex; align-items: center; justify-content: center; color: white; font-style: italic; margin: 20px 0; background: rgba(0,0,0,0.2); border-radius: 10px; padding: 10px; }
+        .answer-reveal { font-family: 'Bangers'; font-size: 2rem; color: var(--hero-yellow); display: none; margin: 15px 0; padding: 10px; border: 2px dashed var(--hero-yellow); }
+        footer { text-align: center; padding: 30px; color: rgba(255,255,255,0.5); width: 100%; }
+        .flex-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>PICKLE 1.2: EMPIRES & LEADERS</h1>
+</header>
+<div class="container">
+    <div class="section" id="setup">
+        <div class="instructions">
+            🔎 <strong>Mission:</strong> Guess the historical term using as few hints as possible.<br>
+            🌟 <strong>Bonus:</strong> Use <strong>English</strong> hints for +1 extra point!
+        </div>
+        <label>Number of Agents:</label>
+        <select id="playerCount" onchange="togglePlayer2()">
+            <option value="1">1 Agent</option>
+            <option value="2" selected>2 Agents</option>
+        </select>
+        <label>Agent 1:</label>
+        <input type="text" id="player1" placeholder="Name of Agent 1" />
+        <div id="player2Section">
+            <label>Agent 2:</label>
+            <input type="text" id="player2" placeholder="Name of Agent 2" />
+        </div>
+        <button class="btn" style="margin-top: 30px;" onclick="startGame()">Start Mission 🚀</button>
+    </div>
+
+    <div id="game" style="display: none;">
+        <div class="turn" id="turnIndicator">Turn: ...</div>
+        <div class="scoreboard">
+            <div><span id="name1"></span>: <span id="score1" style="color:var(--hero-yellow)">0</span></div>
+            <div id="p2ScoreDisplay"><span id="name2"></span>: <span id="score2" style="color:var(--hero-yellow)">0</span></div>
+        </div>
+        <div class="word-card">
+            <div class="answer-reveal" id="word-reveal">Answer: ...</div>
+            <label>Hint Language:</label>
+            <select id="hintLanguage" onchange="resetClue()">
+                <option value="nl">Dutch</option>
+                <option value="en">English (Bonus +1)</option>
+            </select>
+            <div class="hint-text" id="hintBox">Click 'Next Hint' to start</div>
+            <div class="flex-buttons">
+                <button class="btn btn-purple" onclick="nextHint()">Next Hint 💡</button>
+                <button class="btn btn-purple" onclick="showWord()">Show Answer 👁️</button>
+                <button class="btn" style="background:#4caf50; border-color:#2e7d32;" onclick="correctGuess()">Correct ✅</button>
+                <button class="btn" style="background:var(--hero-orange); border-color:#bf360c;" onclick="wrongGuess()">Wrong ❌</button>
+            </div>
+        </div>
+    </div>
+</div>
+<footer>
+    &copy; 2026 EngliForce: Make English Your Superpower!
+</footer>
+<script>
+    const wordList = [
+        { en: "empire", hints: { nl: ["Betekenis: rijk / imperium.", "Voorbeeld: 'Het Romeinse rijk was ooit erg machtig.'", "Nederlandse vertaling: rijk / imperium."], en: ["Context: The Roman empire was once very powerful.", "A large group of states or countries under a single supreme authority.", "Starts with 'E', means 'rijk' in Dutch."] }},
+        { en: "leader", hints: { nl: ["Betekenis: leider.", "Voorbeeld: 'Een goede leider beschermt zijn volk.'", "Nederlandse vertaling: leider."], en: ["Context: A good leader protects their people.", "The person who commands or leads a group.", "Starts with 'L', means 'leider' in Dutch."] }},
+        { en: "soldier", hints: { nl: ["Betekenis: soldaat.", "Voorbeeld: 'De soldaat vocht dapper in de strijd.'", "Nederlandse vertaling: soldaat."], en: ["Context: The soldier fought bravely in battle.", "A person who serves in an army.", "Starts with 'S', means 'soldaat' in Dutch."] }},
+        { en: "hero", hints: { nl: ["Betekenis: held.", "Voorbeeld: 'Hij werd een nationale held na de oorlog.'", "Nederlandse vertaling: held."], en: ["Context: He became a national hero after the war.", "A person admired for courage or outstanding achievements.", "Starts with 'H', means 'held' in Dutch."] }},
+        { en: "villain", hints: { nl: ["Betekenis: schurk / slechterik.", "Voorbeeld: 'De film gaat over een bekende historische schurk.'", "Nederlandse vertaling: schurk / slechterik."], en: ["Context: The movie is about a famous historical villain.", "A character whose evil actions are important to the plot.", "Starts with 'V', means 'schurk' in Dutch."] }},
+        { en: "battle", hints: { nl: ["Betekenis: veldslag.", "Voorbeeld: 'Veel mensen kwamen om in die bekende veldslag.'", "Nederlandse vertaling: veldslag."], en: ["Context: Many people died in that famous battle.", "A fight between organized armed forces.", "Starts with 'B', means 'veldslag' in Dutch."] }},
+        { en: "army", hints: { nl: ["Betekenis: leger.", "Voorbeeld: 'De koning stuurde zijn leger om de stad te beschermen.'", "Nederlandse vertaling: leger."], en: ["Context: The king sent his army to protect the city.", "An organized military force for fighting on land.", "Starts with 'A', means 'leger' in Dutch."] }},
+        { en: "power", hints: { nl: ["Betekenis: macht.", "Voorbeeld: 'De koningin regeerde het land met grote macht.'", "Nederlandse vertaling: macht."], en: ["Context: The queen ruled the country with great power.", "The ability to direct or influence the behavior of others.", "Starts with 'P', means 'macht' in Dutch."] }},
+        { en: "victory", hints: { nl: ["Betekenis: overwinning.", "Voorbeeld: 'Ze vierden hun overwinning na het winnen van de oorlog.'", "Nederlandse vertaling: overwinning."], en: ["Context: They celebrated their victory after winning the war.", "An act of defeating an enemy or opponent.", "Starts with 'V', means 'overwinning' in Dutch."] }},
+        { en: "defeat", hints: { nl: ["Betekenis: nederlaag.", "Voorbeeld: 'Het leger van de vijand leed een grote nederlaag.'", "Nederlandse vertaling: nederlaag."], en: ["Context: The enemy army suffered a big defeat.", "An instance of defeating or being defeated.", "Starts with 'D', means 'nederlaag' in Dutch."] }},
+        { en: "ruler", hints: { nl: ["Betekenis: heerser.", "Voorbeeld: 'Cleopatra was een bekende heerser van Egypte.'", "Nederlandse vertaling: heerser."], en: ["Context: Cleopatra was a famous ruler of Egypt.", "A person exercising government or dominion.", "Starts with 'R', means 'heerser' in Dutch."] }},
+        { en: "enemy", hints: { nl: ["Betekenis: vijand.", "Voorbeeld: 'Ze moesten hun land verdedigen tegen de vijand.'", "Nederlandse vertaling: vijand."], en: ["Context: They had to defend their land against the enemy.", "A person or group opposed to another.", "Starts with 'E', means 'vijand' in Dutch."] }},
+        { en: "brave", hints: { nl: ["Betekenis: dapper / moedig.", "Voorbeeld: 'Zij was een dappere ridder die nergens bang voor was.'", "Nederlandse vertaling: dapper / moedig."], en: ["Context: She was a brave knight who feared nothing.", "Ready to face and endure danger or pain; courageous.", "Starts with 'B', means 'dapper' in Dutch."] }},
+        { en: "to rule", hints: { nl: ["Betekenis: regeren / heersen.", "Voorbeeld: 'Koning Henry VIII regeerde Engeland gedurende vele jaren.'", "Nederlandse vertaling: regeren / heersen."], en: ["Context: King Henry VIII ruled England for many years.", "To exercise ultimate authority over a place and its people.", "Starts with 'R', means 'regeren' in Dutch."] }},
+        { en: "to fight", hints: { nl: ["Betekenis: vechten.", "Voorbeeld: 'Ridders moesten vroeger vechten met zwaarden.'", "Nederlandse vertaling: vechten."], en: ["Context: Knights had to fight with swords in the past.", "To take part in a battle or combat.", "Starts with 'F', means 'vechten' in Dutch."] }}
+    ];
+
+    let words = []; p1 = '', p2 = '', playerCount = 2; score = [0, 0]; currentIndex = 0; currentHint = 0; currentPlayer = 0;
+    function togglePlayer2() { document.getElementById("player2Section").style.display = (document.getElementById("playerCount").value === "1") ? "none" : "block"; }
+    function startGame() {
+        playerCount = parseInt(document.getElementById("playerCount").value);
+        p1 = document.getElementById("player1").value || "Agent 1";
+        p2 = document.getElementById("player2").value || "Agent 2";
+        words = [...wordList].sort(() => Math.random() - 0.5);
+        score = [0, 0]; currentIndex = 0; currentPlayer = 0;
+        document.getElementById("name1").textContent = p1;
+        document.getElementById("name2").textContent = (playerCount === 2) ? p2 : "";
+        document.getElementById("p2ScoreDisplay").style.visibility = (playerCount === 2) ? "visible" : "hidden";
+        document.getElementById("setup").style.display = "none";
+        document.getElementById("game").style.display = "block";
+        updateScore(); showTurn(); resetWordCard();
+    }
+    function showTurn() { document.getElementById("turnIndicator").textContent = (playerCount === 1) ? `Agent: ${p1}` : `Turn: ${currentPlayer === 0 ? p1 : p2}`; }
+    function resetWordCard() { currentHint = 0; document.getElementById("hintBox").textContent = "Click 'Next Hint' to start"; document.getElementById("word-reveal").style.display = "none"; }
+    function nextHint() {
+        if (currentHint >= 3) return;
+        const lang = document.getElementById("hintLanguage").value;
+        document.getElementById("hintBox").textContent = `Hint ${currentHint + 1}: ${words[currentIndex].hints[lang][currentHint]}`;
+        currentHint++;
+    }
+    function showWord() { document.getElementById("word-reveal").textContent = `Answer: ${words[currentIndex].en}`; document.getElementById("word-reveal").style.display = "block"; }
+    function correctGuess() {
+        const lang = document.getElementById("hintLanguage").value;
+        let points = Math.max(1, 4 - currentHint) + (lang === "en" ? 1 : 0);
+        score[currentPlayer] += points; nextWord();
+    }
+    function wrongGuess() { nextWord(); }
+    function nextWord() {
+        currentIndex++;
+        if (playerCount === 2) currentPlayer = 1 - currentPlayer;
+        updateScore();
+        if (currentIndex >= words.length) {
+            document.getElementById("turnIndicator").textContent = "Mission Accomplished!";
+            document.getElementById("hintBox").textContent = "All words discovered!";
+            document.getElementById("word-reveal").style.display = "none";
+        } else { showTurn(); resetWordCard(); }
+    }
+    function updateScore() { document.getElementById("score1").textContent = score[0] + " pt"; document.getElementById("score2").textContent = score[1] + " pt"; }
+    function resetClue() { if (currentHint > 0) { const lang = document.getElementById("hintLanguage").value; document.getElementById("hintBox").textContent = `Hint ${currentHint}: ${words[currentIndex].hints[lang][currentHint - 1]}`; } }
+</script>
+</body>
+</html>

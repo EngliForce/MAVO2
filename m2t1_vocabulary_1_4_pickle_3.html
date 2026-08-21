@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EngliForce Pickle 1.4: Disasters & Events</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Lexend:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --hero-purple-main: #6a1b9a; --hero-purple-dark: #4a148c; --hero-yellow: #ffb703; --hero-cyan: #b39ddb; --dark-bg: #0b101a; --hero-orange: #ff5722; }
+        body { font-family: 'Lexend', sans-serif; background: radial-gradient(circle at center, #1a102a 0%, #05051a 100%); color: white; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+        header { width: 100%; background: var(--hero-orange); padding: 2rem 0; text-align: center; clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%); border-bottom: 5px solid var(--hero-yellow); margin-bottom: 20px; }
+        h1 { font-family: 'Bangers', cursive; font-size: 3rem; margin: 0; text-shadow: 3px 3px 0px #bf360c; color: white; }
+        .container { max-width: 700px; width: 90%; margin: 20px auto; }
+        .section { background: rgba(26, 16, 42, 0.8); border-radius: 20px; padding: 2rem; border: 2px solid var(--hero-cyan); box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-bottom: 20px; }
+        .instructions { font-size: 0.9rem; color: var(--hero-cyan); line-height: 1.5; margin-bottom: 20px; text-align: left; }
+        label { display: block; margin-top: 1rem; font-family: 'Bangers'; color: var(--hero-yellow); font-size: 1.2rem; }
+        input, select { width: 100%; padding: 12px; margin-top: 5px; border-radius: 10px; border: 2px solid var(--hero-purple-main); background: #0b101a; color: white; box-sizing: border-box; font-family: 'Lexend', sans-serif; }
+        .btn { background: var(--hero-orange); color: white; border: none; padding: 15px 25px; border-radius: 50px; font-family: 'Bangers'; font-size: 1.4rem; cursor: pointer; border-bottom: 5px solid #bf360c; transition: 0.2s; margin: 10px 5px 0 0; width: 100%; }
+        .btn:hover { transform: translateY(-3px); filter: brightness(1.1); }
+        .btn-purple { background: var(--hero-purple-main); border-bottom-color: var(--hero-purple-dark); }
+        .turn { font-family: 'Bangers'; font-size: 2.2rem; color: var(--hero-yellow); text-align: center; margin-bottom: 10px; }
+        .scoreboard { display: flex; justify-content: space-around; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid var(--hero-purple-main); }
+        .word-card { background: #1a102a; border: 3px solid var(--hero-purple-main); border-radius: 15px; padding: 25px; text-align: center; }
+        .hint-text { font-size: 1.2rem; min-height: 60px; display: flex; align-items: center; justify-content: center; color: white; font-style: italic; margin: 20px 0; background: rgba(0,0,0,0.2); border-radius: 10px; padding: 10px; }
+        .answer-reveal { font-family: 'Bangers'; font-size: 2rem; color: var(--hero-yellow); display: none; margin: 15px 0; padding: 10px; border: 2px dashed var(--hero-yellow); }
+        footer { text-align: center; padding: 30px; color: rgba(255,255,255,0.5); width: 100%; }
+        .flex-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>PICKLE 1.4: DISASTERS & EVENTS</h1>
+</header>
+<div class="container">
+    <div class="section" id="setup">
+        <div class="instructions">
+            🔎 <strong>Mission:</strong> Guess the disaster or event term using as few hints as possible.<br>
+            🌟 <strong>Bonus:</strong> Use <strong>English</strong> hints for +1 extra point!
+        </div>
+        <label>Number of Agents:</label>
+        <select id="playerCount" onchange="togglePlayer2()">
+            <option value="1">1 Agent</option>
+            <option value="2" selected>2 Agents</option>
+        </select>
+        <label>Agent 1:</label>
+        <input type="text" id="player1" placeholder="Name of Agent 1" />
+        <div id="player2Section">
+            <label>Agent 2:</label>
+            <input type="text" id="player2" placeholder="Name of Agent 2" />
+        </div>
+        <button class="btn" style="margin-top: 30px;" onclick="startGame()">Start Mission 🚀</button>
+    </div>
+
+    <div id="game" style="display: none;">
+        <div class="turn" id="turnIndicator">Turn: ...</div>
+        <div class="scoreboard">
+            <div><span id="name1"></span>: <span id="score1" style="color:var(--hero-yellow)">0</span></div>
+            <div id="p2ScoreDisplay"><span id="name2"></span>: <span id="score2" style="color:var(--hero-yellow)">0</span></div>
+        </div>
+        <div class="word-card">
+            <div class="answer-reveal" id="word-reveal">Answer: ...</div>
+            <label>Hint Language:</label>
+            <select id="hintLanguage" onchange="resetClue()">
+                <option value="nl">Dutch</option>
+                <option value="en">English (Bonus +1)</option>
+            </select>
+            <div class="hint-text" id="hintBox">Click 'Next Hint' to start</div>
+            <div class="flex-buttons">
+                <button class="btn btn-purple" onclick="nextHint()">Next Hint 💡</button>
+                <button class="btn btn-purple" onclick="showWord()">Show Answer 👁️</button>
+                <button class="btn" style="background:#4caf50; border-color:#2e7d32;" onclick="correctGuess()">Correct ✅</button>
+                <button class="btn" style="background:var(--hero-orange); border-color:#bf360c;" onclick="wrongGuess()">Wrong ❌</button>
+            </div>
+        </div>
+    </div>
+</div>
+<footer>
+    &copy; 2026 EngliForce: Make English Your Superpower!
+</footer>
+<script>
+    const wordList = [
+        { en: "disaster", hints: { nl: ["Betekenis: ramp.", "Voorbeeld: 'De aardbeving was een vreselijke ramp.'", "Nederlandse vertaling: ramp."], en: ["Context: The earthquake was a terrible disaster.", "A sudden event that causes great damage or loss of life.", "Starts with 'D', means 'ramp' in Dutch."] }},
+        { en: "accident", hints: { nl: ["Betekenis: ongeluk.", "Voorbeeld: 'De brand begon door een ongeluk.'", "Nederlandse vertaling: ongeluk."], en: ["Context: The fire started by accident.", "An unfortunate incident that happens unexpectedly.", "Starts with 'A', means 'ongeluk' in Dutch."] }},
+        { en: "damage", hints: { nl: ["Betekenis: schade.", "Voorbeeld: 'De storm veroorzaakte veel schade.'", "Nederlandse vertaling: schade."], en: ["Context: The storm caused a lot of damage.", "Physical harm caused to something.", "Starts with 'D', means 'schade' in Dutch."] }},
+        { en: "warning", hints: { nl: ["Betekenis: waarschuwing.", "Voorbeeld: 'Zij kregen niet op tijd een waarschuwing.'", "Nederlandse vertaling: waarschuwing."], en: ["Context: They did not receive a warning in time.", "A statement or event that indicates a possible danger.", "Starts with 'W', means 'waarschuwing' in Dutch."] }},
+        { en: "event", hints: { nl: ["Betekenis: gebeurtenis.", "Voorbeeld: 'De overstroming was een grote historische gebeurtenis.'", "Nederlandse vertaling: gebeurtenis."], en: ["Context: The flood was a major historical event.", "A thing that happens, especially one of importance.", "Starts with 'E', means 'gebeurtenis' in Dutch."] }},
+        { en: "origin", hints: { nl: ["Betekenis: oorsprong.", "Voorbeeld: 'Wat was de belangrijkste oorsprong van de brand?'", "Nederlandse vertaling: oorsprong."], en: ["Context: What was the main origin of the fire?", "The point or place where something begins.", "Starts with 'O', means 'oorsprong' in Dutch."] }},
+        { en: "result", hints: { nl: ["Betekenis: resultaat / gevolg.", "Voorbeeld: 'Oorlog is altijd een vreselijk gevolg van een conflict.'", "Nederlandse vertaling: resultaat / gevolg."], en: ["Context: War is always a terrible result of conflict.", "A consequence or outcome of something.", "Starts with 'R', means 'gevolg' in Dutch."] }},
+        { en: "safe", hints: { nl: ["Betekenis: veilig.", "Voorbeeld: 'Het gezin wist veilig te blijven.'", "Nederlandse vertaling: veilig."], en: ["Context: The family managed to stay safe.", "Protected from or not exposed to danger or risk.", "Starts with 'S', means 'veilig' in Dutch."] }},
+        { en: "terrible", hints: { nl: ["Betekenis: vreselijk.", "Voorbeeld: 'Het was een vreselijke dag voor de hele stad.'", "Nederlandse vertaling: vreselijk."], en: ["Context: It was a terrible day for the entire city.", "Extremely bad or serious.", "Starts with 'T', means 'vreselijk' in Dutch."] }},
+        { en: "sudden", hints: { nl: ["Betekenis: plotseling.", "Voorbeeld: 'Een plotselinge verandering verpestte hun plannen.'", "Nederlandse vertaling: plotseling."], en: ["Context: A sudden change ruined their plans.", "Occurring or done quickly and unexpectedly.", "Starts with 'S', means 'plotseling' in Dutch."] }},
+        { en: "to escape", hints: { nl: ["Betekenis: ontsnappen / vluchten.", "Voorbeeld: 'Mensen probeerden te ontsnappen uit het brandende gebouw.'", "Nederlandse vertaling: ontsnappen."], en: ["Context: People tried to escape from the burning building.", "To break free from confinement or control.", "Starts with 'E', means 'ontsnappen' in Dutch."] }},
+        { en: "to rescue", hints: { nl: ["Betekenis: redden.", "Voorbeeld: 'De brandweer kwam aan om de mensen te redden.'", "Nederlandse vertaling: redden."], en: ["Context: Firefighters arrived to rescue the people.", "To save someone from a dangerous or difficult situation.", "Starts with 'R', means 'redden' in Dutch."] }},
+        { en: "to cause", hints: { nl: ["Betekenis: veroorzaken.", "Voorbeeld: 'Zware regenval kan ernstige overstromingen veroorzaken.'", "Nederlandse vertaling: veroorzaken."], en: ["Context: Heavy rainfall can cause severe floods.", "To make something happen.", "Starts with 'C', means 'veroorzaken' in Dutch."] }},
+        { en: "to rebuild", hints: { nl: ["Betekenis: herbouwen.", "Voorbeeld: 'Ze moesten de stad herbouwen na de oorlog.'", "Nederlandse vertaling: herbouwen."], en: ["Context: They had to rebuild the town after the war.", "To build something again after it has been damaged.", "Starts with 'R', means 'herbouwen' in Dutch."] }},
+        { en: "to recover", hints: { nl: ["Betekenis: herstellen / genezen.", "Voorbeeld: 'Het kostte jaren om te herstellen van de overstroming.'", "Nederlandse vertaling: herstellen."], en: ["Context: It took years to recover from the flood.", "To return to a normal state of health, mind, or strength.", "Starts with 'R', means 'herstellen' in Dutch."] }}
+    ];
+
+    let words = []; p1 = '', p2 = '', playerCount = 2; score = [0, 0]; currentIndex = 0; currentHint = 0; currentPlayer = 0;
+    function togglePlayer2() { document.getElementById("player2Section").style.display = (document.getElementById("playerCount").value === "1") ? "none" : "block"; }
+    function startGame() {
+        playerCount = parseInt(document.getElementById("playerCount").value);
+        p1 = document.getElementById("player1").value || "Agent 1";
+        p2 = document.getElementById("player2").value || "Agent 2";
+        words = [...wordList].sort(() => Math.random() - 0.5);
+        score = [0, 0]; currentIndex = 0; currentPlayer = 0;
+        document.getElementById("name1").textContent = p1;
+        document.getElementById("name2").textContent = (playerCount === 2) ? p2 : "";
+        document.getElementById("p2ScoreDisplay").style.visibility = (playerCount === 2) ? "visible" : "hidden";
+        document.getElementById("setup").style.display = "none";
+        document.getElementById("game").style.display = "block";
+        updateScore(); showTurn(); resetWordCard();
+    }
+    function showTurn() { document.getElementById("turnIndicator").textContent = (playerCount === 1) ? `Agent: ${p1}` : `Turn: ${currentPlayer === 0 ? p1 : p2}`; }
+    function resetWordCard() { currentHint = 0; document.getElementById("hintBox").textContent = "Click 'Next Hint' to start"; document.getElementById("word-reveal").style.display = "none"; }
+    function nextHint() {
+        if (currentHint >= 3) return;
+        const lang = document.getElementById("hintLanguage").value;
+        document.getElementById("hintBox").textContent = `Hint ${currentHint + 1}: ${words[currentIndex].hints[lang][currentHint]}`;
+        currentHint++;
+    }
+    function showWord() { document.getElementById("word-reveal").textContent = `Answer: ${words[currentIndex].en}`; document.getElementById("word-reveal").style.display = "block"; }
+    function correctGuess() {
+        const lang = document.getElementById("hintLanguage").value;
+        let points = Math.max(1, 4 - currentHint) + (lang === "en" ? 1 : 0);
+        score[currentPlayer] += points; nextWord();
+    }
+    function wrongGuess() { nextWord(); }
+    function nextWord() {
+        currentIndex++;
+        if (playerCount === 2) currentPlayer = 1 - currentPlayer;
+        updateScore();
+        if (currentIndex >= words.length) {
+            document.getElementById("turnIndicator").textContent = "Mission Accomplished!";
+            document.getElementById("hintBox").textContent = "All words discovered!";
+            document.getElementById("word-reveal").style.display = "none";
+        } else { showTurn(); resetWordCard(); }
+    }
+    function updateScore() { document.getElementById("score1").textContent = score[0] + " pt"; document.getElementById("score2").textContent = score[1] + " pt"; }
+    function resetClue() { if (currentHint > 0) { const lang = document.getElementById("hintLanguage").value; document.getElementById("hintBox").textContent = `Hint ${currentHint}: ${words[currentIndex].hints[lang][currentHint - 1]}`; } }
+</script>
+</body>
+</html>

@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EngliForce Academy: Inventions & Discoveries</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Lexend:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hero-purple-main: #ff5722;
+            --hero-purple-dark: #bf360c;
+            --hero-yellow: #ffb703;
+            --hero-cyan: #b39ddb;
+            --dark-bg: #0b101a;
+            --hero-orange: #ff5722;
+            --thumb-up: #4caf50;
+            --success-green: #2ecc71;
+        }
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: radial-gradient(circle at center, #1a102a 0%, #05051a 100%);
+            color: white;
+            margin: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        header {
+            background: var(--hero-purple-main);
+            padding: 2.5rem 1rem;
+            text-align: center;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            border-bottom: 5px solid var(--hero-yellow);
+        }
+        h1 { font-family: 'Bangers', cursive; font-size: 3.5rem; letter-spacing: 3px; margin: 0; text-shadow: 4px 4px 0px var(--hero-purple-dark); }
+        h2 { font-family: 'Bangers', cursive; color: var(--hero-yellow); font-size: 2.2rem; margin-top: 10px; margin-bottom: 20px; border-bottom: 2px solid rgba(255,255,255,0.1); display: inline-block; padding-bottom: 5px; }
+        h3 { color: var(--hero-cyan); font-family: 'Bangers'; font-size: 1.8rem; margin-top: 0;}
+        main { max-width: 1200px; margin: 20px auto; padding: 20px; text-align: center; }
+        .section-divider {
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--hero-cyan), transparent);
+            margin: 50px 0;
+            opacity: 0.8;
+            border-radius: 2px;
+            box-shadow: 0 0 15px var(--hero-cyan);
+        }
+        .briefing-box {
+            background: rgba(26, 16, 42, 0.9);
+            border: 2px solid var(--hero-cyan);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            text-align: left;
+        }
+        .explanation-text {
+            font-size: 1.1rem; line-height: 1.6; margin-bottom: 25px;
+            border-left: 4px solid var(--hero-orange); padding-left: 20px;
+            background: rgba(255, 87, 34, 0.05); padding-top: 10px; padding-bottom: 10px;
+        }
+        .keyword { color: var(--hero-orange); font-weight: 700; }
+        .toggle-container { display: flex; gap: 10px; justify-content: center; margin-bottom: 30px; flex-wrap: wrap; }
+        .btn-toggle {
+            background: var(--hero-purple-main); color: white; border: none;
+            padding: 10px 20px; border-radius: 50px; font-family: 'Bangers', cursive;
+            font-size: 1.1rem; cursor: pointer; transition: 0.2s; border-bottom: 4px solid var(--hero-purple-dark);
+        }
+        .btn-toggle:hover { transform: translateY(-2px); background: var(--hero-cyan); color: var(--hero-purple-dark); }
+        .btn-video { background: var(--hero-orange); border-bottom-color: #bf360c; }
+        .btn-video:hover { background: #ff7043; color: white; }
+
+        .table-container { width: 100%; border-radius: 15px; background: #1a102a; overflow: hidden; margin-top: 20px; text-align: left; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: var(--hero-purple-main); padding: 15px; text-align: left; font-family: 'Bangers'; }
+        td { padding: 12px 15px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+
+        .content-section { display: none; animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* FLASHCARDS */
+        .controls { background: rgba(26, 16, 42, 0.8); padding: 20px; border-radius: 15px; border: 1px solid var(--hero-cyan); display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; align-items: center; margin-bottom: 30px; }
+        .controls label { font-family: 'Bangers'; font-size: 1.1rem; color: var(--hero-cyan); display: flex; align-items: center; gap: 5px; cursor: pointer; }
+        .flashcards-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 25px; margin-top: 20px; min-height: 300px; }
+        
+        .card { width: 280px; height: 260px; perspective: 1000px; position: relative; transition: transform 0.4s, opacity 0.4s; }
+        .card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; cursor: pointer; }
+        .card.flipped .card-inner { transform: rotateY(180deg); }
+        .card-front, .card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 15px; box-sizing: border-box; border: 4px solid var(--hero-cyan); }
+        .card-front { background: var(--hero-purple-dark); color: white; font-size: 1.8rem; font-family: 'Bangers'; transition: border-color 0.3s, box-shadow 0.3s; }
+        .card-back { background: var(--hero-yellow); color: var(--dark-bg); transform: rotateY(180deg); font-size: 1.6rem; font-family: 'Bangers'; }
+        
+        /* Known Status */
+        .known-btn {
+            margin-top: 15px;
+            background: rgba(0,0,0,0.1);
+            color: var(--dark-bg);
+            border: 2px solid var(--dark-bg);
+            padding: 8px 15px;
+            border-radius: 10px;
+            font-family: 'Lexend', sans-serif;
+            font-weight: bold;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .known-btn:hover { background: rgba(0,0,0,0.2); transform: scale(1.05); }
+        .card.is-known .card-front { border-color: var(--success-green); box-shadow: 0 0 15px rgba(46, 204, 113, 0.6); }
+
+        .card-example { font-family: 'Lexend', sans-serif; font-size: 0.85rem; margin-top: 10px; font-style: italic; color: rgba(255,255,255,0.8); backface-visibility: hidden; }
+        .card-back .card-example { color: rgba(0,0,0,0.7); }
+
+        /* PICKLE GRID */
+        .pickle-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 25px; margin-top: 20px; }
+        .mission-card { background: #1a102a; border: 3px solid #3b2453; border-radius: 20px; padding: 25px; text-align: center; cursor: pointer; transition: 0.3s; width: 220px; display: flex; flex-direction: column; justify-content: space-between; }
+        .mission-card:hover { border-color: var(--hero-yellow); transform: translateY(-5px); }
+        .mission-card .title { font-family: 'Bangers'; font-size: 1.5rem; color: var(--hero-yellow); margin: 5px 0; }
+        .like-btn { background: rgba(255, 255, 255, 0.05); border: 2px solid var(--hero-cyan); border-radius: 10px; color: white; padding: 8px; margin-top: 15px; cursor: pointer; transition: 0.3s; font-family: 'Lexend', sans-serif; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .like-btn.liked { background: var(--thumb-up); border-color: white; }
+
+        /* EFFECTS */
+        .flash-effect { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; opacity: 0; pointer-events: none; z-index: 1999; }
+        .boom-text { position: fixed; pointer-events: none; font-family: 'Bangers', cursive; color: var(--hero-yellow); font-size: 4rem; z-index: 2001; text-shadow: 3px 3px 0px #000; animation: boomAnim 0.6s ease-out forwards; }
+        @keyframes boomAnim { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
+        .shake { animation: shake 0.2s ease-in-out; }
+        @keyframes shake { 0%, 100% { transform: translate(0,0); } 25% { transform: translate(-5px, 5px); } 50% { transform: translate(5px, -5px); } }
+        footer { text-align: center; padding: 40px; color: rgba(255,255,255,0.5); font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+<div class="flash-effect" id="flash"></div>
+
+<header>
+    <h1>ENGLIFORCE ACADEMY</h1>
+    <p>Inventions & Discoveries Vocabulary</p>
+</header>
+
+<main>
+    <section class="briefing-box">
+        <h2>🚨 MISSION: VOCABULARY BRIEFING</h2>
+        <div class="explanation-text">
+            Improve your vocabulary! Use the <strong>video</strong> for pronunciation and practice with the <strong>flashcards</strong> to learn new words.
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <div class="toggle-container">
+        <button class="btn-toggle" onclick="showSection(event, 'vocab-list', 'ZAP!')">Word List</button>
+        <button class="btn-toggle" onclick="showSection(event, 'context-list', 'KA-POW!')">Sentences</button>
+        <button class="btn-toggle" onclick="showSection(event, 'flashcards-section', 'BOOST!')">Flashcards</button>
+        <button class="btn-toggle btn-video" onclick="showSection(event, 'video-section', 'BOOM!')">Video</button>
+    </div>
+
+    <div id="vocab-list" class="content-section" style="display: block;">
+        <h3>Overview</h3>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr><th>English</th><th>Dutch</th></tr>
+                </thead>
+                <tbody id="vocab-table-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="context-list" class="content-section">
+        <h3>Action Lab (Sentences)</h3>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr><th>Word</th><th>Example Sentence</th></tr>
+                </thead>
+                <tbody id="context-table-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="flashcards-section" class="content-section">
+        <h3>Flashcard Simulator</h3>
+        <div class="controls">
+            <label>Count: 
+                <select id="card-count" onchange="generateCards()">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15" selected>All</option>
+                </select>
+            </label>
+            <label><input type="checkbox" id="show-examples" onchange="generateCards()"> Examples</label>
+            <label><input type="checkbox" id="reverse-cards" onchange="generateCards()"> NL → EN</label>
+            <label style="color: var(--success-green);"><input type="checkbox" id="hide-known" onchange="generateCards()"> Hide learned words</label>
+            <button class="btn-toggle" onclick="resetKnown()" style="padding: 5px 10px; font-size: 0.8rem; background: #444;">Reset progress</button>
+            <button class="btn-toggle btn-action" onclick="generateCards()">Shuffle 🔄</button>
+        </div>
+        <div class="flashcards-container" id="flashcards-container"></div>
+    </div>
+
+    <div id="video-section" class="content-section">
+        <h3>🎬 Pronunciation Training</h3>
+        <div style="max-width: 800px; margin: auto;">
+            <div style="position: relative; padding-top: 56.25%; border: 4px solid var(--hero-purple-main); border-radius: 20px; overflow: hidden;">
+                <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" src="https://www.youtube.com/embed/UFo6m_q6fvs?rel=0" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <h2>⚔️ PICKLE MISSIONS</h2>
+    <div class="pickle-grid">
+        <div class="mission-card" onclick="openPickle(event, 'm1t5_vocab_1_1_pickle_1.html', 'CRUNCH!')">
+            <div><div class="title">Pickle 1</div><p>Drag & Drop</p></div>
+            <button class="like-btn" onclick="toggleLike(event, this)">👍 Like!</button>
+        </div>
+        <div class="mission-card" onclick="openPickle(event, 'm1t5_vocab_1_1_pickle_2.html', 'SQUASH!')">
+            <div><div class="title">Pickle 2</div><p>Vocab Grid</p></div>
+            <button class="like-btn" onclick="toggleLike(event, this)">👍 Like!</button>
+        </div>
+        <div class="mission-card" onclick="openPickle(event, 'm1t5_vocab_1_1_pickle_3.html', 'KABOOM!')">
+            <div><div class="title">Pickle 3</div><p>Vocab Detective</p></div>
+            <button class="like-btn" onclick="toggleLike(event, this)">👍 Like!</button>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2026 EngliForce: Make English Your Superpower!</p>
+</footer>
+
+<script>
+    /* Woordenlijst overgenomen uit de afbeelding */
+    const flashcardsData = [
+        { en: 'invention', nl: 'uitvinding', exEN: 'The telephone was an important invention.', exNL: 'De telefoon was een belangrijke uitvinding.' },
+        { en: 'discovery', nl: 'ontdekking', exEN: 'Scientists made a new discovery.', exNL: 'Wetenschappers deden een nieuwe ontdekking.' },
+        { en: 'inventor', nl: 'uitvinder', exEN: 'Thomas Edison was a famous inventor.', exNL: 'Thomas Edison was een beroemde uitvinder.' },
+        { en: 'engine', nl: 'motor', exEN: 'The car has a powerful engine.', exNL: 'De auto heeft een krachtige motor.' },
+        { en: 'steam engine', nl: 'stoommachine', exEN: 'The steam engine changed industry.', exNL: 'De stoommachine veranderde de industrie.' },
+        { en: 'workshop', nl: 'werkplaats', exEN: 'He works on his machine in the workshop.', exNL: 'Hij werkt aan zijn machine in de werkplaats.' },
+        { en: 'spacecraft', nl: 'ruimteschip', exEN: 'The spacecraft flies to Mars.', exNL: 'Het ruimteschip vliegt naar Mars.' },
+        { en: 'science', nl: 'wetenschap', exEN: 'I love learning about science at school.', exNL: 'Ik vind het leuk om op school over wetenschap te leren.' },
+        { en: 'impact', nl: 'invloed / impact', exEN: 'Computers have a big impact on our lives.', exNL: 'Computers hebben een grote impact op ons leven.' },
+        { en: 'useful', nl: 'nuttig / handig', exEN: 'This tool is very useful.', exNL: 'Gereedschap als dit is erg nuttig.' },
+        { en: 'dangerous', nl: 'gevaarlijk', exEN: 'Fire can be dangerous.', exNL: 'Vuur kan gevaarlijk zijn.' },
+        { en: 'to build', nl: 'bouwen', exEN: 'They plan to build a robot.', exNL: 'Ze zijn van plan om een robot te bouwen.' },
+        { en: 'to explore', nl: 'verkennen / onderzoeken', exEN: 'Astronauts explore space.', exNL: 'Astronauten verkennen de ruimte.' },
+        { en: 'to improve', nl: 'verbeteren', exEN: 'You can improve your skills with practice.', exNL: 'Je kunt je vaardigheden verbeteren door te oefenen.' },
+        { en: 'to design', nl: 'ontwerpen', exEN: 'She wants to design new airplanes.', exNL: 'Zij wil nieuwe vliegtuigen ontwerpen.' }
+    ];
+
+    let knownWords = JSON.parse(localStorage.getItem('engliforce_known')) || [];
+
+    function init() {
+        const vBody = document.getElementById('vocab-table-body');
+        const cBody = document.getElementById('context-table-body');
+        flashcardsData.forEach(item => {
+            vBody.innerHTML += `<tr><td>${item.en}</td><td>${item.nl}</td></tr>`;
+            const cleanWord = item.en.replace(/^to\s+/, '');
+            const highlightedEx = item.exEN.replace(new RegExp(cleanWord, 'gi'), match => `<span class="keyword">${match}</span>`);
+            cBody.innerHTML += `<tr><td>${item.en}</td><td>${highlightedEx}<br><small style="opacity:0.6">${item.exNL}</small></td></tr>`;
+        });
+        generateCards();
+    }
+
+    function generateCards() {
+        const container = document.getElementById('flashcards-container');
+        const countSelect = document.getElementById('card-count');
+        const count = countSelect.value === "15" ? flashcardsData.length : parseInt(countSelect.value);
+        const showEx = document.getElementById('show-examples').checked;
+        const reversed = document.getElementById('reverse-cards').checked;
+        const hideKnown = document.getElementById('hide-known').checked;
+        
+        container.innerHTML = '';
+        
+        let filteredData = [...flashcardsData];
+        if (hideKnown) {
+            filteredData = filteredData.filter(word => !knownWords.includes(word.en));
+        }
+
+        let data = filteredData.sort(() => 0.5 - Math.random()).slice(0, count);
+        
+        if (data.length === 0 && hideKnown) {
+            container.innerHTML = "<p style='font-family:Bangers; font-size:1.5rem; color:var(--hero-yellow);'>Mission accomplished! No unlearned words left in this selection.</p>";
+            return;
+        }
+
+        data.forEach(word => {
+            const isKnown = knownWords.includes(word.en);
+            const cardWrap = document.createElement('div'); 
+            cardWrap.className = `card ${isKnown ? 'is-known' : ''}`;
+            
+            const inner = document.createElement('div'); 
+            inner.className = 'card-inner';
+            inner.onclick = () => cardWrap.classList.toggle('flipped');
+
+            const front = document.createElement('div'); 
+            front.className = 'card-front';
+            front.innerHTML = reversed ? word.nl : word.en;
+            if (showEx) front.innerHTML += `<div class="card-example">${reversed ? word.exNL : word.exEN}</div>`;
+
+            const back = document.createElement('div'); 
+            back.className = 'card-back';
+            back.innerHTML = reversed ? word.en : word.nl;
+            if (showEx) back.innerHTML += `<div class="card-example">${reversed ? word.exEN : word.exNL}</div>`;
+
+            const kBtn = document.createElement('button');
+            kBtn.className = 'known-btn';
+            
+            updateBtnStyle(kBtn, isKnown);
+            
+            kBtn.onclick = (e) => {
+                e.stopPropagation();
+                toggleKnown(e, word.en, cardWrap, kBtn);
+            };
+
+            back.appendChild(kBtn);
+            inner.appendChild(front); 
+            inner.appendChild(back);
+            cardWrap.appendChild(inner);
+            container.appendChild(cardWrap);
+        });
+    }
+
+    function toggleKnown(e, wordEn, cardElem, btn) {
+        const index = knownWords.indexOf(wordEn);
+        const hideKnown = document.getElementById('hide-known').checked;
+
+        if (index === -1) {
+            knownWords.push(wordEn);
+            createExplosion(e, 'CHECK!');
+            
+            if (hideKnown) {
+                cardElem.style.transform = 'scale(0)';
+                cardElem.style.opacity = '0';
+                setTimeout(() => generateCards(), 400);
+            } else {
+                cardElem.classList.add('is-known');
+                updateBtnStyle(btn, true);
+            }
+        } else {
+            knownWords.splice(index, 1);
+            createExplosion(e, 'RESET!');
+            cardElem.classList.remove('is-known');
+            updateBtnStyle(btn, false);
+        }
+        
+        localStorage.setItem('engliforce_known', JSON.stringify(knownWords));
+    }
+
+    function updateBtnStyle(btn, isKnown) {
+        if (isKnown) {
+            btn.innerHTML = '✅ Learned';
+            btn.style.background = 'var(--success-green)';
+            btn.style.color = 'white';
+            btn.style.borderColor = 'white';
+        } else {
+            btn.innerHTML = '✔️ I know this';
+            btn.style.background = 'rgba(0,0,0,0.1)';
+            btn.style.color = 'var(--dark-bg)';
+            btn.style.borderColor = 'var(--dark-bg)';
+        }
+    }
+
+    function resetKnown() {
+        if(confirm("Do you want to reset all your progress?")) {
+            knownWords = [];
+            localStorage.removeItem('engliforce_known');
+            generateCards();
+        }
+    }
+
+    function toggleLike(e, btn) {
+        e.stopPropagation();
+        btn.classList.toggle('liked');
+        btn.innerText = btn.classList.contains('liked') ? "👍 Liked!" : "👍 Like!";
+        if(btn.classList.contains('liked')) createExplosion(e, 'AWESOME!');
+    }
+
+    function openPickle(e, url, msg) {
+        createExplosion(e, msg);
+        setTimeout(() => window.open(url, '_blank'), 400);
+    }
+
+    function showSection(e, id, msg) {
+        document.querySelectorAll('.content-section').forEach(s => s.style.display = 'none');
+        document.getElementById(id).style.display = 'block';
+        createExplosion(e, msg);
+    }
+
+    function createExplosion(e, message) {
+        const x = e.clientX || window.innerWidth/2; 
+        const y = e.clientY || window.innerHeight/2;
+        const flash = document.getElementById('flash');
+        flash.style.opacity = '0.3'; 
+        document.body.classList.add('shake');
+        setTimeout(() => { flash.style.opacity = '0'; document.body.classList.remove('shake'); }, 200);
+
+        const txt = document.createElement('div'); 
+        txt.className = 'boom-text'; 
+        txt.innerText = message;
+        txt.style.left = (x - 50) + 'px'; 
+        txt.style.top = (y - 50) + 'px';
+        document.body.appendChild(txt); 
+        setTimeout(() => txt.remove(), 600);
+    }
+
+    window.onload = init;
+</script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EngliForce Pickle 1.3: Inventions & Discoveries</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Lexend:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --hero-purple-main: #6a1b9a; --hero-purple-dark: #4a148c; --hero-yellow: #ffb703; --hero-cyan: #b39ddb; --dark-bg: #0b101a; --hero-orange: #ff5722; }
+        body { font-family: 'Lexend', sans-serif; background: radial-gradient(circle at center, #1a102a 0%, #05051a 100%); color: white; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+        header { width: 100%; background: var(--hero-orange); padding: 2rem 0; text-align: center; clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%); border-bottom: 5px solid var(--hero-yellow); margin-bottom: 20px; }
+        h1 { font-family: 'Bangers', cursive; font-size: 3rem; margin: 0; text-shadow: 3px 3px 0px #bf360c; color: white; }
+        .container { max-width: 700px; width: 90%; margin: 20px auto; }
+        .section { background: rgba(26, 16, 42, 0.8); border-radius: 20px; padding: 2rem; border: 2px solid var(--hero-cyan); box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-bottom: 20px; }
+        .instructions { font-size: 0.9rem; color: var(--hero-cyan); line-height: 1.5; margin-bottom: 20px; text-align: left; }
+        label { display: block; margin-top: 1rem; font-family: 'Bangers'; color: var(--hero-yellow); font-size: 1.2rem; }
+        input, select { width: 100%; padding: 12px; margin-top: 5px; border-radius: 10px; border: 2px solid var(--hero-purple-main); background: #0b101a; color: white; box-sizing: border-box; font-family: 'Lexend', sans-serif; }
+        .btn { background: var(--hero-orange); color: white; border: none; padding: 15px 25px; border-radius: 50px; font-family: 'Bangers'; font-size: 1.4rem; cursor: pointer; border-bottom: 5px solid #bf360c; transition: 0.2s; margin: 10px 5px 0 0; width: 100%; }
+        .btn:hover { transform: translateY(-3px); filter: brightness(1.1); }
+        .btn-purple { background: var(--hero-purple-main); border-bottom-color: var(--hero-purple-dark); }
+        .turn { font-family: 'Bangers'; font-size: 2.2rem; color: var(--hero-yellow); text-align: center; margin-bottom: 10px; }
+        .scoreboard { display: flex; justify-content: space-around; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid var(--hero-purple-main); }
+        .word-card { background: #1a102a; border: 3px solid var(--hero-purple-main); border-radius: 15px; padding: 25px; text-align: center; }
+        .hint-text { font-size: 1.2rem; min-height: 60px; display: flex; align-items: center; justify-content: center; color: white; font-style: italic; margin: 20px 0; background: rgba(0,0,0,0.2); border-radius: 10px; padding: 10px; }
+        .answer-reveal { font-family: 'Bangers'; font-size: 2rem; color: var(--hero-yellow); display: none; margin: 15px 0; padding: 10px; border: 2px dashed var(--hero-yellow); }
+        footer { text-align: center; padding: 30px; color: rgba(255,255,255,0.5); width: 100%; }
+        .flex-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>PICKLE 1.3: INVENTIONS & DISCOVERIES</h1>
+</header>
+<div class="container">
+    <div class="section" id="setup">
+        <div class="instructions">
+            🔎 <strong>Mission:</strong> Guess the science & invention term using as few hints as possible.<br>
+            🌟 <strong>Bonus:</strong> Use <strong>English</strong> hints for +1 extra point!
+        </div>
+        <label>Number of Agents:</label>
+        <select id="playerCount" onchange="togglePlayer2()">
+            <option value="1">1 Agent</option>
+            <option value="2" selected>2 Agents</option>
+        </select>
+        <label>Agent 1:</label>
+        <input type="text" id="player1" placeholder="Name of Agent 1" />
+        <div id="player2Section">
+            <label>Agent 2:</label>
+            <input type="text" id="player2" placeholder="Name of Agent 2" />
+        </div>
+        <button class="btn" style="margin-top: 30px;" onclick="startGame()">Start Mission 🚀</button>
+    </div>
+
+    <div id="game" style="display: none;">
+        <div class="turn" id="turnIndicator">Turn: ...</div>
+        <div class="scoreboard">
+            <div><span id="name1"></span>: <span id="score1" style="color:var(--hero-yellow)">0</span></div>
+            <div id="p2ScoreDisplay"><span id="name2"></span>: <span id="score2" style="color:var(--hero-yellow)">0</span></div>
+        </div>
+        <div class="word-card">
+            <div class="answer-reveal" id="word-reveal">Answer: ...</div>
+            <label>Hint Language:</label>
+            <select id="hintLanguage" onchange="resetClue()">
+                <option value="nl">Dutch</option>
+                <option value="en">English (Bonus +1)</option>
+            </select>
+            <div class="hint-text" id="hintBox">Click 'Next Hint' to start</div>
+            <div class="flex-buttons">
+                <button class="btn btn-purple" onclick="nextHint()">Next Hint 💡</button>
+                <button class="btn btn-purple" onclick="showWord()">Show Answer 👁️</button>
+                <button class="btn" style="background:#4caf50; border-color:#2e7d32;" onclick="correctGuess()">Correct ✅</button>
+                <button class="btn" style="background:var(--hero-orange); border-color:#bf360c;" onclick="wrongGuess()">Wrong ❌</button>
+            </div>
+        </div>
+    </div>
+</div>
+<footer>
+    &copy; 2026 EngliForce: Make English Your Superpower!
+</footer>
+<script>
+    const wordList = [
+        { en: "invention", hints: { nl: ["Betekenis: uitvinding.", "Voorbeeld: 'De telefoon was een geweldige uitvinding.'", "Nederlandse vertaling: uitvinding."], en: ["Context: The telephone was an amazing invention.", "A new process or device created by someone.", "Starts with 'I', means 'uitvinding' in Dutch."] }},
+        { en: "discovery", hints: { nl: ["Betekenis: ontdekking.", "Voorbeeld: 'Elektriciteit was een grote wetenschappelijke ontdekking.'", "Nederlandse vertaling: ontdekking."], en: ["Context: Electricity was a major scientific discovery.", "The act of finding something for the first time.", "Starts with 'D', means 'ontdekking' in Dutch."] }},
+        { en: "inventor", hints: { nl: ["Betekenis: uitvinder.", "Voorbeeld: 'Thomas Edison was een bekende uitvinder.'", "Nederlandse vertaling: uitvinder."], en: ["Context: Thomas Edison was a famous inventor.", "A person who created or designed new things.", "Starts with 'I', means 'uitvinder' in Dutch."] }},
+        { en: "engine", hints: { nl: ["Betekenis: motor.", "Voorbeeld: 'De auto heeft een erg krachtige motor.'", "Nederlandse vertaling: motor."], en: ["Context: The car has a very powerful engine.", "A machine with moving parts that converts power into motion.", "Starts with 'E', means 'motor' in Dutch."] }},
+        { en: "steam engine", hints: { nl: ["Betekenis: stoommachine.", "Voorbeeld: 'De stoommachine hielp treinen sneller te bewegen.'", "Nederlandse vertaling: stoommachine."], en: ["Context: The steam engine helped trains move faster.", "An engine that uses the expansion of steam to produce power.", "Starts with 'S', means 'stoommachine' in Dutch."] }},
+        { en: "workshop", hints: { nl: ["Betekenis: werkplaats.", "Voorbeeld: 'De uitvinder bouwde een model in zijn werkplaats.'", "Nederlandse vertaling: werkplaats."], en: ["Context: The inventor built a model in his workshop.", "A room or building where things are manufactured or repaired.", "Starts with 'W', means 'werkplaats' in Dutch."] }},
+        { en: "spacecraft", hints: { nl: ["Betekenis: ruimteschip.", "Voorbeeld: 'Het ruimteschip landde veilig op de maan.'", "Nederlandse vertaling: ruimteschip."], en: ["Context: The spacecraft landed safely on the moon.", "A vehicle used for traveling in space.", "Starts with 'S', means 'ruimteschip' in Dutch."] }},
+        { en: "science", hints: { nl: ["Betekenis: wetenschap.", "Voorbeeld: 'Nieuwe hulpmiddelen zijn vaak gebaseerd op wetenschap.'", "Nederlandse vertaling: wetenschap."], en: ["Context: New tools are often based on science.", "The systematic study of the physical and natural world.", "Starts with 'S', means 'wetenschap' in Dutch."] }},
+        { en: "impact", hints: { nl: ["Betekenis: invloed / impact.", "Voorbeeld: 'Computers hadden een enorme invloed op ons leven.'", "Nederlandse vertaling: invloed / impact."], en: ["Context: Computers had a huge impact on our lives.", "A marked effect or influence.", "Starts with 'I', means 'invloed' in Dutch."] }},
+        { en: "useful", hints: { nl: ["Betekenis: nuttig / handig.", "Voorbeeld: 'Het wiel is een erg nuttig hulpmiddel.'", "Nederlandse vertaling: nuttig / handig."], en: ["Context: The wheel is a very useful tool.", "Able to be used for a practical purpose.", "Starts with 'U', means 'nuttig' in Dutch."] }},
+        { en: "dangerous", hints: { nl: ["Betekenis: gevaarlijk.", "Voorbeeld: 'Werken met zwaar gereedschap was gevaarlijk.'", "Nederlandse vertaling: gevaarlijk."], en: ["Context: Working with heavy tools was dangerous.", "Able or likely to cause harm or injury.", "Starts with 'D', means 'gevaarlijk' in Dutch."] }},
+        { en: "to build", hints: { nl: ["Betekenis: bouwen.", "Voorbeeld: 'Ingenieurs willen sterke machines bouwen.'", "Nederlandse vertaling: bouwen."], en: ["Context: Engineers want to build strong machines.", "To construct something by putting parts together.", "Starts with 'B', means 'bouwen' in Dutch."] }},
+        { en: "to explore", hints: { nl: ["Betekenis: verkennen / onderzoeken.", "Voorbeeld: 'Wetenschappers proberen nieuwe planeten te verkennen.'", "Nederlandse vertaling: verkennen."], en: ["Context: Scientists try to explore new planets.", "To travel through an unfamiliar area to learn about it.", "Starts with 'E', means 'verkennen' in Dutch."] }},
+        { en: "to improve", hints: { nl: ["Betekenis: verbeteren.", "Voorbeeld: 'Nieuwe ideeën helpen het dagelijks leven te verbeteren.'", "Nederlandse vertaling: verbeteren."], en: ["Context: New ideas help to improve daily life.", "To make or become better.", "Starts with 'I', means 'verbeteren' in Dutch."] }},
+        { en: "to design", hints: { nl: ["Betekenis: ontwerpen.", "Voorbeeld: 'Ingenieurs werken om nieuwe hulpmiddelen te ontwerpen.'", "Nederlandse vertaling: ontwerpen."], en: ["Context: Engineers work to design new tools.", "To decide upon the look and function of something before building it.", "Starts with 'D', means 'ontwerpen' in Dutch."] }}
+    ];
+
+    let words = []; p1 = '', p2 = '', playerCount = 2; score = [0, 0]; currentIndex = 0; currentHint = 0; currentPlayer = 0;
+    function togglePlayer2() { document.getElementById("player2Section").style.display = (document.getElementById("playerCount").value === "1") ? "none" : "block"; }
+    function startGame() {
+        playerCount = parseInt(document.getElementById("playerCount").value);
+        p1 = document.getElementById("player1").value || "Agent 1";
+        p2 = document.getElementById("player2").value || "Agent 2";
+        words = [...wordList].sort(() => Math.random() - 0.5);
+        score = [0, 0]; currentIndex = 0; currentPlayer = 0;
+        document.getElementById("name1").textContent = p1;
+        document.getElementById("name2").textContent = (playerCount === 2) ? p2 : "";
+        document.getElementById("p2ScoreDisplay").style.visibility = (playerCount === 2) ? "visible" : "hidden";
+        document.getElementById("setup").style.display = "none";
+        document.getElementById("game").style.display = "block";
+        updateScore(); showTurn(); resetWordCard();
+    }
+    function showTurn() { document.getElementById("turnIndicator").textContent = (playerCount === 1) ? `Agent: ${p1}` : `Turn: ${currentPlayer === 0 ? p1 : p2}`; }
+    function resetWordCard() { currentHint = 0; document.getElementById("hintBox").textContent = "Click 'Next Hint' to start"; document.getElementById("word-reveal").style.display = "none"; }
+    function nextHint() {
+        if (currentHint >= 3) return;
+        const lang = document.getElementById("hintLanguage").value;
+        document.getElementById("hintBox").textContent = `Hint ${currentHint + 1}: ${words[currentIndex].hints[lang][currentHint]}`;
+        currentHint++;
+    }
+    function showWord() { document.getElementById("word-reveal").textContent = `Answer: ${words[currentIndex].en}`; document.getElementById("word-reveal").style.display = "block"; }
+    function correctGuess() {
+        const lang = document.getElementById("hintLanguage").value;
+        let points = Math.max(1, 4 - currentHint) + (lang === "en" ? 1 : 0);
+        score[currentPlayer] += points; nextWord();
+    }
+    function wrongGuess() { nextWord(); }
+    function nextWord() {
+        currentIndex++;
+        if (playerCount === 2) currentPlayer = 1 - currentPlayer;
+        updateScore();
+        if (currentIndex >= words.length) {
+            document.getElementById("turnIndicator").textContent = "Mission Accomplished!";
+            document.getElementById("hintBox").textContent = "All words discovered!";
+            document.getElementById("word-reveal").style.display = "none";
+        } else { showTurn(); resetWordCard(); }
+    }
+    function updateScore() { document.getElementById("score1").textContent = score[0] + " pt"; document.getElementById("score2").textContent = score[1] + " pt"; }
+    function resetClue() { if (currentHint > 0) { const lang = document.getElementById("hintLanguage").value; document.getElementById("hintBox").textContent = `Hint ${currentHint}: ${words[currentIndex].hints[lang][currentHint - 1]}`; } }
+</script>
+</body>
+</html>

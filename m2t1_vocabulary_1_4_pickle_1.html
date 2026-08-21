@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EngliForce Pickle 1.4: Disasters & Events</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Lexend:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hero-purple-main: #ff5722;
+            --hero-purple-dark: #bf360c;
+            --hero-yellow: #ffb703;
+            --hero-cyan: #b39ddb;
+            --dark-bg: #0b101a;
+            --hero-orange: #ff5722;
+        }
+
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: radial-gradient(circle at center, #1a102a 0%, #05051a 100%);
+            color: white;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        header {
+            background: var(--hero-purple-main);
+            padding: 2rem 1rem;
+            text-align: center;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            border-bottom: 5px solid var(--hero-yellow);
+        }
+
+        h1 { 
+            font-family: 'Bangers', cursive; 
+            font-size: 3rem; 
+            margin: 0; 
+            text-shadow: 3px 3px 0px var(--hero-purple-dark); 
+        }
+
+        h2 { 
+            font-family: 'Bangers', cursive; 
+            color: var(--hero-yellow); 
+            text-align: center; 
+        }
+
+        .container { 
+            max-width: 1000px; 
+            margin: 20px auto; 
+            padding: 20px; 
+        }
+
+        .language-select {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 50px;
+            border: 1px solid var(--hero-cyan);
+        }
+
+        .language-select label { 
+            font-family: 'Bangers'; 
+            color: var(--hero-cyan); 
+            cursor: pointer; 
+        }
+
+        /* STICKY WORD BANK */
+        .word-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: rgba(26, 16, 42, 0.95);
+            border-radius: 20px;
+            border: 2px dashed var(--hero-cyan);
+            position: sticky;
+            top: 10px;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .draggable-word {
+            background: var(--hero-purple-main);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 10px;
+            cursor: grab;
+            font-family: 'Lexend', sans-serif;
+            font-weight: bold;
+            font-size: 1rem;
+            border-bottom: 4px solid var(--hero-purple-dark);
+            user-select: none;
+            transition: 0.2s;
+        }
+
+        .draggable-word:active { 
+            cursor: grabbing; 
+            transform: scale(1.1); 
+        }
+
+        .exercise-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+        }
+
+        .sentence-box {
+            background: #1a102a;
+            border: 2px solid var(--hero-purple-main);
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .sentence-box p { 
+            margin: 0; 
+            font-size: 0.95rem; 
+            line-height: 1.4; 
+            color: var(--hero-cyan); 
+        }
+
+        .drop-zone {
+            height: 55px;
+            background: rgba(0,0,0,0.3);
+            border: 2px dashed #444;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+
+        .drop-zone.drag-over { 
+            background: rgba(179, 157, 219, 0.2); 
+            border-color: var(--hero-cyan); 
+        }
+
+        .correct { 
+            border: 3px solid #4caf50 !important; 
+            background: rgba(76, 175, 80, 0.1) !important; 
+        }
+
+        .wrong { 
+            border: 3px solid var(--hero-orange) !important; 
+            background: rgba(255, 87, 34, 0.1) !important; 
+        }
+
+        .button-row { 
+            display: flex; 
+            justify-content: center; 
+            gap: 20px; 
+            margin-top: 40px; 
+            padding-bottom: 50px; 
+        }
+
+        .btn {
+            background: var(--hero-orange);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-family: 'Bangers';
+            font-size: 1.5rem;
+            cursor: pointer;
+            border-bottom: 5px solid #bf360c;
+            transition: 0.2s;
+        }
+
+        .btn:hover { 
+            transform: translateY(-3px); 
+        }
+
+        .boom-text {
+            position: fixed; 
+            pointer-events: none; 
+            font-family: 'Bangers';
+            color: var(--hero-yellow); 
+            font-size: 4rem; 
+            z-index: 2000;
+            text-shadow: 3px 3px 0px #000; 
+            animation: boom 0.6s ease-out forwards;
+        }
+
+        @keyframes boom { 
+            0% { transform: scale(0); opacity: 1; } 
+            100% { transform: scale(1.5); opacity: 0; } 
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: rgba(0,0,0,0.2);
+            color: rgba(255,255,255,0.6);
+            margin-top: 50px;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>PICKLE 1.4: DISASTERS & EVENTS</h1>
+    <p>sleep de woorden naar de juiste omschrijving</p>
+</header>
+
+<div class="container">
+    <div class="language-select">
+        <label><input type="radio" name="language" value="nl" checked onchange="setupGame()"> nederlands</label>
+        <label><input type="radio" name="language" value="en" onchange="setupGame()"> english</label>
+        <label><input type="radio" name="language" value="mixed" onchange="setupGame()"> mixed mode</label>
+    </div>
+
+    <div class="word-bank" id="wordBank"></div>
+    <div class="exercise-grid" id="sentenceGrid"></div>
+
+    <div class="button-row">
+        <button class="btn" onclick="checkAnswers(event)">controleer ✅</button>
+        <button class="btn" style="background:var(--hero-purple-main); border-bottom-color:var(--hero-purple-dark);" onclick="setupGame()">opnieuw 🔁</button>
+    </div>
+</div>
+
+<footer>
+    &copy; 2026 EngliForce: Make English Your Superpower!
+</footer>
+
+<script>
+    const vocabData = {
+        "disaster": {
+                "nl": "ramp (bijv. \"De aardbeving was een vreselijke ramp.\")",
+                "en": "The earthquake was a terrible disaster."
+        },
+        "accident": {
+                "nl": "ongeluk (bijv. \"De brand begon door een ongeluk.\")",
+                "en": "The fire started by accident."
+        },
+        "damage": {
+                "nl": "schade (bijv. \"De storm veroorzaakte veel schade.\")",
+                "en": "The storm caused a lot of damage."
+        },
+        "warning": {
+                "nl": "waarschuwing (bijv. \"Zij kregen niet op tijd een waarschuwing.\")",
+                "en": "They did not receive a warning in time."
+        },
+        "event": {
+                "nl": "gebeurtenis (bijv. \"De overstroming was een grote historische gebeurtenis.\")",
+                "en": "The flood was a major historical event."
+        },
+        "origin": {
+                "nl": "oorsprong (bijv. \"Wat was de belangrijkste oorsprong van de brand?\")",
+                "en": "What was the main origin of the fire?"
+        },
+        "result": {
+                "nl": "resultaat / gevolg (bijv. \"Oorlog is altijd een vreselijk gevolg van een conflict.\")",
+                "en": "War is always a terrible result of conflict."
+        },
+        "safe": {
+                "nl": "veilig (bijv. \"Het gezin wist veilig te blijven.\")",
+                "en": "The family managed to stay safe."
+        },
+        "terrible": {
+                "nl": "vreselijk (bijv. \"Het was een vreselijke dag voor de hele stad.\")",
+                "en": "It was a terrible day for the entire city."
+        },
+        "sudden": {
+                "nl": "plotseling (bijv. \"Een plotselinge verandering verpestte hun plannen.\")",
+                "en": "A sudden change ruined their plans."
+        },
+        "to escape": {
+                "nl": "ontsnappen / vluchten (bijv. \"Mensen probeerden te ontsnappen uit het brandende gebouw.\")",
+                "en": "People tried to escape from the burning building."
+        },
+        "to rescue": {
+                "nl": "redden (bijv. \"De brandweer kwam aan om de mensen te redden.\")",
+                "en": "Firefighters arrived to rescue the people."
+        },
+        "to cause": {
+                "nl": "veroorzaken (bijv. \"Zware regenval kan ernstige overstromingen veroorzaken.\")",
+                "en": "Heavy rainfall can cause severe floods."
+        },
+        "to rebuild": {
+                "nl": "herbouwen (bijv. \"Ze moesten de stad herbouwen na de oorlog.\")",
+                "en": "They had to rebuild the town after the war."
+        },
+        "to recover": {
+                "nl": "herstellen / genezen (bijv. \"Het kostte jaren om te herstellen van de overstroming.\")",
+                "en": "It took years to recover from the flood."
+        }
+};
+
+    function setupGame() {
+        const wordBank = document.getElementById('wordBank');
+        const sentenceGrid = document.getElementById('sentenceGrid');
+        wordBank.innerHTML = '';
+        sentenceGrid.innerHTML = '';
+
+        const allWords = Object.keys(vocabData);
+        const selectedWords = allWords.sort(() => 0.5 - Math.random()).slice(0, 10);
+                
+        [...selectedWords].sort().forEach(word => {
+            const el = document.createElement('div');
+            el.className = 'draggable-word';
+            el.textContent = word;
+            el.draggable = true;
+            el.addEventListener('dragstart', e => e.dataTransfer.setData("text", word));
+            wordBank.appendChild(el);
+        });
+
+        const lang = document.querySelector('input[name="language"]:checked').value;
+        
+        selectedWords.forEach((word, index) => {
+            let desc = lang === 'en' ? vocabData[word].en :
+                       lang === 'nl' ? vocabData[word].nl :
+                       (Math.random() > 0.5 ? vocabData[word].nl : vocabData[word].en);
+
+            const box = document.createElement('div');
+            box.className = 'sentence-box';
+            box.innerHTML = `
+                <p><strong>mission ${index + 1}:</strong> ${desc}</p>
+                <div class="drop-zone" data-word="${word}"></div>
+            `;
+            
+            const zone = box.querySelector('.drop-zone');
+            zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+            zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+            zone.addEventListener('drop', e => {
+                e.preventDefault();
+                zone.classList.remove('drag-over');
+                const droppedWord = e.dataTransfer.getData("text");
+                zone.innerHTML = `<div class="draggable-word" draggable="true">${droppedWord}</div>`;
+                zone.querySelector('.draggable-word').addEventListener('dragstart', ev => ev.dataTransfer.setData("text", droppedWord));
+            });
+            
+            sentenceGrid.appendChild(box);
+        });
+    }
+
+    function checkAnswers(e) {
+        let allCorrect = true;
+        document.querySelectorAll('.drop-zone').forEach(zone => {
+            const correctWord = zone.getAttribute('data-word');
+            const userWord = zone.textContent.trim();
+            zone.classList.remove('correct', 'wrong');
+
+            if (userWord === correctWord) {
+                zone.classList.add('correct');
+            } else if (userWord !== "") {
+                zone.classList.add('wrong');
+                allCorrect = false;
+            } else {
+                allCorrect = false;
+            }
+        });
+        
+        createExplosion(e, allCorrect ? 'mission complete!' : 'check again!');
+    }
+
+    function createExplosion(e, message) {
+        const txt = document.createElement('div');
+        txt.className = 'boom-text';
+        txt.innerText = message;
+        txt.style.left = (e.clientX - 50) + 'px';
+        txt.style.top = (e.clientY - 50) + 'px';
+        document.body.appendChild(txt);
+        setTimeout(() => txt.remove(), 600);
+    }
+
+    window.onload = setupGame;
+</script>
+
+</body>
+</html>

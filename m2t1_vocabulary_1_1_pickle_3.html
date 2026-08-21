@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EngliForce Pickle 1.1: Daily Life & History</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Lexend:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hero-purple-main: #6a1b9a;
+            --hero-purple-dark: #4a148c;
+            --hero-yellow: #ffb703;
+            --hero-cyan: #b39ddb;
+            --dark-bg: #0b101a;
+            --hero-orange: #ff5722;
+        }
+        body { font-family: 'Lexend', sans-serif; background: radial-gradient(circle at center, #1a102a 0%, #05051a 100%); color: white; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+        header { width: 100%; background: var(--hero-orange); padding: 2rem 0; text-align: center; clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%); border-bottom: 5px solid var(--hero-yellow); margin-bottom: 20px; }
+        h1 { font-family: 'Bangers', cursive; font-size: 3rem; margin: 0; text-shadow: 3px 3px 0px #bf360c; color: white; }
+        .container { max-width: 700px; width: 90%; margin: 20px auto; }
+        .section { background: rgba(26, 16, 42, 0.8); border-radius: 20px; padding: 2rem; border: 2px solid var(--hero-cyan); box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-bottom: 20px; }
+        .instructions { font-size: 0.9rem; color: var(--hero-cyan); line-height: 1.5; margin-bottom: 20px; text-align: left; }
+        label { display: block; margin-top: 1rem; font-family: 'Bangers'; color: var(--hero-yellow); font-size: 1.2rem; }
+        input, select { width: 100%; padding: 12px; margin-top: 5px; border-radius: 10px; border: 2px solid var(--hero-purple-main); background: #0b101a; color: white; box-sizing: border-box; font-family: 'Lexend', sans-serif; }
+        .btn { background: var(--hero-orange); color: white; border: none; padding: 15px 25px; border-radius: 50px; font-family: 'Bangers'; font-size: 1.4rem; cursor: pointer; border-bottom: 5px solid #bf360c; transition: 0.2s; margin: 10px 5px 0 0; width: 100%; }
+        .btn:hover { transform: translateY(-3px); filter: brightness(1.1); }
+        .btn-purple { background: var(--hero-purple-main); border-bottom-color: var(--hero-purple-dark); }
+        .turn { font-family: 'Bangers'; font-size: 2.2rem; color: var(--hero-yellow); text-align: center; margin-bottom: 10px; }
+        .scoreboard { display: flex; justify-content: space-around; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid var(--hero-purple-main); }
+        .word-card { background: #1a102a; border: 3px solid var(--hero-purple-main); border-radius: 15px; padding: 25px; text-align: center; }
+        .hint-text { font-size: 1.2rem; min-height: 60px; display: flex; align-items: center; justify-content: center; color: white; font-style: italic; margin: 20px 0; background: rgba(0,0,0,0.2); border-radius: 10px; padding: 10px; }
+        .answer-reveal { font-family: 'Bangers'; font-size: 2rem; color: var(--hero-yellow); display: none; margin: 15px 0; padding: 10px; border: 2px dashed var(--hero-yellow); }
+        footer { text-align: center; padding: 30px; color: rgba(255,255,255,0.5); width: 100%; }
+        .flex-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>PICKLE 1.1: DAILY LIFE & HISTORY DETECTIVE</h1>
+</header>
+<div class="container">
+    <div class="section" id="setup">
+        <div class="instructions">
+            🔎 <strong>Mission:</strong> Guess the vocabulary word using as few hints as possible.<br>
+            🌟 <strong>Bonus:</strong> Use <strong>English</strong> hints for +1 extra point!
+        </div>
+        <label>Number of Agents:</label>
+        <select id="playerCount" onchange="togglePlayer2()">
+            <option value="1">1 Agent</option>
+            <option value="2" selected>2 Agents</option>
+        </select>
+        <label>Agent 1:</label>
+        <input type="text" id="player1" placeholder="Name of Agent 1" />
+        <div id="player2Section">
+            <label>Agent 2:</label>
+            <input type="text" id="player2" placeholder="Name of Agent 2" />
+        </div>
+        <button class="btn" style="margin-top: 30px;" onclick="startGame()">Start Mission 🚀</button>
+    </div>
+
+    <div id="game" style="display: none;">
+        <div class="turn" id="turnIndicator">Turn: ...</div>
+        <div class="scoreboard">
+            <div><span id="name1"></span>: <span id="score1" style="color:var(--hero-yellow)">0</span></div>
+            <div id="p2ScoreDisplay"><span id="name2"></span>: <span id="score2" style="color:var(--hero-yellow)">0</span></div>
+        </div>
+        <div class="word-card">
+            <div class="answer-reveal" id="word-reveal">Answer: ...</div>
+            <label>Hint Language:</label>
+            <select id="hintLanguage" onchange="resetClue()">
+                <option value="nl">Dutch</option>
+                <option value="en">English (Bonus +1)</option>
+            </select>
+            <div class="hint-text" id="hintBox">Click 'Next Hint' to start</div>
+            <div class="flex-buttons">
+                <button class="btn btn-purple" onclick="nextHint()">Next Hint 💡</button>
+                <button class="btn btn-purple" onclick="showWord()">Show Answer 👁️</button>
+                <button class="btn" style="background:#4caf50; border-color:#2e7d32;" onclick="correctGuess()">Correct ✅</button>
+                <button class="btn" style="background:var(--hero-orange); border-color:#bf360c;" onclick="wrongGuess()">Wrong ❌</button>
+            </div>
+        </div>
+    </div>
+</div>
+<footer>
+    &copy; 2026 EngliForce: Make English Your Superpower!
+</footer>
+<script>
+    const wordList = [
+        { en: "century", hints: { nl: ["Betekenis: eeuw.", "Voorbeeld: 'Wij leven in de eenentwintigste eeuw.'", "Nederlandse vertaling: eeuw."], en: ["Context: We live in the twenty-first century.", "Refers to a period of 100 years.", "Starts with 'C', means 'eeuw' in Dutch."] }},
+        { en: "fashion", hints: { nl: ["Betekenis: mode.", "Voorbeeld: 'Ik hou van de mode uit de jaren 80.'", "Nederlandse vertaling: mode."], en: ["Context: I like the fashion from the 1980s.", "Popular style of clothes or behavior.", "Starts with 'F', means 'mode' in Dutch."] }},
+        { en: "daily life", hints: { nl: ["Betekenis: dagelijks leven.", "Voorbeeld: 'Het dagelijks leven was vroeger heel anders.'", "Nederlandse vertaling: dagelijks leven."], en: ["Context: Daily life was very different in the past.", "How people live every single day.", "Starts with 'D', means 'dagelijks leven' in Dutch."] }},
+        { en: "custom", hints: { nl: ["Betekenis: gewoonte / gebruik.", "Voorbeeld: 'Samen avondeten is een oud gebruik.'", "Nederlandse vertaling: gewoonte / gebruik."], en: ["Context: Eating dinner together is an old custom.", "An accepted way of behaving in a culture.", "Starts with 'C', means 'gewoonte' in Dutch."] }},
+        { en: "tradition", hints: { nl: ["Betekenis: traditie.", "Voorbeeld: 'Elk gezin heeft zijn eigen traditie.'", "Nederlandse vertaling: traditie."], en: ["Context: Every family has its own tradition.", "A belief or custom passed down through time.", "Starts with 'T', means 'traditie' in Dutch."] }},
+        { en: "household", hints: { nl: ["Betekenis: huishouden.", "Voorbeeld: 'Wie doet het werk in jouw huishouden?'", "Nederlandse vertaling: huishouden."], en: ["Context: Who does the work in your household?", "A house and its occupants regarded as a unit.", "Starts with 'H', means 'huishouden' in Dutch."] }},
+        { en: "equipment", hints: { nl: ["Betekenis: apparatuur / uitrusting.", "Voorbeeld: 'Zij hadden toen geen moderne apparatuur.'", "Nederlandse vertaling: apparatuur / uitrusting."], en: ["Context: They did not have modern equipment back then.", "Tools or machinery used for a specific task.", "Starts with 'E', means 'apparatuur' in Dutch."] }},
+        { en: "chore", hints: { nl: ["Betekenis: karwei / huishoudelijk klusje.", "Voorbeeld: 'Afwassen was mijn belangrijkste huishoudelijke klusje.'", "Nederlandse vertaling: karwei / klusje."], en: ["Context: Washing the dishes was my main chore.", "A routine task, especially household work.", "Starts with 'C', means 'huishoudelijk klusje' in Dutch."] }},
+        { en: "clothes", hints: { nl: ["Betekenis: kleding.", "Voorbeeld: 'Mensen droegen lang geleden erg formele kleding.'", "Nederlandse vertaling: kleding."], en: ["Context: People wore very formal clothes long ago.", "Items worn to cover the body.", "Starts with 'C', means 'kleding' in Dutch."] }},
+        { en: "behavior", hints: { nl: ["Betekenis: gedrag.", "Voorbeeld: 'Goed gedrag op school was erg belangrijk.'", "Nederlandse vertaling: gedrag."], en: ["Context: Good behavior at school was very important.", "The way in which one acts or conducts oneself.", "Starts with 'B', means 'gedrag' in Dutch."] }},
+        { en: "difference", hints: { nl: ["Betekenis: verschil.", "Voorbeeld: 'Wat is het grote verschil tussen nu en toen?'", "Nederlandse vertaling: verschil."], en: ["Context: What is the big difference between now and then?", "A point or way in which things are not the same.", "Starts with 'D', means 'verschil' in Dutch."] }},
+        { en: "entertainment", hints: { nl: ["Betekenis: amusement / vermaak.", "Voorbeeld: 'Muziek was de belangrijkste vorm van amusement.'", "Nederlandse vertaling: amusement / vermaak."], en: ["Context: Music was the main form of entertainment.", "Things that provide amusement or enjoyment.", "Starts with 'E', means 'amusement' in Dutch."] }},
+        { en: "comfortable", hints: { nl: ["Betekenis: comfortabel / prettig.", "Voorbeeld: 'Hun huizen waren niet erg comfortabel.'", "Nederlandse vertaling: comfortabel / prettig."], en: ["Context: Their houses were not very comfortable.", "Providing physical ease and relaxation.", "Starts with 'C', means 'comfortabel' in Dutch."] }},
+        { en: "to compare", hints: { nl: ["Betekenis: vergelijken.", "Voorbeeld: 'Je kunt het tienerleven door de eeuwen heen vergelijken.'", "Nederlandse vertaling: vergelijken."], en: ["Context: You can compare teenager life through the ages.", "To examine the differences and similarities.", "Starts with 'C', means 'vergelijken' in Dutch."] }},
+        { en: "to change", hints: { nl: ["Betekenis: veranderen.", "Voorbeeld: 'Veel dingen beginnen door de tijd heen te veranderen.'", "Nederlandse vertaling: veranderen."], en: ["Context: Many things start to change over time.", "To make or become different.", "Starts with 'C', means 'veranderen' in Dutch."] }}
+    ];
+
+    let words = []; p1 = '', p2 = '', playerCount = 2; score = [0, 0]; currentIndex = 0; currentHint = 0; currentPlayer = 0;
+    function togglePlayer2() { document.getElementById("player2Section").style.display = (document.getElementById("playerCount").value === "1") ? "none" : "block"; }
+    function startGame() {
+        playerCount = parseInt(document.getElementById("playerCount").value);
+        p1 = document.getElementById("player1").value || "Agent 1";
+        p2 = document.getElementById("player2").value || "Agent 2";
+        words = [...wordList].sort(() => Math.random() - 0.5);
+        score = [0, 0]; currentIndex = 0; currentPlayer = 0;
+        document.getElementById("name1").textContent = p1;
+        document.getElementById("name2").textContent = (playerCount === 2) ? p2 : "";
+        document.getElementById("p2ScoreDisplay").style.visibility = (playerCount === 2) ? "visible" : "hidden";
+        document.getElementById("setup").style.display = "none";
+        document.getElementById("game").style.display = "block";
+        updateScore(); showTurn(); resetWordCard();
+    }
+    function showTurn() { document.getElementById("turnIndicator").textContent = (playerCount === 1) ? `Agent: ${p1}` : `Turn: ${currentPlayer === 0 ? p1 : p2}`; }
+    function resetWordCard() { currentHint = 0; document.getElementById("hintBox").textContent = "Click 'Next Hint' to start"; document.getElementById("word-reveal").style.display = "none"; }
+    function nextHint() {
+        if (currentHint >= 3) return;
+        const lang = document.getElementById("hintLanguage").value;
+        document.getElementById("hintBox").textContent = `Hint ${currentHint + 1}: ${words[currentIndex].hints[lang][currentHint]}`;
+        currentHint++;
+    }
+    function showWord() { document.getElementById("word-reveal").textContent = `Answer: ${words[currentIndex].en}`; document.getElementById("word-reveal").style.display = "block"; }
+    function correctGuess() {
+        const lang = document.getElementById("hintLanguage").value;
+        let points = Math.max(1, 4 - currentHint) + (lang === "en" ? 1 : 0);
+        score[currentPlayer] += points; nextWord();
+    }
+    function wrongGuess() { nextWord(); }
+    function nextWord() {
+        currentIndex++;
+        if (playerCount === 2) currentPlayer = 1 - currentPlayer;
+        updateScore();
+        if (currentIndex >= words.length) {
+            document.getElementById("turnIndicator").textContent = "Mission Accomplished!";
+            document.getElementById("hintBox").textContent = "All words discovered!";
+            document.getElementById("word-reveal").style.display = "none";
+        } else { showTurn(); resetWordCard(); }
+    }
+    function updateScore() { document.getElementById("score1").textContent = score[0] + " pt"; document.getElementById("score2").textContent = score[1] + " pt"; }
+    function resetClue() { if (currentHint > 0) { const lang = document.getElementById("hintLanguage").value; document.getElementById("hintBox").textContent = `Hint ${currentHint}: ${words[currentIndex].hints[lang][currentHint - 1]}`; } }
+</script>
+</body>
+</html>
