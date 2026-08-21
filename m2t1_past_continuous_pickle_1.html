@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Past Continuous Boss Battle | EngliForce Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Lexend:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hero-purple-main: #7b2cbf;
+            --hero-purple-dark: #3c096c;
+            --hero-yellow: #ffb703;
+            --hero-cyan: #00f5d4;
+            --dark-bg: #05101a;
+            --hero-orange: #ff5722;
+            --hero-orange-dark: #bf360c;
+            --hero-green: #4caf50;
+            --hero-blue: #4361ee;
+            --hero-red: #d32f2f;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: #05101a;
+            background: radial-gradient(circle at center, #1a102a 0%, #05101a 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            text-align: center;
+        }
+
+        header {
+            background: var(--hero-orange);
+            padding: 2.5rem 1rem;
+            text-align: center;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            border-bottom: 5px solid var(--hero-yellow);
+        }
+
+        h1 {
+            font-family: 'Bangers', cursive;
+            font-size: 3.5rem;
+            letter-spacing: 3px;
+            margin: 0;
+            text-shadow: 4px 4px 0px var(--hero-orange-dark);
+        }
+
+        header p {
+            font-size: 1.2rem;
+            margin-top: 5px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        #start-screen, #game-screen {
+            display: none;
+            padding: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        #start-screen.active, #game-screen.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .player-setup {
+            display: inline-block;
+            text-align: center;
+            margin: 1rem;
+            background: rgba(26, 16, 42, 0.9);
+            border: 2px solid var(--hero-blue);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            min-width: 280px;
+        }
+
+        .player-setup h2 {
+            font-family: 'Bangers', cursive;
+            color: var(--hero-yellow);
+            font-size: 2rem;
+            margin: 0 0 10px 0;
+        }
+
+        .character-option {
+            font-size: 2.5rem;
+            border: 3px solid transparent;
+            border-radius: 12px;
+            margin: 0.3rem;
+            padding: 0.4rem;
+            cursor: pointer;
+            display: inline-block;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .character-option:hover {
+            transform: scale(1.2);
+        }
+
+        .character-option.selected {
+            border-color: var(--hero-yellow);
+            background-color: rgba(255, 183, 3, 0.2);
+        }
+
+        input[type="text"] {
+            padding: 0.8rem;
+            font-size: 1.1rem;
+            font-family: 'Lexend', sans-serif;
+            margin: 0.5rem 0;
+            width: 85%;
+            border-radius: 10px;
+            border: 2px solid var(--hero-purple-main);
+            background: #0d0718;
+            color: white;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--hero-cyan);
+        }
+
+        button {
+            background: var(--hero-purple-main);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 50px;
+            font-family: 'Bangers', cursive;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: 0.2s;
+            border-bottom: 5px solid var(--hero-purple-dark);
+            margin-top: 1rem;
+        }
+
+        button:hover:enabled {
+            transform: translateY(-3px);
+            background: var(--hero-blue);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #game-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: 1rem;
+            gap: 20px;
+        }
+
+        .player-card {
+            background: rgba(26, 16, 42, 0.9);
+            border: 2px solid var(--hero-cyan);
+            border-radius: 20px;
+            padding: 20px;
+            min-width: 200px;
+        }
+
+        .player-card h2 {
+            font-family: 'Bangers', cursive;
+            color: var(--hero-cyan);
+            font-size: 2rem;
+            margin: 0;
+        }
+
+        .player-display {
+            font-size: 5rem;
+            transition: opacity 0.3s ease;
+            margin: 10px 0;
+        }
+
+        .damage-bar {
+            font-family: 'Bangers', cursive;
+            font-size: 1.3rem;
+            color: var(--hero-orange);
+            letter-spacing: 1px;
+        }
+
+        #question-box {
+            background: rgba(26, 16, 42, 0.95);
+            border: 3px solid var(--hero-yellow);
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(255, 183, 3, 0.2);
+            padding: 2rem;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        #turn-indicator {
+            font-family: 'Bangers', cursive;
+            color: var(--hero-yellow);
+            font-size: 2.2rem;
+            margin-top: 0;
+            letter-spacing: 1px;
+        }
+
+        #question {
+            font-size: 1.4rem;
+            line-height: 1.5;
+            margin: 20px 0;
+        }
+
+        #feedback {
+            margin-top: 1.5rem;
+            font-weight: bold;
+            padding: 1rem;
+            border-radius: 12px;
+            min-height: 2.5rem;
+            white-space: pre-line;
+            transition: all 0.2s ease;
+            font-size: 1.1rem;
+        }
+
+        #feedback.correct {
+            background-color: rgba(76, 175, 80, 0.2);
+            color: var(--hero-cyan);
+            border: 2px solid var(--hero-green);
+        }
+
+        #feedback.incorrect {
+            background-color: rgba(211, 47, 47, 0.2);
+            color: #ff8a80;
+            border: 2px solid var(--hero-red);
+        }
+
+        footer {
+            background: #05101a;
+            color: rgba(255,255,255,0.8);
+            text-align: center;
+            padding: 30px 20px;
+            border-top: 2px solid var(--hero-purple-dark);
+            margin-top: auto;
+        }
+
+        .flash-effect { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: white; 
+            opacity: 0; 
+            pointer-events: none; 
+            z-index: 1999; 
+            transition: opacity 0.2s ease;
+        }
+
+        .boom-text { 
+            position: fixed; 
+            pointer-events: none; 
+            font-family: 'Bangers', cursive; 
+            color: var(--hero-yellow); 
+            font-size: 5rem; 
+            z-index: 2001; 
+            text-shadow: 5px 5px 0px #000; 
+            animation: boomAnim 0.6s ease-out forwards; 
+        }
+
+        @keyframes boomAnim {
+            0% { transform: scale(0) rotate(-20deg); opacity: 1; }
+            100% { transform: scale(2) rotate(10deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="flash-effect" id="flash"></div>
+
+<header>
+    <h1>⚔️ PAST CONTINUOUS BOSS BATTLE</h1>
+    <p>BATTLE YOUR WAY TO VICTORY!</p>
+</header>
+
+<!-- Start Screen -->
+<section id="start-screen" class="active">
+    <div class="player-setup">
+        <h2>PLAYER 1</h2>
+        <input type="text" id="name1" placeholder="Enter Player 1 name">
+        <div id="char1-options">
+            <span class="character-option" onclick="selectCharacter(1, '🧙')">🧙</span>
+            <span class="character-option" onclick="selectCharacter(1, '🧛')">🧛</span>
+            <span class="character-option" onclick="selectCharacter(1, '👸')">👸</span>
+            <span class="character-option" onclick="selectCharacter(1, '🤖')">🤖</span>
+            <span class="character-option" onclick="selectCharacter(1, '🧟')">🧟</span>
+        </div>
+    </div>
+
+    <div class="player-setup">
+        <h2>PLAYER 2</h2>
+        <input type="text" id="name2" placeholder="Enter Player 2 name">
+        <div id="char2-options">
+            <span class="character-option" onclick="selectCharacter(2, '🧙')">🧙</span>
+            <span class="character-option" onclick="selectCharacter(2, '🧛')">🧛</span>
+            <span class="character-option" onclick="selectCharacter(2, '👸')">👸</span>
+            <span class="character-option" onclick="selectCharacter(2, '🤖')">🤖</span>
+            <span class="character-option" onclick="selectCharacter(2, '🧟')">🧟</span>
+        </div>
+    </div>
+    <br>
+    <button onclick="startGame(event)">START BATTLE!</button>
+</section>
+
+<!-- Game Screen -->
+<section id="game-screen">
+    <div id="game-container">
+        <div class="player-card">
+            <h2 id="label1">Player 1</h2>
+            <div id="charDisplay1" class="player-display">❓</div>
+            <div class="damage-bar" id="damage1">Damage: 0/10</div>
+        </div>
+        <div class="player-card">
+            <h2 id="label2">Player 2</h2>
+            <div id="charDisplay2" class="player-display">❓</div>
+            <div class="damage-bar" id="damage2">Damage: 0/10</div>
+        </div>
+    </div>
+
+    <section id="question-box">
+        <h2 id="turn-indicator">Turn: Player 1</h2>
+        <p id="question">She ___ (read) a book when the door opened.</p>
+        <input type="text" id="answer" placeholder="Type your answer (e.g. 'was reading')" onkeydown="if(event.key === 'Enter') submitAnswer(event)">
+        <br>
+        <button id="submit-btn" onclick="submitAnswer(event)">ATTACK!</button>
+        <p id="feedback"></p>
+    </section>
+</section>
+
+<footer>
+    <div class="footer-text">&copy; 2026 EngliForce – <span style="color: var(--hero-yellow);">Make English Your Superpower!</span></div>
+</footer>
+
+<script>
+    let playerNames = ["Player 1", "Player 2"];
+    let playerChars = ["❓", "❓"];
+    let currentPlayer = 1;
+    let damage = { 1: 0, 2: 0 };
+    let currentQuestion = 0;
+
+    const questions = [
+    // ==========================================
+    // 🟢 50 AFFIRMATIVE SENTENCES (BEVESTIGEND)
+    // ==========================================
+    { sentence: "She ___ (read) a book when I arrived.", answer: "was reading" },
+    { sentence: "We ___ (watch) a movie at 8 o'clock last night.", answer: "were watching" },
+    { sentence: "He ___ (play) football in the park yesterday.", answer: "was playing" },
+    { sentence: "I ___ (do) my homework at that moment.", answer: "was doing" },
+    { sentence: "They ___ (have) lunch when it started to rain.", answer: "were having" },
+    { sentence: "Emma ___ (study) for her test all evening.", answer: "was studying" },
+    { sentence: "The cat ___ (sleep) on the sofa then.", answer: "was sleeping" },
+    { sentence: "James ___ (write) an email when the power went out.", answer: "was writing" },
+    { sentence: "We ___ (walk) home when suddenly it snowed.", answer: "were walking" },
+    { sentence: "You ___ (listen) to music at 6 o'clock.", answer: "were listening" },
+    { sentence: "My dad ___ (cook) dinner when I came in.", answer: "was cooking" },
+    { sentence: "I ___ (talk) to my friend at that time.", answer: "was talking" },
+    { sentence: "They ___ (swim) in the pool when we arrived.", answer: "were swimming" },
+    { sentence: "Olivia ___ (draw) a picture when I called.", answer: "was drawing" },
+    { sentence: "The children ___ (play) in the garden all afternoon.", answer: "were playing" },
+    { sentence: "The sun ___ (shine) bright this morning.", answer: "was shining" },
+    { sentence: "It ___ (rain) heavily when we stepped outside.", answer: "was raining" },
+    { sentence: "My brother ___ (fix) his bike yesterday.", answer: "was fixing" },
+    { sentence: "We ___ (dance) at the party around midnight.", answer: "were dancing" },
+    { sentence: "She ___ (sing) her favourite song in the shower.", answer: "was singing" },
+    { sentence: "They ___ (wait) for the bus at 4 o'clock.", answer: "were waiting" },
+    { sentence: "I ___ (clean) my room when my mom came home.", answer: "was cleaning" },
+    { sentence: "The dog ___ (bark) at the mailman.", answer: "was barking" },
+    { sentence: "You ___ (run) fast in the race.", answer: "were running" },
+    { sentence: "He ___ (drive) to work when he saw the accident.", answer: "was driving" },
+    { sentence: "We ___ (bake) a cake for the birthday party.", answer: "were baking" },
+    { sentence: "She ___ (wear) a green dress yesterday.", answer: "was wearing" },
+    { sentence: "They ___ (talk) about the new superhero movie.", answer: "were talking" },
+    { sentence: "My grandparents ___ (visit) us last weekend.", answer: "were visiting" },
+    { sentence: "The birds ___ (sing) early this morning.", answer: "were singing" },
+    { sentence: "I ___ (think) about our upcoming trip.", answer: "was thinking" },
+    { sentence: "He ___ (wash) his car when it started to rain.", answer: "was washing" },
+    { sentence: "We ___ (eat) pizza while watching football.", answer: "were eating" },
+    { sentence: "She ___ (listen) to a podcast during her run.", answer: "was listening" },
+    { sentence: "They ___ (build) a treehouse all weekend.", answer: "were building" },
+    { sentence: "I ___ (search) for my keys when you phoned.", answer: "was searching" },
+    { sentence: "The teacher ___ (explain) the grammar rule.", answer: "was explaining" },
+    { sentence: "You ___ (smile) at me during class.", answer: "were smiling" },
+    { sentence: "He ___ (paint) the living room wall.", answer: "was painting" },
+    { sentence: "We ___ (shop) for new clothes yesterday.", answer: "were shopping" },
+    { sentence: "She ___ (skate) on the frozen lake.", answer: "was skating" },
+    { sentence: "They ___ (laugh) at the funny joke.", answer: "were laughing" },
+    { sentence: "I ___ (pack) my suitcase at 10 PM.", answer: "was packing" },
+    { sentence: "The baby ___ (cry) because it was hungry.", answer: "was crying" },
+    { sentence: "He ___ (repair) the computer all afternoon.", answer: "was repairing" },
+    { sentence: "We ___ (sit) by the campfire.", answer: "were sitting" },
+    { sentence: "She ___ (carry) a heavy backpack.", answer: "was carrying" },
+    { sentence: "They ___ (practice) the new song.", answer: "were practicing" },
+    { sentence: "I ___ (look) out the window when the bird flew by.", answer: "was looking" },
+    { sentence: "The mechanic ___ (check) the car engines.", answer: "was checking" },
+
+    // ==========================================
+    // 🔴 50 NEGATIVE SENTENCES (ONTKENNEND)
+    // ==========================================
+    { sentence: "I ___ (not watch) TV at 9 o'clock.", answer: "was not watching" },
+    { sentence: "She ___ (not do) her homework at that moment.", answer: "was not doing" },
+    { sentence: "They ___ (not play) football when it rained.", answer: "were not playing" },
+    { sentence: "He ___ (not listen) to the teacher.", answer: "was not listening" },
+    { sentence: "We ___ (not eat) breakfast at 7 o'clock.", answer: "were not eating" },
+    { sentence: "Emma ___ (not sleep) when you called.", answer: "was not sleeping" },
+    { sentence: "You ___ (not write) an email back then.", answer: "were not writing" },
+    { sentence: "Tom ___ (not read) his book at that time.", answer: "was not reading" },
+    { sentence: "I ___ (not talk) on the phone when you saw me.", answer: "was not talking" },
+    { sentence: "They ___ (not swim) in the sea yesterday.", answer: "were not swimming" },
+    { sentence: "He ___ (not wear) a jacket when it rained.", answer: "was not wearing" },
+    { sentence: "We ___ (not go) home at 5 o'clock.", answer: "were not going" },
+    { sentence: "She ___ (not cook) dinner last night.", answer: "was not cooking" },
+    { sentence: "You ___ (not run) in the hallway.", answer: "were not running" },
+    { sentence: "The children ___ (not sit) quietly.", answer: "were not sitting" },
+    { sentence: "The sun ___ (not shine) yesterday afternoon.", answer: "was not shining" },
+    { sentence: "I ___ (not pay) attention during the lecture.", answer: "was not paying" },
+    { sentence: "They ___ (not work) on the project.", answer: "were not working" },
+    { sentence: "He ___ (not clean) the kitchen when I got home.", answer: "was not cleaning" },
+    { sentence: "We ___ (not expect) visitors last night.", answer: "were not expecting" },
+    { sentence: "She ___ (not feel) well yesterday.", answer: "was not feeling" },
+    { sentence: "The dog ___ (not bark) at the strangers.", answer: "was not barking" },
+    { sentence: "I ___ (not use) the laptop at that moment.", answer: "was not using" },
+    { sentence: "You ___ (not driving) fast when the cop pulled you over.", answer: "were not driving" },
+    { sentence: "They ___ (not make) noise in the library.", answer: "were not making" },
+    { sentence: "He ___ (not study) for his math exam.", answer: "was not studying" },
+    { sentence: "We ___ (not play) video games all night.", answer: "were not playing" },
+    { sentence: "She ___ (not carry) an umbrella when it rained.", answer: "was not carrying" },
+    { sentence: "I ___ (not sleep) when the alarm rang.", answer: "was not sleeping" },
+    { sentence: "They ___ (not living) in London back in 2020.", answer: "were not living" },
+    { sentence: "My sister ___ (not help) with the dishes.", answer: "was not helping" },
+    { sentence: "You ___ (not wearing) shoes inside.", answer: "were not wearing" },
+    { sentence: "The teacher ___ (not shout) at the students.", answer: "was not shouting" },
+    { sentence: "He ___ (not answer) the phone.", answer: "was not answering" },
+    { sentence: "We ___ (not shop) at that supermarket.", answer: "were not shopping" },
+    { sentence: "They ___ (not wait) for us at the station.", answer: "were not waiting" },
+    { sentence: "I ___ (not write) in my journal yesterday.", answer: "was not writing" },
+    { sentence: "She ___ (not drink) coffee this morning.", answer: "was not drinking" },
+    { sentence: "The bus ___ (not move) because of traffic.", answer: "was not moving" },
+    { sentence: "You ___ (not try) hard enough.", answer: "were not trying" },
+    { sentence: "He ___ (not plan) to go to the party.", answer: "was not planning" },
+    { sentence: "We ___ (not travel) during the storm.", answer: "were not traveling" },
+    { sentence: "They ___ (not dance) on the dancefloor.", answer: "were not dancing" },
+    { sentence: "I ___ (not record) the video.", answer: "was not recording" },
+    { sentence: "She ___ (not paint) her nails.", answer: "was not painting" },
+    { sentence: "The wind ___ (not blow) very hard.", answer: "was not blowing" },
+    { sentence: "You ___ (not looking) where you were going.", answer: "were not looking" },
+    { sentence: "He ___ (not sell) his old car.", answer: "was not selling" },
+    { sentence: "We ___ (not laugh) at your joke.", answer: "were not laughing" },
+    { sentence: "They ___ (not bake) cookies yesterday.", answer: "were not baking" },
+
+    // ==========================================
+    // 🟡 50 QUESTIONS (VRAGEND)
+    // ==========================================
+    { sentence: "___ you ___ (do) your homework at 8?", answer: "Were doing" },
+    { sentence: "___ she ___ (read) a book when you came in?", answer: "Was reading" },
+    { sentence: "___ they ___ (play) in the garden yesterday?", answer: "Were playing" },
+    { sentence: "___ he ___ (watch) TV at that moment?", answer: "Was watching" },
+    { sentence: "___ we ___ (have) lunch at 1 o'clock?", answer: "Were having" },
+    { sentence: "___ Emma ___ (study) for her exam all night?", answer: "Was studying" },
+    { sentence: "___ they ___ (swim) in the pool then?", answer: "Were swimming" },
+    { sentence: "___ he ___ (write) a message when I called?", answer: "Was writing" },
+    { sentence: "___ you ___ (listen) to me at that time?", answer: "Were listening" },
+    { sentence: "___ we ___ (go) to the park when it rained?", answer: "Were going" },
+    { sentence: "___ she ___ (cook) dinner at 6 o'clock?", answer: "Was cooking" },
+    { sentence: "___ they ___ (talk) about the game then?", answer: "Were talking" },
+    { sentence: "___ he ___ (wear) a hat yesterday?", answer: "Was wearing" },
+    { sentence: "___ you ___ (sit) there when it happened?", answer: "Were sitting" },
+    { sentence: "___ we ___ (wait) for the bus at 4?", answer: "Were waiting" },
+    { sentence: "___ I ___ (dream) or was it real?", answer: "Was dreaming" },
+    { sentence: "___ the sun ___ (shine) when you woke up?", answer: "Was shining" },
+    { sentence: "___ it ___ (rain) when you left home?", answer: "Was raining" },
+    { sentence: "___ they ___ (drive) home during the storm?", answer: "Were driving" },
+    { sentence: "___ she ___ (sing) on stage last night?", answer: "Was singing" },
+    { sentence: "___ you ___ (sleep) when I sent the text?", answer: "Were sleeping" },
+    { sentence: "___ he ___ (run) in the marathon?", answer: "Was running" },
+    { sentence: "___ we ___ (making) too much noise?", answer: "Were making" },
+    { sentence: "___ the dog ___ (chase) the cat?", answer: "Was chasing" },
+    { sentence: "___ they ___ (build) a new house?", answer: "Were building" },
+    { sentence: "___ she ___ (dance) with Tom at the party?", answer: "Was dancing" },
+    { sentence: "___ you ___ (search) for your phone earlier?", answer: "Were searching" },
+    { sentence: "___ he ___ (fix) his car engine?", answer: "Was fixing" },
+    { sentence: "___ they ___ (enjoy) their vacation?", answer: "Were enjoying" },
+    { sentence: "___ I ___ (speaking) too loud?", answer: "Was speaking" },
+    { sentence: "___ we ___ (planning) a secret party?", answer: "Were planning" },
+    { sentence: "___ she ___ (wearing) her red jacket?", answer: "Was wearing" },
+    { sentence: "___ you ___ (buying) groceries at 5 PM?", answer: "Were buying" },
+    { sentence: "___ he ___ (playing) computer games?", answer: "Was playing" },
+    { sentence: "___ they ___ (walking) the dog in the park?", answer: "Were walking" },
+    { sentence: "___ the baby ___ (crying) during the flight?", answer: "Was crying" },
+    { sentence: "___ you ___ (taking) pictures at the museum?", answer: "Were taking" },
+    { sentence: "___ she ___ (cleaning) her room all morning?", answer: "Was cleaning" },
+    { sentence: "___ he ___ (working) late yesterday?", answer: "Was working" },
+    { sentence: "___ they ___ (flying) to Paris at 9 AM?", answer: "Were flying" },
+    { sentence: "___ we ___ (standing) in the right line?", answer: "Were standing" },
+    { sentence: "___ you ___ (feeling) sick yesterday?", answer: "Were feeling" },
+    { sentence: "___ she ___ (baking) apple pie?", answer: "Was baking" },
+    { sentence: "___ he ___ (listening) to the radio?", answer: "Was listening" },
+    { sentence: "___ they ___ (laugh) at the cartoon?", answer: "Were laughing" },
+    { sentence: "___ I ___ (annoying) you earlier?", answer: "Was annoying" },
+    { sentence: "___ you ___ (painting) the fence?", answer: "Were painting" },
+    { sentence: "___ she ___ (practicing) the piano?", answer: "Was practicing" },
+    { sentence: "___ he ___ (drinking) water after the run?", answer: "Was drinking" },
+    { sentence: "___ they ___ (waiting) for the train?", answer: "Were waiting" }
+  ];
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    function createExplosion(e, message) {
+        const x = e ? e.clientX : window.innerWidth / 2;
+        const y = e ? e.clientY : window.innerHeight / 2;
+        const flash = document.getElementById('flash');
+        flash.style.opacity = '0.3';
+        setTimeout(() => flash.style.opacity = '0', 200);
+        
+        const txt = document.createElement('div');
+        txt.className = 'boom-text';
+        txt.innerText = message || 'BOOM!';
+        txt.style.left = (x - 50) + 'px'; 
+        txt.style.top = (y - 50) + 'px';
+        document.body.appendChild(txt);
+        setTimeout(() => txt.remove(), 600);
+    }
+
+    function selectCharacter(player, emoji) {
+        playerChars[player - 1] = emoji;
+        const container = document.getElementById(`char${player}-options`);
+        Array.from(container.children).forEach(c => c.classList.remove('selected'));
+        Array.from(container.children).forEach(c => {
+            if (c.textContent === emoji) c.classList.add('selected');
+        });
+    }
+
+    function startGame(e) {
+        shuffle(questions);
+        const name1 = document.getElementById('name1').value || "Player 1";
+        const name2 = document.getElementById('name2').value || "Player 2";
+
+        playerNames = [name1, name2];
+
+        document.getElementById('label1').textContent = name1;
+        document.getElementById('label2').textContent = name2;
+        document.getElementById('charDisplay1').textContent = playerChars[0];
+        document.getElementById('charDisplay2').textContent = playerChars[1];
+
+        document.getElementById('start-screen').classList.remove('active');
+        document.getElementById('game-screen').classList.add('active');
+
+        createExplosion(e, 'START!');
+        updateQuestion();
+    }
+
+    function updateQuestion() {
+        document.getElementById('turn-indicator').textContent =
+            `Turn: ${playerNames[currentPlayer - 1]}`;
+        document.getElementById('question').textContent =
+            questions[currentQuestion].sentence;
+        document.getElementById('answer').value = "";
+
+        const feedback = document.getElementById('feedback');
+        feedback.textContent = "";
+        feedback.classList.remove('correct', 'incorrect');
+
+        const submitBtn = document.getElementById('submit-btn');
+        submitBtn.disabled = false;
+        document.getElementById('answer').focus();
+    }
+
+    function normalizeSpaces(str) {
+        return str.replace(/\s+/g, ' ').trim();
+    }
+
+    function expandContractions(str) {
+        return str
+            .replace(/\bwasn't\b/gi, "was not")
+            .replace(/\bweren't\b/gi, "were not")
+            .replace(/(^|\s)'m\b/gi, "$1am")
+            .replace(/(^|\s)'re\b/gi, "$1are")
+            .replace(/(^|\s)'s\b/gi, "$1is");
+    }
+
+    function stripPronoun(str) {
+        const pronouns = ["I", "You", "He", "She", "It", "We", "They",
+                          "i", "you", "he", "she", "it", "we", "they"];
+        for (const p of pronouns) {
+            if (str.startsWith(p + " ")) {
+                return str.slice(p.length + 1);
+            }
+        }
+        return str;
+    }
+
+    function isCorrect(userInputRaw, expectedRaw) {
+        const expected = normalizeSpaces(expectedRaw);
+        let user = normalizeSpaces(userInputRaw);
+
+        if (!user) return false;
+
+        // Exact match (case sensitive)
+        if (user === expected) return true;
+
+        // Afkortingen / voluit (case-insensitive fallback)
+        if (user.toLowerCase() === expected.toLowerCase()) return true;
+
+        user = expandContractions(user);
+        user = normalizeSpaces(user);
+        if (user.toLowerCase() === expected.toLowerCase()) return true;
+
+        user = stripPronoun(user);
+        user = normalizeSpaces(user);
+        if (user.toLowerCase() === expected.toLowerCase()) return true;
+
+        return false;
+    }
+
+    function submitAnswer(e) {
+        const submitBtn = document.getElementById('submit-btn');
+        if (submitBtn.disabled) return;
+        submitBtn.disabled = true;
+
+        const rawInput = document.getElementById("answer").value;
+        const feedback = document.getElementById("feedback");
+        const correctAnswer = questions[currentQuestion].answer;
+
+        feedback.classList.remove('correct', 'incorrect');
+
+        const right = isCorrect(rawInput, correctAnswer);
+
+        if (right) {
+            const target = currentPlayer === 1 ? 2 : 1;
+            damage[target]++;
+            updateDamage(target);
+            createExplosion(e, 'HIT!');
+            feedback.textContent = `💥 CRITICAL HIT! Your answer: "${rawInput.trim()}"`;
+            feedback.classList.add('correct');
+        } else {
+            const shownCorrect = correctAnswer;
+            const shownInput = rawInput.trim() || "—";
+            createExplosion(e, 'MISS!');
+            feedback.textContent =
+                `🛡️ MISSED!\nYour answer: "${shownInput}".\nCorrect answer: "${shownCorrect}".`;
+            feedback.classList.add('incorrect');
+        }
+
+        // Win check
+        if (damage[1] >= 10 || damage[2] >= 10) {
+            const winner = damage[1] >= 10 ? playerNames[0] : playerNames[1];
+            setTimeout(() => {
+                createExplosion(null, 'VICTORY!');
+                alert(`🏆 ${winner} WINS THE BATTLE!`);
+                location.reload();
+            }, 1200);
+            return;
+        }
+
+        // Pauze voor volgende vraag
+        setTimeout(() => {
+            currentPlayer = currentPlayer === 1 ? 2 : 1;
+            currentQuestion = (currentQuestion + 1) % questions.length;
+            updateQuestion();
+        }, 2000);
+    }
+
+    function updateDamage(player) {
+        document.getElementById(`damage${player}`).textContent =
+            `Damage: ${damage[player]}/10`;
+        const display = document.getElementById(`charDisplay${player}`);
+        display.style.opacity = `${1 - damage[player] * 0.08}`;
+    }
+</script>
+
+</body>
+</html>

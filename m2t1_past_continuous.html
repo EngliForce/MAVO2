@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nebula Navigator: Past Continuous</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Mono&display=swap');
+        
+        body { 
+            font-family: 'Space Mono', monospace; 
+            background-color: #020617; 
+            color: #f8fafc; 
+            overflow: hidden; 
+            height: 100vh;
+        }
+        .orbitron { font-family: 'Orbitron', sans-serif; }
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: moveStars 25s linear infinite;
+        }
+        @keyframes moveStars {
+            from { transform: translateY(0); }
+            to { transform: translateY(100vh); }
+        }
+        .nebula-panel {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            box-shadow: 0 0 50px rgba(56, 189, 248, 0.15);
+        }
+        .large-input {
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid #334155;
+            border-bottom: 4px solid #22d3ee;
+            color: #22d3ee;
+            outline: none;
+            text-align: center;
+            width: 100%;
+            max-width: 650px;
+            padding: 20px;
+            font-size: 2.5rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        .large-input:focus {
+            border-color: #22d3ee;
+            box-shadow: 0 0 20px rgba(34, 211, 238, 0.2);
+        }
+        .landed-anim {
+            animation: landing 1s ease-out forwards;
+        }
+        @keyframes landing {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const MASTER_DATABASE = {
+            AFFIRMATIVE: [
+                { start: "She", end: "a book when I arrived", verb: "read", full: "was reading", short: "was reading" },
+                { start: "We", end: "a movie at 8 o'clock", verb: "watch", full: "were watching", short: "were watching" },
+                { start: "He", end: "football yesterday", verb: "play", full: "was playing", short: "was playing" },
+                { start: "I", end: "my homework at that moment", verb: "do", full: "was doing", short: "was doing" },
+                { start: "They", end: "lunch when it rained", verb: "have", full: "were having", short: "were having" },
+                { start: "Emma", end: "for her test all evening", verb: "study", full: "was studying", short: "was studying" },
+                { start: "The cat", end: "on the sofa then", verb: "sleep", full: "was sleeping", short: "was sleeping" },
+                { start: "James", end: "an email when the power cut", verb: "write", full: "was writing", short: "was writing" },
+                { start: "We", end: "home when it snowed", verb: "walk", full: "were walking", short: "were walking" },
+                { start: "You", end: "to music at 6 o'clock", verb: "listen", full: "were listening", short: "were listening" },
+                { start: "My dad", end: "dinner when I entered", verb: "cook", full: "was cooking", short: "was cooking" },
+                { start: "I", end: "to my friend at that time", verb: "talk", full: "was talking", short: "was talking" },
+                { start: "They", end: "in the pool then", verb: "swim", full: "were swimming", short: "were swimming" },
+                { start: "Olivia", end: "a picture when I called", verb: "draw", full: "was drawing", short: "was drawing" },
+                { start: "The children", end: "in the garden all afternoon", verb: "play", full: "were playing", short: "were playing" },
+                { start: "The sun", end: "bright this morning", verb: "shine", full: "was shining", short: "was shining" },
+                { start: "It", end: "heavily when we left", verb: "rain", full: "was raining", short: "was raining" },
+                { start: "My brother", end: "his bike yesterday", verb: "fix", full: "was fixing", short: "was fixing" },
+                { start: "We", end: "at the party at midnight", verb: "dance", full: "were dancing", short: "were dancing" },
+                { start: "She", end: "in the shower", verb: "sing", full: "was singing", short: "was singing" },
+                { start: "They", end: "for the bus at 4 o'clock", verb: "wait", full: "were waiting", short: "were waiting" },
+                { start: "I", end: "my room when mom arrived", verb: "clean", full: "was cleaning", short: "was cleaning" },
+                { start: "The dog", end: "at the mailman", verb: "bark", full: "was barking", short: "was barking" },
+                { start: "You", end: "fast in the race", verb: "run", full: "were running", short: "were running" },
+                { start: "He", end: "to work when he stopped", verb: "drive", full: "was driving", short: "was driving" },
+                { start: "We", end: "a cake for the party", verb: "bake", full: "were baking", short: "were baking" },
+                { start: "She", end: "a green dress yesterday", verb: "wear", full: "was wearing", short: "was wearing" },
+                { start: "They", end: "about the new movie", verb: "talk", full: "were talking", short: "were talking" },
+                { start: "My grandparents", end: "us last weekend", verb: "visit", full: "were visiting", short: "were visiting" },
+                { start: "The birds", end: "early this morning", verb: "sing", full: "were singing", short: "were singing" },
+                { start: "I", end: "about our upcoming trip", verb: "think", full: "was thinking", short: "was thinking" },
+                { start: "He", end: "his car when it rained", verb: "wash", full: "was washing", short: "was washing" },
+                { start: "We", end: "pizza while watching TV", verb: "eat", full: "were eating", short: "were eating" },
+                { start: "She", end: "to a podcast during her run", verb: "listen", full: "was listening", short: "was listening" },
+                { start: "They", end: "a treehouse all weekend", verb: "build", full: "were building", short: "were building" },
+                { start: "I", end: "for my keys when you phoned", verb: "search", full: "was searching", short: "was searching" },
+                { start: "The teacher", end: "the rule clearly", verb: "explain", full: "was explaining", short: "was explaining" },
+                { start: "You", end: "at me during class", verb: "smile", full: "were smiling", short: "were smiling" },
+                { start: "He", end: "the living room wall", verb: "paint", full: "was painting", short: "was painting" },
+                { start: "We", end: "for new clothes yesterday", verb: "shop", full: "were shopping", short: "were shopping" },
+                { start: "She", end: "on the frozen lake", verb: "skate", full: "was skating", short: "was skating" },
+                { start: "They", end: "at the funny joke", verb: "laugh", full: "were laughing", short: "were laughing" },
+                { start: "I", end: "my suitcase at 10 PM", verb: "pack", full: "was packing", short: "was packing" },
+                { start: "The baby", end: "because it was hungry", verb: "cry", full: "was crying", short: "was crying" },
+                { start: "He", end: "the computer all day", verb: "repair", full: "was repairing", short: "was repairing" },
+                { start: "We", end: "by the campfire", verb: "sit", full: "were sitting", short: "were sitting" },
+                { start: "She", end: "a heavy backpack", verb: "carry", full: "was carrying", short: "was carrying" },
+                { start: "They", end: "the new song together", verb: "practice", full: "were practicing", short: "were practicing" },
+                { start: "I", end: "out the window when it flew by", verb: "look", full: "was looking", short: "was looking" },
+                { start: "The mechanic", end: "the car engine", verb: "check", full: "was checking", short: "was checking" }
+            ],
+            NEGATIVE: [
+                { start: "I", end: "TV at 9 o'clock", verb: "not watch", full: "was not watching", short: "wasn't watching" },
+                { start: "She", end: "her homework then", verb: "not do", full: "was not doing", short: "wasn't doing" },
+                { start: "They", end: "football when it rained", verb: "not play", full: "were not playing", short: "weren't playing" },
+                { start: "He", end: "to the teacher", verb: "not listen", full: "was not listening", short: "wasn't listening" },
+                { start: "We", end: "breakfast at 7 o'clock", verb: "not eat", full: "were not eating", short: "weren't eating" },
+                { start: "Emma", end: "when you called", verb: "not sleep", full: "was not sleeping", short: "wasn't sleeping" },
+                { start: "You", end: "an email back then", verb: "not write", full: "were not writing", short: "weren't writing" },
+                { start: "Tom", end: "his book at that time", verb: "not read", full: "was not reading", short: "wasn't reading" },
+                { start: "I", end: "on the phone when you saw me", verb: "not talk", full: "was not talking", short: "wasn't talking" },
+                { start: "They", end: "in the sea yesterday", verb: "not swim", full: "were not swimming", short: "weren't swimming" },
+                { start: "He", end: "a jacket when it rained", verb: "not wear", full: "was not wearing", short: "wasn't wearing" },
+                { start: "We", end: "home at 5 o'clock", verb: "not go", full: "were not going", short: "weren't going" },
+                { start: "She", end: "dinner last night", verb: "not cook", full: "was not cooking", short: "wasn't cooking" },
+                { start: "You", end: "in the hallway", verb: "not run", full: "were not running", short: "weren't running" },
+                { start: "The children", end: "quietly", verb: "not sit", full: "are not sitting", short: "weren't sitting" },
+                { start: "The sun", end: "yesterday afternoon", verb: "not shine", full: "was not shining", short: "wasn't shining" },
+                { start: "I", end: "attention during the class", verb: "not pay", full: "was not paying", short: "wasn't paying" },
+                { start: "They", end: "on the project", verb: "not work", full: "were not working", short: "weren't working" },
+                { start: "He", end: "the kitchen then", verb: "not clean", full: "was not cleaning", short: "wasn't cleaning" },
+                { start: "We", end: "visitors last night", verb: "not expect", full: "were not expecting", short: "weren't expecting" },
+                { start: "She", end: "well yesterday", verb: "not feel", full: "was not feeling", short: "wasn't feeling" },
+                { start: "The dog", end: "at the strangers", verb: "not bark", full: "was not barking", short: "wasn't barking" },
+                { start: "I", end: "the laptop at that moment", verb: "not use", full: "was not using", short: "wasn't using" },
+                { start: "You", end: "fast when stopped", verb: "not drive", full: "were not driving", short: "weren't driving" },
+                { start: "They", end: "noise in the library", verb: "not make", full: "were not making", short: "weren't making" },
+                { start: "He", end: "for his math exam", verb: "not study", full: "was not studying", short: "wasn't studying" },
+                { start: "We", end: "games all night", verb: "not play", full: "were not playing", short: "weren't playing" },
+                { start: "She", end: "an umbrella when it rained", verb: "not carry", full: "was not carrying", short: "wasn't carrying" },
+                { start: "I", end: "when the alarm rang", verb: "not sleep", full: "was not sleeping", short: "wasn't sleeping" },
+                { start: "They", end: "in London back in 2020", verb: "not live", full: "were not living", short: "weren't living" },
+                { start: "My sister", end: "with the dishes", verb: "not help", full: "was not helping", short: "wasn't helping" },
+                { start: "You", end: "shoes inside", verb: "not wear", full: "were not wearing", short: "weren't wearing" },
+                { start: "The teacher", end: "at the students", verb: "not shout", full: "was not shouting", short: "wasn't shouting" },
+                { start: "He", end: "the phone call", verb: "not answer", full: "was not answering", short: "wasn't answering" },
+                { start: "We", end: "at that supermarket", verb: "not shop", full: "were not shopping", short: "weren't shopping" },
+                { start: "They", end: "for us at the station", verb: "not wait", full: "were not waiting", short: "weren't waiting" },
+                { start: "I", end: "in my journal yesterday", verb: "not write", full: "was not writing", short: "wasn't writing" },
+                { start: "She", end: "coffee yesterday morning", verb: "not drink", full: "was not drinking", short: "wasn't drinking" },
+                { start: "The bus", end: "because of traffic", verb: "not move", full: "was not moving", short: "wasn't moving" },
+                { start: "You", end: "hard enough", verb: "not try", full: "were not trying", short: "weren't trying" },
+                { start: "He", end: "to go to the party", verb: "not plan", full: "was not planning", short: "wasn't planning" },
+                { start: "We", end: "during the storm", verb: "not travel", full: "were not traveling", short: "weren't traveling" },
+                { start: "They", end: "on the dancefloor", verb: "not dance", full: "were not dancing", short: "weren't dancing" },
+                { start: "I", end: "the video", verb: "not record", full: "was not recording", short: "wasn't recording" },
+                { start: "She", end: "her nails then", verb: "not paint", full: "was not painting", short: "wasn't painting" },
+                { start: "The wind", end: "very hard yesterday", verb: "not blow", full: "was not blowing", short: "wasn't blowing" },
+                { start: "You", end: "where you were going", verb: "not look", full: "were not looking", short: "weren't looking" },
+                { start: "He", end: "his old car", verb: "not sell", full: "was not selling", short: "wasn't selling" },
+                { start: "We", end: "at your joke", verb: "not laugh", full: "were not laughing", short: "weren't laughing" },
+                { start: "They", end: "cookies yesterday", verb: "not bake", full: "were not baking", short: "weren't baking" }
+            ],
+            QUESTIONS: [
+                { start: "___ you", end: "your homework at 8?", verb: "do", full: "Were doing", short: "Were doing" },
+                { start: "___ she", end: "a book when I arrived?", verb: "read", full: "Was reading", short: "Was reading" },
+                { start: "___ they", end: "in the garden yesterday?", verb: "play", full: "Were playing", short: "Were playing" },
+                { start: "___ he", end: "TV at that moment?", verb: "watch", full: "Was watching", short: "Was watching" },
+                { start: "___ we", end: "lunch at 1 o'clock?", verb: "have", full: "Were having", short: "Were having" },
+                { start: "___ Emma", end: "for her exam all night?", verb: "study", full: "Was studying", short: "Was studying" },
+                { start: "___ they", end: "in the pool then?", verb: "swim", full: "Were swimming", short: "Were swimming" },
+                { start: "___ he", end: "a message when I called?", verb: "write", full: "Was writing", short: "Was writing" },
+                { start: "___ you", end: "to me at that time?", verb: "listen", full: "Were listening", short: "Were listening" },
+                { start: "___ we", end: "to the park when it rained?", verb: "go", full: "Were going", short: "Were going" },
+                { start: "___ she", end: "dinner at 6 o'clock?", verb: "cook", full: "Was cooking", short: "Was cooking" },
+                { start: "___ they", end: "about the game then?", verb: "talk", full: "Were talking", short: "Were talking" },
+                { start: "___ he", end: "a hat yesterday?", verb: "wear", full: "Was wearing", short: "Was wearing" },
+                { start: "___ you", end: "there when it happened?", verb: "sit", full: "Were sitting", short: "Were sitting" },
+                { start: "___ we", end: "for the bus at 4?", verb: "wait", full: "Were waiting", short: "Were waiting" },
+                { start: "___ I", end: "or was it real?", verb: "dream", full: "Was dreaming", short: "Was dreaming" },
+                { start: "___ the sun", end: "when you woke up?", verb: "shine", full: "Was shining", short: "Was shining" },
+                { start: "___ it", end: "when you left home?", verb: "rain", full: "Was raining", short: "Was raining" },
+                { start: "___ they", end: "home during the storm?", verb: "drive", full: "Were driving", short: "Were driving" },
+                { start: "___ she", end: "on stage last night?", verb: "sing", full: "Was singing", short: "Was singing" },
+                { start: "___ you", end: "when I sent the text?", verb: "sleep", full: "Were sleeping", short: "Were sleeping" },
+                { start: "___ he", end: "in the marathon?", verb: "run", full: "Was running", short: "Was running" },
+                { start: "___ we", end: "too much noise then?", verb: "make", full: "Were making", short: "Were making" },
+                { start: "___ the dog", end: "the cat?", verb: "chase", full: "Was chasing", short: "Was chasing" },
+                { start: "___ they", end: "a new house?", verb: "build", full: "Were building", short: "Were building" },
+                { start: "___ she", end: "with Tom at the party?", verb: "dance", full: "Was dancing", short: "Was dancing" },
+                { start: "___ you", end: "for your phone earlier?", verb: "search", full: "Were searching", short: "Were searching" },
+                { start: "___ he", end: "his car engine?", verb: "fix", full: "Was fixing", short: "Was fixing" },
+                { start: "___ they", end: "their vacation?", verb: "enjoy", full: "Were enjoying", short: "Were enjoying" },
+                { start: "___ I", end: "too loud then?", verb: "speak", full: "Was speaking", short: "Was speaking" },
+                { start: "___ we", end: "a secret party?", verb: "plan", full: "Were planning", short: "Were planning" },
+                { start: "___ she", end: "her red jacket yesterday?", verb: "wear", full: "Was wearing", short: "Was wearing" },
+                { start: "___ you", end: "groceries at 5 PM?", verb: "buy", full: "Were buying", short: "Were buying" },
+                { start: "___ he", end: "computer games then?", verb: "play", full: "Was playing", short: "Was playing" },
+                { start: "___ they", end: "the dog in the park?", verb: "walk", full: "Were walking", short: "Were walking" },
+                { start: "___ the baby", end: "during the flight?", verb: "cry", full: "Was crying", short: "Was crying" },
+                { start: "___ you", end: "pictures at the museum?", verb: "take", full: "Were taking", short: "Were taking" },
+                { start: "___ she", end: "her room all morning?", verb: "clean", full: "Was cleaning", short: "Was cleaning" },
+                { start: "___ he", end: "late yesterday?", verb: "work", full: "Was working", short: "Was working" },
+                { start: "___ they", end: "to Paris at 9 AM?", verb: "fly", full: "Were flying", short: "Were flying" },
+                { start: "___ we", end: "in the right line?", verb: "stand", full: "Were standing", short: "Were standing" },
+                { start: "___ you", end: "sick yesterday?", verb: "feel", full: "Were feeling", short: "Were feeling" },
+                { start: "___ she", end: "apple pie then?", verb: "bake", full: "Was baking", short: "Was baking" },
+                { start: "___ he", end: "to the radio?", verb: "listen", full: "Was listening", short: "Was listening" },
+                { start: "___ they", end: "at the cartoon?", verb: "laugh", full: "Were laughing", short: "Were laughing" },
+                { start: "___ I", end: "you earlier?", verb: "annoy", full: "Was annoying", short: "Was annoying" },
+                { start: "___ you", end: "the fence yesterday?", verb: "paint", full: "Were painting", short: "Were painting" },
+                { start: "___ she", end: "the piano at 4?", verb: "practice", full: "Was practicing", short: "Was practicing" },
+                { start: "___ he", end: "water after the run?", verb: "drink", full: "Was drinking", short: "Was drinking" },
+                { start: "___ they", end: "for the train then?", verb: "wait", full: "Were waiting", short: "Were waiting" }
+            ]
+        };
+
+        const App = () => {
+            const [phase, setPhase] = useState('INTRO');
+            const [category, setCategory] = useState('AFFIRMATIVE');
+            const [distance, setDistance] = useState(0);
+            const [correctCount, setCorrectCount] = useState(0);
+            const [wrongCount, setWrongCount] = useState(0);
+            const [remainingWords, setRemainingWords] = useState([]);
+            const [currentQ, setCurrentQ] = useState(null);
+            const [input, setInput] = useState("");
+            const [feedback, setFeedback] = useState(null);
+
+            const totalQuestions = 10;
+
+            const startMission = (cat) => {
+                setCategory(cat);
+                let selectedList = [];
+
+                if (cat === 'MIXED') {
+                    selectedList = [
+                        ...MASTER_DATABASE.AFFIRMATIVE,
+                        ...MASTER_DATABASE.NEGATIVE,
+                        ...MASTER_DATABASE.QUESTIONS
+                    ];
+                } else {
+                    selectedList = MASTER_DATABASE[cat];
+                }
+
+                const shuffled = [...selectedList].sort(() => Math.random() - 0.5).slice(0, totalQuestions);
+                
+                setDistance(0); 
+                setCorrectCount(0); 
+                setWrongCount(0);
+                setRemainingWords(shuffled.slice(1));
+                setCurrentQ(shuffled[0]); 
+                setInput(""); 
+                setFeedback(null);
+                setPhase('GAME');
+            };
+
+            const handleAnswer = () => {
+                if (!input.trim() || feedback) return;
+                const userInput = input.toLowerCase().trim().replace(/’/g, "'");
+                const isCorrect = userInput === currentQ.full.toLowerCase() || userInput === currentQ.short.toLowerCase();
+
+                if (isCorrect) {
+                    setFeedback('SUCCESS');
+                    setDistance(d => d + 12500);
+                    setTimeout(() => {
+                        const nextCount = correctCount + 1;
+                        setCorrectCount(nextCount);
+                        if (nextCount >= totalQuestions) setPhase('SUMMARY');
+                        else {
+                            setCurrentQ(remainingWords[0]);
+                            setRemainingWords(remainingWords.slice(1));
+                            setFeedback(null); 
+                            setInput("");
+                        }
+                    }, 1000);
+                } else {
+                    setFeedback('FAIL');
+                    setWrongCount(w => w + 1);
+                    setTimeout(() => setFeedback(null), 2500);
+                }
+            };
+
+            return (
+                <div className="h-screen w-full relative flex items-center justify-center">
+                    {[...Array(30)].map((_, i) => (
+                        <div key={i} className="star" style={{
+                            left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%`,
+                            width: '2px', height: '2px', animationDuration: `${Math.random() * 20 + 10}s`
+                        }} />
+                    ))}
+
+                    {phase === 'INTRO' && (
+                        <div className="z-10 text-center max-w-5xl px-4">
+                            <h1 className="text-6xl md:text-7xl font-bold orbitron mb-4 text-white uppercase tracking-tighter">Nebula Navigator</h1>
+                            <p className="text-cyan-400 orbitron text-lg mb-10 tracking-[0.3em]">PAST CONTINUOUS // SELECT SECTOR</p>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                                <button 
+                                    onClick={() => startMission('AFFIRMATIVE')} 
+                                    className="p-6 border-2 border-cyan-500 bg-slate-900/80 hover:bg-cyan-500 hover:text-black orbitron rounded-2xl transition-all uppercase tracking-wider group text-left"
+                                >
+                                    <div className="text-xs text-cyan-400 group-hover:text-black mb-2">Sector 01</div>
+                                    <div className="text-xl font-bold text-white group-hover:text-black">Affirmative</div>
+                                    <div className="text-xs text-slate-400 group-hover:text-black/70 mt-2">50 Targets (was/were + ing)</div>
+                                </button>
+
+                                <button 
+                                    onClick={() => startMission('NEGATIVE')} 
+                                    className="p-6 border-2 border-pink-500 bg-slate-900/80 hover:bg-pink-500 hover:text-black orbitron rounded-2xl transition-all uppercase tracking-wider group text-left"
+                                >
+                                    <div className="text-xs text-pink-400 group-hover:text-black mb-2">Sector 02</div>
+                                    <div className="text-xl font-bold text-white group-hover:text-black">Negative</div>
+                                    <div className="text-xs text-slate-400 group-hover:text-black/70 mt-2">50 Targets (wasn't/weren't)</div>
+                                </button>
+
+                                <button 
+                                    onClick={() => startMission('QUESTIONS')} 
+                                    className="p-6 border-2 border-amber-500 bg-slate-900/80 hover:bg-amber-500 hover:text-black orbitron rounded-2xl transition-all uppercase tracking-wider group text-left"
+                                >
+                                    <div className="text-xs text-amber-400 group-hover:text-black mb-2">Sector 03</div>
+                                    <div className="text-xl font-bold text-white group-hover:text-black">Questions</div>
+                                    <div className="text-xs text-slate-400 group-hover:text-black/70 mt-2">50 Targets (Was/Were...?)</div>
+                                </button>
+
+                                <button 
+                                    onClick={() => startMission('MIXED')} 
+                                    className="p-6 border-2 border-purple-500 bg-slate-900/80 hover:bg-purple-500 hover:text-black orbitron rounded-2xl transition-all uppercase tracking-wider group text-left"
+                                >
+                                    <div className="text-xs text-purple-400 group-hover:text-black mb-2">Sector 04</div>
+                                    <div className="text-xl font-bold text-white group-hover:text-black">Mixed</div>
+                                    <div className="text-xs text-slate-400 group-hover:text-black/70 mt-2">Random 150 Targets</div>
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
+                    {phase === 'GAME' && (
+                        <div className="z-10 w-full max-w-6xl p-16 rounded-3xl nebula-panel">
+                            {/* PROGRESS BAR */}
+                            <div className="w-full bg-slate-800 h-3 rounded-full mb-12 overflow-hidden border border-slate-700">
+                                <div 
+                                    className="h-full bg-gradient-to-r from-cyan-600 to-cyan-400 transition-all duration-700"
+                                    style={{ width: `${(correctCount / totalQuestions) * 100}%` }}
+                                ></div>
+                            </div>
+
+                            <div className="flex justify-between items-center mb-16 orbitron">
+                                <span className="text-cyan-400 text-sm tracking-widest">
+                                    SECTOR: {category} // TARGET {correctCount + 1} OF {totalQuestions}
+                                </span>
+                                <span className="text-3xl font-bold text-white tracking-tighter">{distance.toLocaleString()} KM</span>
+                            </div>
+
+                            {!feedback ? (
+                                <div className="text-center">
+                                    {/* VERB CALIBRATION */}
+                                    <div className="mb-10">
+                                        <div className="text-xs uppercase text-slate-500 tracking-[0.6em] mb-4">Calibration Target:</div>
+                                        <div className="text-4xl md:text-5xl font-bold orbitron text-cyan-400 border-b-2 border-cyan-900 inline-block pb-2">
+                                            ({currentQ?.verb.toUpperCase()})
+                                        </div>
+                                    </div>
+
+                                    {/* DE ZIN */}
+                                    <div className="text-4xl md:text-5xl font-bold orbitron text-white mb-16 leading-relaxed opacity-90 italic">
+                                        {currentQ?.start} <span className="text-cyan-700 underline decoration-dotted underline-offset-8">_______</span> {currentQ?.end}
+                                    </div>
+
+                                    <div className="flex justify-center">
+                                        <input 
+                                            className="large-input orbitron"
+                                            value={input}
+                                            onChange={(e) => setInput(e.target.value)}
+                                            onKeyPress={(e) => e.key === 'Enter' && handleAnswer()}
+                                            autoFocus
+                                            spellCheck="false"
+                                            autoComplete="off"
+                                        />
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="text-center py-12">
+                                    <h2 className={`text-6xl font-bold orbitron mb-10 ${feedback === 'SUCCESS' ? 'text-cyan-400' : 'text-red-500'}`}>
+                                        {feedback === 'SUCCESS' ? 'WARP SUCCESS' : 'SYSTEM OVERLOAD'}
+                                    </h2>
+                                    {feedback === 'FAIL' && (
+                                        <div className="bg-red-950/30 p-8 rounded-2xl border border-red-900 inline-block">
+                                            <p className="text-slate-400 text-xs uppercase mb-2">Required Sequence:</p>
+                                            <p className="text-5xl text-white font-bold italic tracking-tighter">"{currentQ.full}"</p>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {phase === 'SUMMARY' && (
+                        <div className="z-10 w-full max-w-4xl p-16 rounded-3xl nebula-panel text-center landed-anim border-b-4 border-b-cyan-500">
+                            <h1 className="text-8xl font-bold text-white orbitron mb-4 uppercase tracking-tighter">Mission Clear</h1>
+                            <p className="text-cyan-400 orbitron text-xl mb-12 tracking-[0.3em]">SECTOR {category} PURGED</p>
+
+                            <div className="grid grid-cols-2 gap-8 mb-16">
+                                <div className="bg-slate-900/80 p-10 rounded-3xl border border-slate-800">
+                                    <div className="text-slate-500 text-xs uppercase tracking-widest mb-4">Final Distance</div>
+                                    <div className="text-5xl text-yellow-400 orbitron tracking-tighter">{distance.toLocaleString()} KM</div>
+                                </div>
+                                <div className="bg-slate-900/80 p-10 rounded-3xl border border-slate-800">
+                                    <div className="text-slate-500 text-xs uppercase tracking-widest mb-4">Hull Integrity</div>
+                                    <div className="text-5xl text-white orbitron tracking-tighter">{Math.max(0, 100 - (wrongCount * 10))}%</div>
+                                </div>
+                            </div>
+
+                            <button onClick={() => setPhase('INTRO')} className="px-24 py-8 bg-white text-black text-2xl font-bold orbitron rounded-full hover:bg-cyan-400 hover:text-black transition-all uppercase tracking-widest shadow-2xl">
+                                Select New Sector
+                            </button>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

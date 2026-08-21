@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EngliForce Academy: Past Continuous Power</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Lexend:wght@400;700;900&family=Ubuntu+Mono:wght@700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --hero-orange-main: #ff7043;
+            --hero-orange-dark: #e65c30;
+            --hero-orange-glow: rgba(255, 112, 67, 0.4);
+            --hero-yellow: #ffb703;
+            --dark-bg: #0b1a2a;
+            --card-bg: #102a43;
+            --card-border: #243b53;
+            --card-bg-done: #05101a;
+        }
+
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: radial-gradient(circle at center, #102a43 0%, #05101a 100%);
+            color: white;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: var(--hero-orange-main);
+            padding: 2.5rem 1rem;
+            text-align: center;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            border-bottom: 5px solid var(--hero-yellow);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            color: white;
+        }
+
+        h1 { 
+            font-family: 'Bangers', cursive; 
+            font-size: 3.5rem; 
+            letter-spacing: 3px; 
+            margin: 0; 
+            text-shadow: 4px 4px 0px var(--hero-orange-dark); 
+        }
+
+        header p { 
+            font-size: 1.2rem; 
+            font-weight: bold; 
+            margin-top: 5px; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+        }
+
+        main { 
+            max-width: 1000px; 
+            margin: 20px auto; 
+            padding: 20px; 
+            width: 100%;
+            box-sizing: border-box;
+            flex-grow: 1;
+        }
+
+        .section-title { 
+            font-family: 'Bangers', cursive; 
+            font-size: 2.5rem; 
+            color: var(--hero-orange-main); 
+            margin: 0 0 15px 0; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            text-align: center; 
+        }
+
+        /* Briefing Box */
+        .briefing-box {
+            background: rgba(255, 112, 67, 0.1);
+            border: 2px dashed var(--hero-orange-main);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .briefing-box p {
+            margin: 8px 0;
+            font-size: 1.1rem;
+            color: #cbd5e1;
+        }
+
+        .badge {
+            background: var(--hero-yellow);
+            color: var(--dark-bg);
+            padding: 3px 10px;
+            border-radius: 8px;
+            font-family: 'Bangers', cursive;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+        }
+
+        /* Exercise Cards */
+        .exercise-card {
+            background: var(--card-bg);
+            border: 3px solid var(--card-border);
+            border-radius: 20px;
+            padding: 22px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .exercise-card:hover {
+            border-color: var(--hero-orange-main);
+        }
+
+        .exercise-card.correct {
+            border-color: #4ade80;
+            background: #062319;
+            box-shadow: 0 0 20px rgba(74, 222, 128, 0.2);
+        }
+
+        .exercise-card.incorrect {
+            border-color: #f87171;
+            background: #2a0b10;
+        }
+
+        .exercise-content {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .exercise-content {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+
+        /* Goed leesbare zinsstructuur met ruime afstand */
+        .sentence-box {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px; 
+            font-size: 1.25rem;
+            font-weight: 500;
+            line-height: 1.8;
+            color: #ffffff;
+        }
+
+        .sentence-text {
+            color: #f8fafc;
+            letter-spacing: 0.5px;
+        }
+
+        /* Zeer duidelijk werkwoord */
+        .verb-tag {
+            color: var(--hero-yellow);
+            font-family: 'Ubuntu Mono', monospace;
+            font-weight: 700;
+            font-size: 1.35rem;
+            background: rgba(255, 183, 3, 0.15);
+            padding: 4px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 183, 3, 0.4);
+            white-space: nowrap;
+        }
+
+        /* Hero Invoerveld */
+        input.hero-input {
+            background: #05101a;
+            border: 2px solid var(--card-border);
+            border-radius: 10px;
+            color: #ffffff;
+            font-family: 'Lexend', sans-serif;
+            font-weight: 700;
+            font-size: 1.15rem;
+            padding: 8px 15px;
+            outline: none;
+            transition: all 0.2s;
+            text-align: center;
+            min-width: 210px;
+        }
+
+        input.hero-input:focus {
+            border-color: var(--hero-orange-main);
+            box-shadow: 0 0 12px var(--hero-orange-glow);
+        }
+
+        /* Hero Action Knop */
+        .btn-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .hero-btn {
+            background: var(--hero-orange-main);
+            border: none;
+            color: white;
+            padding: 16px 40px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-family: 'Bangers', cursive;
+            font-size: 1.8rem;
+            letter-spacing: 1.5px;
+            transition: all 0.2s ease;
+            box-shadow: 0 6px 0px var(--hero-orange-dark);
+            text-transform: uppercase;
+        }
+
+        .hero-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 0px var(--hero-orange-dark);
+            background: #ff855f;
+        }
+
+        .hero-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0px var(--hero-orange-dark);
+        }
+
+        footer {
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>ENGLIFORCE ACADEMY</h1>
+        <p>MISSION: PAST CONTINUOUS POWER</p>
+    </header>
+
+    <main>
+        <div id="app-root"></div>
+    </main>
+
+    <footer>
+        <p style="text-align: center; opacity: 0.5; padding: 60px 0;">
+            &copy; 2026 EngliForce – Make English Your Superpower!
+        </p>
+    </footer>
+
+    <script type="text/babel">
+        const { useState, useEffect, useCallback } = React;
+
+        const MASTER_DATABASE = [
+            { verb: "wait", q1: "The passengers", q2: "at Gate 7 when the alarm rang.", answer: "were waiting" },
+            { verb: "check in", q1: "Sophie", q2: "her luggage at 3 PM.", answer: "was checking in" },
+            { verb: "fly", q1: "The pilot", q2: "above the clouds during the storm.", answer: "was flying" },
+            { verb: "not land", q1: "Flight UA20", q2: "due to heavy fog.", answer: "was not landing" },
+            { verb: "have", q1: "We", q2: "lunch in the VIP lounge.", answer: "were having" },
+            { verb: "wear", q1: "The crew members", q2: "their new uniforms.", answer: "were wearing" },
+            { verb: "run", q1: "They", q2: "to catch the final shuttle.", answer: "were running" },
+            { verb: "get", q1: "It", q2: "late for our connection flight.", answer: "was getting" },
+            { verb: "take off", q1: "The aircraft", q2: "from runway 4 at noon.", answer: "was taking off" },
+            { verb: "fix", q1: "Engineers", q2: "the technical issue.", answer: "were fixing" },
+            { verb: "talk", q1: "The ground staff", q2: "to the captain.", answer: "was talking" },
+            { verb: "drink", q1: "The tourists", q2: "orange juice at the bar.", answer: "were drinking" },
+            { verb: "read", q1: "A woman", q2: "a book about London.", answer: "was reading" },
+            { verb: "buy", q1: "We", q2: "some snacks for the flight.", answer: "were buying" },
+            { verb: "sit", q1: "The children", q2: "on their suitcases.", answer: "were sitting" },
+            { verb: "not use", q1: "The pilots", q2: "autopilot during landing.", answer: "were not using" },
+            { verb: "make", q1: "The stewardess", q2: "an important announcement.", answer: "was making" },
+            { verb: "sleep", q1: "He", q2: "on the terminal bench.", answer: "was sleeping" },
+            { verb: "work", q1: "I", q2: "at the information desk yesterday.", answer: "was working" },
+            { verb: "not listen", q1: "You", q2: "to the safety instructions!", answer: "were not listening" }
+        ];
+
+        const App = () => {
+            const [currentQuestions, setCurrentQuestions] = useState([]);
+            const [userAnswers, setUserAnswers] = useState({});
+            const [isSubmitted, setIsSubmitted] = useState(false);
+            const [batchNumber, setBatchNumber] = useState(1);
+
+            const loadNewBatch = useCallback(() => {
+                const shuffled = [...MASTER_DATABASE].sort(() => 0.5 - Math.random());
+                setCurrentQuestions(shuffled.slice(0, 8));
+                setUserAnswers({});
+                setIsSubmitted(false);
+                setBatchNumber(prev => prev + 1);
+            }, []);
+
+            useEffect(() => {
+                loadNewBatch();
+            }, []);
+
+            const handleInputChange = (index, value) => {
+                setUserAnswers({
+                    ...userAnswers,
+                    [index]: value
+                });
+            };
+
+            const handleSubmit = () => {
+                if (isSubmitted) {
+                    loadNewBatch();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    return;
+                }
+
+                setIsSubmitted(true);
+
+                let allCorrect = true;
+                currentQuestions.forEach((q, idx) => {
+                    const ans = (userAnswers[idx] || '').trim().toLowerCase();
+                    if (ans !== q.answer.toLowerCase()) {
+                        allCorrect = false;
+                    }
+                });
+
+                if (allCorrect) {
+                    confetti({
+                        particleCount: 100,
+                        spread: 70,
+                        origin: { y: 0.6 },
+                        colors: ['#ff7043', '#ffb703', '#ffffff']
+                    });
+                }
+            };
+
+            return (
+                <div>
+                    <div className="briefing-box">
+                        <h2 className="section-title">
+                            ⚡ MISSION BRIEFING #{batchNumber}
+                        </h2>
+                        <p>Complete the terminal status using the <span className="badge">PAST CONTINUOUS</span> (was/were + verb-ing).</p>
+                    </div>
+
+                    <div className="exercises-container">
+                        {currentQuestions.map((q, index) => {
+                            const userAnswer = userAnswers[index] || '';
+                            const isCorrect = userAnswer.trim().toLowerCase() === q.answer.toLowerCase();
+                            
+                            let cardStateClass = '';
+                            if (isSubmitted) {
+                                cardStateClass = isCorrect ? 'correct' : 'incorrect';
+                            }
+
+                            return (
+                                <div key={`${batchNumber}-${index}`} className={`exercise-card ${cardStateClass}`}>
+                                    <div className="exercise-content">
+                                        <div className="sentence-box">
+                                            <span className="sentence-text">{q.q1}</span>
+                                            
+                                            <span className="verb-tag">({q.verb})</span>
+
+                                            <input 
+                                                type="text" 
+                                                className="hero-input"
+                                                value={userAnswer}
+                                                onChange={(e) => handleInputChange(index, e.target.value)}
+                                                disabled={isSubmitted}
+                                                placeholder="..."
+                                                autoCapitalize="none"
+                                                autoCorrect="off"
+                                            />
+
+                                            <span className="sentence-text">{q.q2}</span>
+                                        </div>
+
+                                        {isSubmitted && (
+                                            <div>
+                                                {isCorrect ? (
+                                                    <span style={{color: '#4ade80', fontWeight: 'bold', fontSize: '1.2rem', fontFamily: 'Lexend'}}>
+                                                        ✓ PERFECT
+                                                    </span>
+                                                ) : (
+                                                    <span style={{color: '#f87171', fontWeight: 'bold', fontSize: '1.15rem', fontFamily: 'Ubuntu Mono'}}>
+                                                        ✖ {q.answer}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+
+                    <div className="btn-container">
+                        <button className="hero-btn" onClick={handleSubmit}>
+                            {isSubmitted ? "NEXT MISSION >>" : "CHECK ANSWERS ⚡"}
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('app-root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

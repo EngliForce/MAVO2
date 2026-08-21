@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nebula Navigator | EngliForce Academy</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Lexend:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hero-purple-main: #7b2cbf;
+            --hero-purple-dark: #3c096c;
+            --hero-yellow: #ffb703;
+            --hero-cyan: #00f5d4;
+            --dark-bg: #05101a;
+            --hero-orange: #ff5722;
+            --hero-orange-dark: #bf360c;
+            --hero-green: #4caf50;
+            --hero-blue: #4361ee;
+            --hero-red: #d32f2f;
+        }
+
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: #05101a;
+            background: radial-gradient(circle at center, #1a102a 0%, #05101a 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        header {
+            background: var(--hero-orange);
+            padding: 2.5rem 1rem;
+            text-align: center;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            border-bottom: 5px solid var(--hero-yellow);
+        }
+
+        h1 {
+            font-family: 'Bangers', cursive;
+            font-size: 3.5rem;
+            letter-spacing: 3px;
+            margin: 0;
+            text-shadow: 4px 4px 0px var(--hero-orange-dark);
+            color: white;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            margin-top: 5px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 0;
+        }
+
+        .font-bangers {
+            font-family: 'Bangers', cursive;
+        }
+
+        /* Goed leesbare stijl voor het werkwoord */
+        .verb-target {
+            font-family: 'Lexend', sans-serif;
+            font-weight: 800;
+            color: var(--hero-yellow);
+            background: rgba(255, 183, 3, 0.15);
+            border: 2px solid var(--hero-yellow);
+            padding: 2px 12px;
+            border-radius: 8px;
+            letter-spacing: 1px;
+        }
+
+        .game-card {
+            background: rgba(26, 16, 42, 0.95);
+            border: 3px solid var(--hero-yellow);
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(255, 183, 3, 0.2);
+        }
+
+        .large-input {
+            background: #0d0718;
+            border: 2px solid var(--hero-purple-main);
+            color: white;
+            outline: none;
+            text-align: center;
+            width: 100%;
+            max-width: 600px;
+            padding: 15px;
+            font-size: 2rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-family: 'Lexend', sans-serif;
+        }
+
+        .large-input:focus {
+            border-color: var(--hero-cyan);
+            box-shadow: 0 0 15px rgba(0, 245, 212, 0.3);
+        }
+
+        .hero-btn {
+            background: var(--hero-purple-main);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 50px;
+            font-family: 'Bangers', cursive;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: 0.2s;
+            border-bottom: 5px solid var(--hero-purple-dark);
+        }
+
+        .hero-btn:hover {
+            transform: translateY(-3px);
+            background: var(--hero-blue);
+        }
+
+        footer {
+            background: #05101a;
+            color: rgba(255,255,255,0.8);
+            text-align: center;
+            padding: 30px 20px;
+            border-top: 2px solid var(--hero-purple-dark);
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🚀 NEBULA NAVIGATOR</h1>
+        <p>PAST CONTINUOUS GRAMMAR MISSION!</p>
+    </header>
+
+    <div id="root" class="flex-1 flex flex-col justify-center items-center py-8 px-4"></div>
+
+    <footer>
+        <div class="footer-text">&copy; 2026 EngliForce – <span style="color: var(--hero-yellow);">Make English Your Superpower!</span></div>
+    </footer>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        const MASTER_DATABASE = {
+            AFFIRMATIVE: [
+                { start: "She", end: "a book when I arrived.", verb: "read", full: "was reading", short: "was reading" },
+                { start: "We", end: "a movie at 8 o'clock last night.", verb: "watch", full: "were watching", short: "were watching" },
+                { start: "He", end: "football in the park yesterday.", verb: "play", full: "was playing", short: "was playing" },
+                { start: "I", end: "my homework at that moment.", verb: "do", full: "was doing", short: "was doing" },
+                { start: "They", end: "lunch when it started to rain.", verb: "have", full: "were having", short: "were having" },
+                { start: "Emma", end: "for her test all evening.", verb: "study", full: "was studying", short: "was studying" },
+                { start: "The cat", end: "on the sofa then.", verb: "sleep", full: "was sleeping", short: "was sleeping" },
+                { start: "James", end: "an email when the power went out.", verb: "write", full: "was writing", short: "was writing" },
+                { start: "We", end: "home when suddenly it snowed.", verb: "walk", full: "were walking", short: "were walking" },
+                { start: "You", end: "to music at 6 o'clock.", verb: "listen", full: "were listening", short: "were listening" }
+            ],
+            NEGATIVE: [
+                { start: "I", end: "TV at 9 o'clock.", verb: "not watch", full: "was not watching", short: "wasn't watching" },
+                { start: "She", end: "her homework at that moment.", verb: "not do", full: "was not doing", short: "wasn't doing" },
+                { start: "They", end: "football when it rained.", verb: "not play", full: "were not playing", short: "weren't playing" },
+                { start: "He", end: "to the teacher.", verb: "not listen", full: "was not listening", short: "wasn't listening" },
+                { start: "We", end: "breakfast at 7 o'clock.", verb: "not eat", full: "were not eating", short: "weren't eating" }
+            ],
+            QUESTIONS: [
+                { start: "___ you", end: "your homework at 8?", verb: "do", full: "Were doing", short: "Were doing" },
+                { start: "___ she", end: "a book when you came in?", verb: "read", full: "Was reading", short: "Was reading" },
+                { start: "___ they", end: "in the garden yesterday?", verb: "play", full: "Were playing", short: "Were playing" },
+                { start: "___ he", end: "TV at that moment?", verb: "watch", full: "Was watching", short: "Was watching" },
+                { start: "___ we", end: "lunch at 1 o'clock?", verb: "have", full: "Were having", short: "Were having" }
+            ]
+        };
+
+        const App = () => {
+            const [phase, setPhase] = useState('INTRO');
+            const [category, setCategory] = useState('AFFIRMATIVE');
+            const [distance, setDistance] = useState(0);
+            const [correctCount, setCorrectCount] = useState(0);
+            const [remainingWords, setRemainingWords] = useState([]);
+            const [currentQ, setCurrentQ] = useState(null);
+            const [input, setInput] = useState("");
+            const [feedback, setFeedback] = useState(null);
+
+            const totalQuestions = 10;
+
+            const startMission = (cat) => {
+                setCategory(cat);
+                let selectedList = cat === 'MIXED' 
+                    ? [...MASTER_DATABASE.AFFIRMATIVE, ...MASTER_DATABASE.NEGATIVE, ...MASTER_DATABASE.QUESTIONS] 
+                    : MASTER_DATABASE[cat];
+
+                const shuffled = [...selectedList].sort(() => Math.random() - 0.5).slice(0, totalQuestions);
+                
+                setDistance(0); 
+                setCorrectCount(0);
+                setRemainingWords(shuffled.slice(1));
+                setCurrentQ(shuffled[0]); 
+                setInput(""); 
+                setFeedback(null);
+                setPhase('GAME');
+            };
+
+            const handleAnswer = () => {
+                if (!input.trim() || feedback) return;
+                const userInput = input.toLowerCase().trim().replace(/’/g, "'");
+                const isCorrect = userInput === currentQ.full.toLowerCase() || userInput === currentQ.short.toLowerCase();
+
+                if (isCorrect) {
+                    setFeedback('SUCCESS');
+                    setDistance(d => d + 12500);
+                    setTimeout(() => {
+                        const nextCount = correctCount + 1;
+                        setCorrectCount(nextCount);
+                        if (nextCount >= totalQuestions) setPhase('SUMMARY');
+                        else {
+                            setCurrentQ(remainingWords[0]);
+                            setRemainingWords(remainingWords.slice(1));
+                            setFeedback(null); 
+                            setInput("");
+                        }
+                    }, 1200);
+                } else {
+                    setFeedback('FAIL');
+                    setTimeout(() => setFeedback(null), 2500);
+                }
+            };
+
+            return (
+                <div className="w-full max-w-4xl flex flex-col items-center">
+                    {phase === 'INTRO' && (
+                        <div className="text-center w-full">
+                            <h2 className="text-4xl font-bangers text-[var(--hero-yellow)] tracking-wider mb-2">KIES JE MISSIE SECTOR</h2>
+                            <p className="text-slate-300 mb-8 font-bold">Selecteer een oefenmodus en start de training!</p>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                                {[
+                                    { id: 'AFFIRMATIVE', name: 'Affirmative', sub: 'was/were + ing', border: 'border-cyan-400', color: 'text-cyan-400' },
+                                    { id: 'NEGATIVE', name: 'Negative', sub: "wasn't/weren't", border: 'border-pink-500', color: 'text-pink-400' },
+                                    { id: 'QUESTIONS', name: 'Questions', sub: 'Was/Were...?', border: 'border-amber-400', color: 'text-amber-400' },
+                                    { id: 'MIXED', name: 'Mixed Sector', sub: 'Alle vormen', border: 'border-purple-500', color: 'text-purple-400' }
+                                ].map((sec) => (
+                                    <button 
+                                        key={sec.id}
+                                        onClick={() => startMission(sec.id)} 
+                                        className={`p-6 bg-[#1a102a] border-2 ${sec.border} rounded-2xl hover:scale-105 transition-all text-left shadow-lg`}
+                                    >
+                                        <div className={`text-2xl font-bangers ${sec.color} mb-1`}>{sec.name}</div>
+                                        <div className="text-xs text-slate-400">{sec.sub}</div>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {phase === 'GAME' && (
+                        <div className="w-full p-8 rounded-3xl game-card text-center">
+                            <div className="flex justify-between items-center mb-6 font-bangers text-xl">
+                                <span className="text-[var(--hero-cyan)]">SECTOR: {category}</span>
+                                <span className="text-[var(--hero-yellow)]">SCORE: {correctCount}/{totalQuestions}</span>
+                                <span className="text-white">{distance.toLocaleString()} KM</span>
+                            </div>
+
+                            {!feedback ? (
+                                <div>
+                                    {/* AANGEPAST LETTERTYPE VOOR HET WERKWOORD */}
+                                    <div className="text-base text-slate-300 font-bold mb-4 flex items-center justify-center gap-2">
+                                        <span>Werkwoord:</span>
+                                        <span className="verb-target text-xl">({currentQ?.verb})</span>
+                                    </div>
+
+                                    <div className="text-2xl md:text-3xl font-bold my-8 leading-relaxed">
+                                        {currentQ?.start} <span className="text-[var(--hero-cyan)] border-b-2 border-dashed border-[var(--hero-cyan)] px-2">_______</span> {currentQ?.end}
+                                    </div>
+
+                                    <div className="flex flex-col items-center gap-4">
+                                        <input 
+                                            className="large-input"
+                                            placeholder="Type je antwoord..."
+                                            value={input}
+                                            onChange={(e) => setInput(e.target.value)}
+                                            onKeyDown={(e) => e.key === 'Enter' && handleAnswer()}
+                                            autoFocus
+                                            spellCheck="false"
+                                        />
+                                        <button onClick={handleAnswer} className="hero-btn mt-2">
+                                            AANVALLEN! 💥
+                                        </button>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="py-8">
+                                    <h2 className={`text-5xl font-bangers mb-4 ${feedback === 'SUCCESS' ? 'text-[var(--hero-cyan)]' : 'text-[var(--hero-red)]'}`}>
+                                        {feedback === 'SUCCESS' ? '💥 CRITICAL HIT!' : '🛡️ MISSED!'}
+                                    </h2>
+                                    {feedback === 'FAIL' && (
+                                        <div className="text-xl mt-4">
+                                            Juiste antwoord: <span className="text-[var(--hero-yellow)] font-bold">"{currentQ.full}"</span>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {phase === 'SUMMARY' && (
+                        <div className="w-full p-10 rounded-3xl game-card text-center">
+                            <h2 className="text-6xl font-bangers text-[var(--hero-yellow)] mb-2">VICTORY!</h2>
+                            <p className="text-xl mb-6">Voltooide Sector: {category}</p>
+                            <p className="text-3xl font-bangers text-[var(--hero-cyan)] mb-8">Totale Afstand: {distance.toLocaleString()} KM</p>
+
+                            <button onClick={() => setPhase('INTRO')} className="hero-btn">
+                                KIES NIEUWE MISSIE
+                            </button>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
