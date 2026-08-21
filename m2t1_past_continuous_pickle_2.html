@@ -34,6 +34,37 @@
             flex-direction: column;
         }
 
+        /* Top Airport Marquee / Split-Flap Ticker */
+        .airport-ticker {
+            background-color: #030a12;
+            border-bottom: 2px solid var(--hero-yellow);
+            color: #ffb703;
+            font-family: 'Ubuntu Mono', monospace;
+            font-size: 1.1rem;
+            padding: 10px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .ticker-track {
+            display: inline-block;
+            white-space: nowrap;
+            animation: airportScroll 35s linear infinite;
+        }
+
+        .ticker-item {
+            display: inline-block;
+            margin-right: 50px;
+        }
+
+        @keyframes airportScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
         header {
             background: var(--hero-orange-main);
             padding: 2.5rem 1rem;
@@ -79,7 +110,6 @@
             text-align: center; 
         }
 
-        /* Briefing Box */
         .briefing-box {
             background: rgba(255, 112, 67, 0.1);
             border: 2px dashed var(--hero-orange-main);
@@ -145,24 +175,56 @@
             }
         }
 
-        /* Goed leesbare zinsstructuur met ruime afstand */
         .sentence-box {
             display: flex;
             align-items: center;
             flex-wrap: wrap;
-            gap: 12px; 
+            gap: 8px; 
             font-size: 1.25rem;
             font-weight: 500;
             line-height: 1.8;
             color: #ffffff;
         }
 
-        .sentence-text {
-            color: #f8fafc;
-            letter-spacing: 0.5px;
+        /* Airport Flap Text Effect */
+        .split-flap-text {
+            display: inline-flex;
+            gap: 2px;
+            font-family: 'Ubuntu Mono', monospace;
         }
 
-        /* Zeer duidelijk werkwoord */
+        .flap-char {
+            display: inline-block;
+            background: #05101a;
+            color: #ffffff;
+            padding: 2px 5px;
+            border-radius: 4px;
+            border: 1px solid #243b53;
+            box-shadow: inset 0 -2px 0 rgba(0,0,0,0.5);
+            font-weight: 700;
+            min-width: 12px;
+            text-align: center;
+        }
+
+        .flap-char.space {
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            padding: 0 2px;
+        }
+
+        .flap-char.flipping {
+            animation: flipAnimation 0.15s ease-in-out infinite alternate;
+            color: var(--hero-yellow);
+            border-color: var(--hero-yellow);
+        }
+
+        @keyframes flipAnimation {
+            0% { transform: rotateX(0deg); opacity: 1; }
+            50% { transform: rotateX(90deg); opacity: 0.3; }
+            100% { transform: rotateX(0deg); opacity: 1; }
+        }
+
         .verb-tag {
             color: var(--hero-yellow);
             font-family: 'Ubuntu Mono', monospace;
@@ -175,7 +237,6 @@
             white-space: nowrap;
         }
 
-        /* Hero Invoerveld */
         input.hero-input {
             background: #05101a;
             border: 2px solid var(--card-border);
@@ -196,7 +257,6 @@
             box-shadow: 0 0 12px var(--hero-orange-glow);
         }
 
-        /* Hero Action Knop */
         .btn-container {
             text-align: center;
             margin-top: 30px;
@@ -235,6 +295,22 @@
 </head>
 <body>
 
+    <!-- Airport Scrolling Flight Board Banner -->
+    <div class="airport-ticker">
+        <div class="ticker-track">
+            <span class="ticker-item">✈ FLIGHT EF101 TO LONDON - BOARDING AT GATE 4</span>
+            <span class="ticker-item">✈ FLIGHT KL402 TO NEW YORK - DELAYED</span>
+            <span class="ticker-item">✈ FLIGHT LH889 TO BERLIN - NOW BOARDING</span>
+            <span class="ticker-item">✈ FLIGHT AF304 TO PARIS - GATE CHANGED TO B12</span>
+            <span class="ticker-item">✈ FLIGHT BA902 TO TOKYO - FINAL CALL</span>
+            <span class="ticker-item">✈ FLIGHT EF101 TO LONDON - BOARDING AT GATE 4</span>
+            <span class="ticker-item">✈ FLIGHT KL402 TO NEW YORK - DELAYED</span>
+            <span class="ticker-item">✈ FLIGHT LH889 TO BERLIN - NOW BOARDING</span>
+            <span class="ticker-item">✈ FLIGHT AF304 TO PARIS - GATE CHANGED TO B12</span>
+            <span class="ticker-item">✈ FLIGHT BA902 TO TOKYO - FINAL CALL</span>
+        </div>
+    </div>
+
     <header>
         <h1>ENGLIFORCE ACADEMY</h1>
         <p>MISSION: PAST CONTINUOUS POWER</p>
@@ -254,27 +330,215 @@
         const { useState, useEffect, useCallback } = React;
 
         const MASTER_DATABASE = [
+            // --- 50 AFFIRMATIVE SENTENCES ---
             { verb: "wait", q1: "The passengers", q2: "at Gate 7 when the alarm rang.", answer: "were waiting" },
             { verb: "check in", q1: "Sophie", q2: "her luggage at 3 PM.", answer: "was checking in" },
             { verb: "fly", q1: "The pilot", q2: "above the clouds during the storm.", answer: "was flying" },
-            { verb: "not land", q1: "Flight UA20", q2: "due to heavy fog.", answer: "was not landing" },
             { verb: "have", q1: "We", q2: "lunch in the VIP lounge.", answer: "were having" },
             { verb: "wear", q1: "The crew members", q2: "their new uniforms.", answer: "were wearing" },
             { verb: "run", q1: "They", q2: "to catch the final shuttle.", answer: "were running" },
             { verb: "get", q1: "It", q2: "late for our connection flight.", answer: "was getting" },
             { verb: "take off", q1: "The aircraft", q2: "from runway 4 at noon.", answer: "was taking off" },
-            { verb: "fix", q1: "Engineers", q2: "the technical issue.", answer: "were fixing" },
+            { verb: "fix", q1: "Engineers", q2: "the technical issue.", answer: "was fixing" },
             { verb: "talk", q1: "The ground staff", q2: "to the captain.", answer: "was talking" },
             { verb: "drink", q1: "The tourists", q2: "orange juice at the bar.", answer: "were drinking" },
             { verb: "read", q1: "A woman", q2: "a book about London.", answer: "was reading" },
             { verb: "buy", q1: "We", q2: "some snacks for the flight.", answer: "were buying" },
             { verb: "sit", q1: "The children", q2: "on their suitcases.", answer: "were sitting" },
-            { verb: "not use", q1: "The pilots", q2: "autopilot during landing.", answer: "were not using" },
             { verb: "make", q1: "The stewardess", q2: "an important announcement.", answer: "was making" },
             { verb: "sleep", q1: "He", q2: "on the terminal bench.", answer: "was sleeping" },
             { verb: "work", q1: "I", q2: "at the information desk yesterday.", answer: "was working" },
-            { verb: "not listen", q1: "You", q2: "to the safety instructions!", answer: "were not listening" }
+            { verb: "charge", q1: "She", q2: "her phone near the gate.", answer: "was charging" },
+            { verb: "look", q1: "They", q2: "for their passports in the bag.", answer: "were looking" },
+            { verb: "clean", q1: "The team", q2: "the airplane cabin.", answer: "was cleaning" },
+            { verb: "board", q1: "Passengers", q2: "the plane very quickly.", answer: "were boarding" },
+            { verb: "carry", q1: "The porter", q2: "heavy bags to the taxi.", answer: "was carrying" },
+            { verb: "listen", q1: "I", q2: "to music while waiting.", answer: "was listening" },
+            { verb: "shine", q1: "The sun", q2: "over the airport runway.", answer: "was shining" },
+            { verb: "drive", q1: "The bus driver", q2: "us to Terminal 2.", answer: "was driving" },
+            { verb: "search", q1: "Security staff", q2: "the suspicious package.", answer: "was searching" },
+            { verb: "prepare", q1: "The chefs", q2: "in-flight meals.", answer: "were preparing" },
+            { verb: "show", q1: "The agent", q2: "us the way to the gate.", answer: "was showing" },
+            { verb: "stand", q1: "Many people", q2: "in line for security.", answer: "were standing" },
+            { verb: "pack", q1: "Tom", q2: "his last-minute items.", answer: "was packing" },
+            { verb: "travel", q1: "My parents", q2: "across Europe by air.", answer: "were traveling" },
+            { verb: "watch", q1: "We", q2: "the planes land on the strip.", answer: "were watching" },
+            { verb: "write", q1: "The officer", q2: "a flight report.", answer: "was writing" },
+            { verb: "call", q1: "The manager", q2: "the maintenance crew.", answer: "was calling" },
+            { verb: "inspect", q1: "Technicians", q2: "the plane wings.", answer: "were inspecting" },
+            { verb: "guide", q1: "The marshal", q2: "the jet to its parking spot.", answer: "was guiding" },
+            { verb: "hold", q1: "She", q2: "her boarding pass tightly.", answer: "was holding" },
+            { verb: "print", q1: "The machine", q2: "our baggage tags.", answer: "was printing" },
+            { verb: "eat", q1: "They", q2: "sandwiches before boarding.", answer: "were eating" },
+            { verb: "walk", q1: "The crew", q2: "through the departure hall.", answer: "was walking" },
+            { verb: "pay", q1: "He", q2: "for excess luggage fees.", answer: "was paying" },
+            { verb: "help", q1: "The assistant", q2: "an elderly traveler.", answer: "was helping" },
+            { verb: "store", q1: "We", q2: "our carry-on bags in the bin.", answer: "were storing" },
+            { verb: "enjoy", q1: "Passengers", q2: "the movie on board.", answer: "were enjoying" },
+            { verb: "land", q1: "The aircraft", q2: "safely on runway 1.", answer: "was landing" },
+            { verb: "wave", q1: "Family members", q2: "goodbye from the window.", answer: "were waving" },
+            { verb: "check", q1: "The agent", q2: "our visas at customs.", answer: "was checking" },
+            { verb: "pour", q1: "The flight attendant", q2: "hot coffee for us.", answer: "was pouring" },
+            { verb: "plan", q1: "They", q2: "their holiday route on the map.", answer: "were planning" },
+            { verb: "rest", q1: "The co-pilot", q2: "before the long flight.", answer: "was resting" },
+
+            // --- 50 NEGATIVE SENTENCES ---
+            { verb: "not land", q1: "Flight UA20", q2: "due to heavy fog.", answer: "was not landing" },
+            { verb: "not use", q1: "The pilots", q2: "autopilot during landing.", answer: "were not using" },
+            { verb: "not listen", q1: "You", q2: "to the safety instructions!", answer: "were not listening" },
+            { verb: "not sleep", q1: "I", q2: "well on the night flight.", answer: "was not sleeping" },
+            { verb: "not work", q1: "The escalator", q2: "this morning.", answer: "was not working" },
+            { verb: "not pay", q1: "They", q2: "attention to the gate change.", answer: "were not paying" },
+            { verb: "not wear", q1: "He", q2: "his seatbelt when turbulence hit.", answer: "was not wearing" },
+            { verb: "not carry", q1: "She", q2: "any liquids in her hand luggage.", answer: "was not carrying" },
+            { verb: "not fly", q1: "The helicopters", q2: "because of the high winds.", answer: "were not flying" },
+            { verb: "not respond", q1: "The terminal screen", q2: "to touch inputs.", answer: "was not responding" },
+            { verb: "not wait", q1: "We", q2: "in the right queue.", answer: "were not waiting" },
+            { verb: "not rain", q1: "It", q2: "when we reached the airport.", answer: "was not raining" },
+            { verb: "not feeling", q1: "The captain", q2: "well before takeoff.", answer: "was not feeling" },
+            { verb: "not look", q1: "The guard", q2: "at the scanner screen.", answer: "was not looking" },
+            { verb: "not talk", q1: "The passengers", q2: "to each other.", answer: "were not talking" },
+            { verb: "not run", q1: "She", q2: "fast enough to make the flight.", answer: "was not running" },
+            { verb: "not open", q1: "The duty-free shop", q2: "at 5 AM.", answer: "was not opening" },
+            { verb: "not move", q1: "The luggage carousel", q2: "for twenty minutes.", answer: "was not moving" },
+            { verb: "not eat", q1: "I", q2: "the airplane food.", answer: "was not eating" },
+            { verb: "not follow", q1: "They", q2: "the signs to exit 4.", answer: "were not following" },
+            { verb: "not wear", q1: "The ground crew", q2: "ear protection.", answer: "were not wearing" },
+            { verb: "not seat", q1: "The staff", q2: "passengers in group A yet.", answer: "was not seating" },
+            { verb: "not check", q1: "He", q2: "his email before boarding.", answer: "was not checking" },
+            { verb: "not shine", q1: "The sun", q2: "during our arrival.", answer: "was not shining" },
+            { verb: "not charge", q1: "My laptop", q2: "at the power station.", answer: "was not charging" },
+            { verb: "not accept", q1: "They", q2: "cash at the terminal cafe.", answer: "were not accepting" },
+            { verb: "not smile", q1: "The officer", q2: "at the passengers.", answer: "was not smiling" },
+            { verb: "not record", q1: "The camera", q2: "the main runway.", answer: "was not recording" },
+            { verb: "not smoke", q1: "Nobody", q2: "in the designated lounge.", answer: "was not smoking" },
+            { verb: "not hurry", q1: "We", q2: "because the flight was delayed.", answer: "were not hurrying" },
+            { verb: "not sit", q1: "The travelers", q2: "in their assigned seats.", answer: "were not sitting" },
+            { verb: "not make", q1: "The announcement system", q2: "any clear sounds.", answer: "was not making" },
+            { verb: "not clean", q1: "They", q2: "the seats fast enough.", answer: "were not cleaning" },
+            { verb: "not board", q1: "The gate staff", q2: "the late passengers.", answer: "was not boarding" },
+            { verb: "not complain", q1: "The tourists", q2: "about the small delay.", answer: "were not complaining" },
+            { verb: "not buy", q1: "I", q2: "duty-free items today.", answer: "was not buying" },
+            { verb: "not park", q1: "The taxi", q2: "in the correct zone.", answer: "was not parking" },
+            { verb: "not expect", q1: "We", q2: "such a long security queue.", answer: "were not expecting" },
+            { verb: "not drive", q1: "The shuttle driver", q2: "too fast.", answer: "was not driving" },
+            { verb: "not leave", q1: "The plane", q2: "the gate on schedule.", answer: "was not leaving" },
+            { verb: "not bring", q1: "She", q2: "her jacket on board.", answer: "was not bringing" },
+            { verb: "not show", q1: "The screens", q2: "the correct departure time.", answer: "were not showing" },
+            { verb: "not drink", q1: "He", q2: "water during the flight.", answer: "was not drinking" },
+            { verb: "not lose", q1: "The airline", q2: "bags as frequently.", answer: "was not losing" },
+            { verb: "not operate", q1: "They", q2: "flights to Rome today.", answer: "were not operating" },
+            { verb: "not wear", q1: "I", q2: "comfortable shoes for travel.", answer: "was not wearing" },
+            { verb: "not scan", q1: "The machine", q2: "our barcodes properly.", answer: "was not scanning" },
+            { verb: "not rest", q1: "The flight attendants", q2: "during the short hop.", answer: "were not resting" },
+            { verb: "not enjoy", q1: "The child", q2: "the noisy flight.", answer: "was not enjoying" },
+            { verb: "not stop", q1: "The rain", q2: "over the airport.", answer: "was not stopping" },
+
+            // --- 50 INTERROGATIVE SENTENCES (Fully open input: Was/Were + Verb-ing) ---
+            { verb: "wait", q1: "", q2: "the family waiting at the wrong boarding gate?", answer: "Was" },
+            { verb: "fly", q1: "", q2: "the birds flying near the airplane engines?", answer: "Were" },
+            { verb: "sleep", q1: "", q2: "the baby sleeping during the entire flight?", answer: "Was" },
+            { verb: "check", q1: "", q2: "you checking your flight status online?", answer: "Were" },
+            { verb: "sit", q1: "", q2: "she sitting next to the window on the plane?", answer: "Was" },
+            { verb: "talk", q1: "", q2: "they talking about their holiday plans?", answer: "Were" },
+            { verb: "read", q1: "", q2: "he reading the safety card in front of him?", answer: "Was" },
+            { verb: "listen", q1: "", q2: "you listening to the pilot's announcement?", answer: "Were" },
+            { verb: "drink", q1: "", q2: "the traveler drinking coffee in the lounge?", answer: "Was" },
+            { verb: "wear", q1: "", q2: "all passengers wearing their seatbelts properly?", answer: "Were" },
+            { verb: "look", q1: "", q2: "she looking for her misplaced passport?", answer: "Was" },
+            { verb: "run", q1: "", q2: "they running through the airport terminal?", answer: "Were" },
+            { verb: "take off", q1: "", q2: "the plane taking off when the thunder started?", answer: "Was" },
+            { verb: "work", q1: "", q2: "engineers working on the aircraft engine?", answer: "Were" },
+            { verb: "carry", q1: "", q2: "he carrying too much hand luggage?", answer: "Was" },
+            { verb: "eat", q1: "", q2: "you eating breakfast at the airport cafe?", answer: "Were" },
+            { verb: "drive", q1: "", q2: "the chauffeur driving them directly to Terminal 1?", answer: "Was" },
+            { verb: "charge", q1: "", q2: "they charging their laptops before takeoff?", answer: "Were" },
+            { verb: "stand", q1: "", q2: "everyone standing in line for customs check?", answer: "Was" },
+            { verb: "shine", q1: "", q2: "the sun shining brightly when you landed?", answer: "Was" },
+            { verb: "buy", q1: "", q2: "you buying perfume at the duty-free store?", answer: "Were" },
+            { verb: "search", q1: "", q2: "security searching your checked luggage?", answer: "Was" },
+            { verb: "pack", q1: "", q2: "they packing their bags late last night?", answer: "Were" },
+            { verb: "board", q1: "", q2: "the crew boarding the first class section?", answer: "Was" },
+            { verb: "inspect", q1: "", q2: "technicians inspecting the landing gear?", answer: "Were" },
+            { verb: "make", q1: "", q2: "the captain making a speech to the crew?", answer: "Was" },
+            { verb: "travel", q1: "", q2: "you traveling alone or with a group?", answer: "Were" },
+            { verb: "enjoy", q1: "", q2: "the child enjoying the flight simulator?", answer: "Was" },
+            { verb: "call", q1: "", q2: "they calling your name over the loudspeaker?", answer: "Were" },
+            { verb: "show", q1: "", q2: "the agent showing you the seat map?", answer: "Was" },
+            { verb: "clean", q1: "", q2: "staff members cleaning the gate seating area?", answer: "Were" },
+            { verb: "get", q1: "", q2: "it getting dark when the plane arrived?", answer: "Was" },
+            { verb: "pour", q1: "", q2: "the stewardess pouring apple juice for you?", answer: "Was" },
+            { verb: "hold", q1: "", q2: "you holding the wrong boarding pass?", answer: "Were" },
+            { verb: "pay", q1: "", q2: "he paying for the extra baggage allowance?", answer: "Was" },
+            { verb: "guide", q1: "", q2: "ground vehicles guiding the taxiing airplane?", answer: "Were" },
+            { verb: "print", q1: "", q2: "the kiosk printing your tickets correctly?", answer: "Was" },
+            { verb: "wave", q1: "", q2: "people waving from the observation deck?", answer: "Were" },
+            { verb: "land", q1: "", q2: "the jet landing during the heavy windstorm?", answer: "Was" },
+            { verb: "rest", q1: "", q2: "the pilots resting during the layover?", answer: "Were" },
+            { verb: "plan", q1: "", q2: "the family planning a trip to North America?", answer: "Was" },
+            { verb: "store", q1: "", q2: "passengers storing their coats above?", answer: "Were" },
+            { verb: "help", q1: "", q2: "someone helping you with that heavy bag?", answer: "Was" },
+            { verb: "walk", q1: "", q2: "they walking towards the arrivals hall?", answer: "Were" },
+            { verb: "complain", q1: "", q2: "the passenger complaining about the seat size?", answer: "Was" },
+            { verb: "prepare", q1: "", q2: "chefs preparing fresh meals for business class?", answer: "Were" },
+            { verb: "scan", q1: "", q2: "the guard scanning your passport again?", answer: "Was" },
+            { verb: "park", q1: "", q2: "the taxi parking in the drop-off zone?", answer: "Was" },
+            { verb: "hurry", q1: "", q2: "you hurrying because of the final call?", answer: "Were" },
+            { verb: "record", q1: "", q2: "the system recording the flight telemetry?", answer: "Was" }
         ];
+
+        // Component to render text with an animated airport split-flap letter effect
+        const SplitFlapText = ({ text }) => {
+            const [displayText, setDisplayText] = useState('');
+            const [isFlipping, setIsFlipping] = useState(true);
+
+            useEffect(() => {
+                if (!text) {
+                    setDisplayText('');
+                    setIsFlipping(false);
+                    return;
+                }
+
+                setIsFlipping(true);
+                let iteration = 0;
+                const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                
+                const interval = setInterval(() => {
+                    setDisplayText(
+                        text.split("").map((char, index) => {
+                            if (char === " ") return " ";
+                            if (index < iteration) {
+                                return text[index];
+                            }
+                            return chars[Math.floor(Math.random() * chars.length)];
+                        }).join("")
+                    );
+
+                    if (iteration >= text.length) {
+                        clearInterval(interval);
+                        setIsFlipping(false);
+                    }
+                    iteration += 1 / 2;
+                }, 30);
+
+                return () => clearInterval(interval);
+            }, [text]);
+
+            if (!text) return null;
+
+            return (
+                <span className="split-flap-text">
+                    {displayText.split("").map((char, index) => (
+                        <span 
+                            key={index} 
+                            className={`flap-char ${char === " " ? "space" : ""} ${isFlipping && char !== " " ? "flipping" : ""}`}
+                        >
+                            {char}
+                        </span>
+                    ))}
+                </span>
+            );
+        };
 
         const App = () => {
             const [currentQuestions, setCurrentQuestions] = useState([]);
@@ -334,7 +598,12 @@
                         <h2 className="section-title">
                             ⚡ MISSION BRIEFING #{batchNumber}
                         </h2>
-                        <p>Complete the terminal status using the <span className="badge">PAST CONTINUOUS</span> (was/were + verb-ing).</p>
+                        <p>
+                            Complete the flight log with the <span className="badge">PAST CONTINUOUS</span>.
+                        </p>
+                        <p style={{fontSize: '0.95rem', color: '#ffb703'}}>
+                            💡 Always write <b>was / were</b> + verb (-ing) — including capital letters for Questions!
+                        </p>
                     </div>
 
                     <div className="exercises-container">
@@ -351,7 +620,7 @@
                                 <div key={`${batchNumber}-${index}`} className={`exercise-card ${cardStateClass}`}>
                                     <div className="exercise-content">
                                         <div className="sentence-box">
-                                            <span className="sentence-text">{q.q1}</span>
+                                            {q.q1 && <SplitFlapText text={q.q1} />}
                                             
                                             <span className="verb-tag">({q.verb})</span>
 
@@ -366,7 +635,7 @@
                                                 autoCorrect="off"
                                             />
 
-                                            <span className="sentence-text">{q.q2}</span>
+                                            {q.q2 && <SplitFlapText text={q.q2} />}
                                         </div>
 
                                         {isSubmitted && (
