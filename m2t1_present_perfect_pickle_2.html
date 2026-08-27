@@ -1,0 +1,553 @@
+<!DOCTYPE html><html lang="nl"><head>    <meta charset="UTF-8">    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>EngliForce Mega Typ-Quiz: Present Perfect</title>    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Lexend:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">    <style>
+        :root {
+            --hero-orange-main: #ff7043;
+            --hero-orange-dark: #e65c30;
+            --hero-purple-main: #7b2cbf;
+            --hero-purple-dark: #3c096c;
+            --hero-yellow: #ffb703;
+            --hero-cyan: #00f5d4;
+            --dark-bg: #05101a;
+            --hero-orange: #ff5722;
+            --hero-green: #4caf50;
+            --hero-blue: #4361ee;
+            --hero-red: #d32f2f;
+            --wa-bg: #0b141a;
+            --wa-bubble-in: #202c33;
+            --wa-bubble-out: #005c4b;
+        }
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: radial-gradient(circle at center, #1a102a 0%, #05101a 100%);
+            color: white;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background: var(--hero-orange-main);
+            padding: 2.5rem 1rem;
+            text-align: center;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            border-bottom: 5px solid var(--hero-yellow);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            color: white;
+        }
+        header h1 {
+            font-family: 'Bangers', cursive;
+            font-size: 3.5rem;
+            letter-spacing: 3px;
+            margin: 0;
+            text-shadow: 4px 4px 0px var(--hero-orange-dark);
+        }
+        header p {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: white;
+        }
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .quiz-container {
+            width: 100%;
+            max-width: 700px;
+            background: rgba(26, 16, 42, 0.9);
+            border: 3px solid var(--hero-blue);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.7);
+            margin-top: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+        .subtitle {
+            text-align: center;
+            color: var(--hero-cyan);
+            font-family: 'Bangers', cursive;
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
+        }
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+        }
+        .score-box {
+            color: var(--hero-yellow);
+            font-weight: bold;
+        }
+        #chat-window {
+            flex: 1;
+            background: var(--wa-bg);
+            background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
+            background-blend-mode: overlay;
+            border-radius: 10px;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #333;
+            min-height: 300px;
+            max-height: 380px;
+        }
+        .bubble {
+            max-width: 85%;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 1rem;
+            line-height: 1.4;
+            position: relative;
+            animation: slideUp 0.3s ease-out;
+        }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .bubble-in { background: var(--wa-bubble-in); align-self: flex-start; border-bottom-left-radius: 2px; color: #e9edef; }
+        .bubble-out { background: var(--wa-bubble-out); align-self: flex-end; border-bottom-right-radius: 2px; color: #fff; }
+        .sender { color: var(--hero-cyan); font-size: 0.8rem; font-weight: bold; display: block; margin-bottom: 4px; font-family: 'Share Tech Mono', monospace; }
+        .type-area {
+            display: flex;
+            gap: 10px;
+            background: rgba(0,0,0,0.4);
+            padding: 10px;
+            border-radius: 30px;
+            align-items: center;
+            border: 1px solid var(--hero-purple-main);
+        }
+        .text-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            font-size: 1.1rem;
+            font-family: 'Lexend', sans-serif;
+            outline: none;
+        }
+        .text-input:disabled {
+            opacity: 0.5;
+        }
+        .action-btn {
+            width: 100%;
+            background: var(--hero-orange);
+            color: white;
+            border: none;
+            border-bottom: 5px solid #e64a19;
+            padding: 15px;
+            font-family: 'Bangers', cursive;
+            font-size: 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: 0.1s;
+        }
+        .action-btn:active {
+            transform: translateY(3px);
+            border-bottom-width: 2px;
+        }
+        .check-btn {
+            background: #00a884;
+            border-bottom-color: #008f6f;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            padding: 0;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .result-screen {
+            text-align: center;
+            display: none;
+        }
+        .result-title {
+            font-family: 'Bangers', cursive;
+            font-size: 3rem;
+            color: var(--hero-yellow);
+            margin-bottom: 20px;
+        }
+        .final-score {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        .recap-box {
+            text-align: left;
+            margin-top: 20px;
+            max-height: 250px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .recap-item {
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed rgba(255,255,255,0.2);
+            font-size: 0.95rem;
+        }
+        .recap-q { font-weight: bold; color: var(--hero-cyan); }
+        .recap-given { color: var(--hero-red); }
+        .recap-correct { color: var(--hero-green); font-weight: bold; }
+        footer {
+            text-align: center;
+            opacity: 0.5;
+            padding: 40px 0 20px 0;
+            font-size: 0.9rem;
+        }
+        .flash-effect { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; opacity: 0; pointer-events: none; z-index: 1999; }
+        .shake { animation: shake 0.2s ease-in-out; }
+        @keyframes shake { 0%, 100% { transform: translate(0,0); } 25% { transform: translate(-5px, 5px); } 50% { transform: translate(5px, -5px); } }
+    </style></head><body>
+    <div class="flash-effect" id="flash"></div>
+    <header>
+        <h1>ENGLIFORCE ACADEMY</h1>
+        <p>PRESENT PERFECT INTERCEPTOR ⏳</p>    </header>
+    <main>
+        <div class="quiz-container">
+            <div id="screen-intro" style="text-align: center;">
+                <div class="subtitle">🚨 WHATSAPP INTERCEPTOR</div>
+                <p style="font-size: 1.2rem;">Agent, decode the message by typing the correct <strong>Present Perfect</strong> form (including <em>have/has</em> and questions/negatives where applicable)!</p>
+                <p style="color: var(--hero-cyan);">Rule: Type the full verb form (e.g., "has corrected" or "have not watched")!</p>
+                <button class="action-btn" onclick="startGame()">START MISSION</button>
+            </div>
+            <div id="quiz-screen" style="display: none;">
+                <div class="status-bar">
+                    <span id="question-number">Missie: 1 / 10</span>
+                    <span class="score-box" id="score-display">⚡ Score: 0</span>
+                </div>
+                <div id="chat-window"></div>
+                <div class="type-area">
+                    <input type="text" id="user-answer" class="text-input" placeholder="Typ de werkwoordsvorm..." autocomplete="off" autocapitalize="none" autocorrect="off">
+                    <button class="action-btn check-btn" id="check-btn" onclick="checkAnswer()">➤</button>
+                </div>
+            </div>
+            <div id="result-screen" class="result-screen">
+                <div class="result-title" id="result-title">MISSIE VOLBRACHT!</div>
+                <div class="final-score" id="final-score">Jouw score: 0 / 10</div>
+                <p id="result-comment">Ben jij de nieuwe Master of Time?</p>
+                <div id="recap-container" class="recap-box" style="display: none;"></div>
+                <button class="action-btn" onclick="restartQuiz()">SPEEL NOG EEN RONDE (NIEUWE VRAGEN!)</button>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2026 EngliForce – Make English Your Superpower!</p>    </footer>
+<script>
+    const masterQuestionDatabase = [
+        // --- 50 BEVESTIGENDE ZINNEN (AFFIRMATIVE) ---
+        { q: "Mister Sebel (correct) ___ the test already.", a: ["has corrected"] },
+        { q: "Agent Smith (watch) ___ the base.", a: ["has watched"] },
+        { q: "Miss Lane (call) ___ the boss.", a: ["has called"] },
+        { q: "The robot (carry) ___ the heavy suitcase.", a: ["has carried"] },
+        { q: "The guards (close) ___ the main gate.", a: ["have closed"] },
+        { q: "Iker (play) ___ football in the garden.", a: ["has played"] },
+        { q: "The students (visit) ___ the museum.", a: ["have visited"] },
+        { q: "My father (wash) ___ the car.", a: ["has washed"] },
+        { q: "Miss Parker (open) ___ the secret safe.", a: ["has opened"] },
+        { q: "Those men (climb) ___ over the wall.", a: ["have climbed"] },
+        { q: "The tech expert (fix) ___ the laser.", a: ["has fixed"] },
+        { q: "The Queen (visit) ___ the park.", a: ["has visited"] },
+        { q: "The general (start) ___ the attack.", a: ["has started"] },
+        { q: "The driver (stop) ___ the car at the light.", a: ["has stopped"] },
+        { q: "The chef (cook) ___ a delicious dinner.", a: ["has cooked"] },
+        { q: "The thief (drop) ___ the stolen bag.", a: ["has dropped"] },
+        { q: "The mechanic (repair) ___ the van.", a: ["has repaired"] },
+        { q: "The artist (paint) ___ a beautiful picture.", a: ["has painted"] },
+        { q: "The actor (learn) ___ all his lines.", a: ["has learned", "has learnt"] },
+        { q: "The team (enjoy) ___ their great victory.", a: ["has enjoyed", "have enjoyed"] },
+        { q: "The audience (clap) ___ very loud.", a: ["have clapped", "has clapped"] },
+        { q: "The dancer (dance) ___ on the stage.", a: ["has danced"] },
+        { q: "The student (pass) ___ the difficult exam.", a: ["has passed"] },
+        { q: "The teacher (explain) ___ the grammar rule.", a: ["has explained"] },
+        { q: "The doctor (help) ___ the sick patient.", a: ["has helped"] },
+        { q: "The police officer (arrest) ___ the thief.", a: ["has arrested"] },
+        { q: "The firefighter (stop) ___ the big fire.", a: ["has stopped"] },
+        { q: "The pilot (land) ___ the plane safely.", a: ["has landed"] },
+        { q: "The sailor (cross) ___ the wild sea.", a: ["has crossed"] },
+        { q: "The driver (turn) ___ left at the corner.", a: ["has turned"] },
+        { q: "The passenger (wait) ___ for the bus.", a: ["has waited"] },
+        { q: "The player (score) ___ a great goal.", a: ["has scored"] },
+        { q: "The coach (shout) ___ at the referee.", a: ["has shouted"] },
+        { q: "The runner (finish) ___ the long race.", a: ["has finished"] },
+        { q: "The climber (reach) ___ the top.", a: ["has reached"] },
+        { q: "The hiker (walk) ___ through the woods.", a: ["has walked"] },
+        { q: "The builder (mix) ___ the cement.", a: ["has mixed"] },
+        { q: "The gardener (plant) ___ the new seeds.", a: ["has planted"] },
+        { q: "The hunter (watch) ___ the quiet forest.", a: ["has watched"] },
+        { q: "The soldier (march) ___ all day long.", a: ["has marched"] },
+        { q: "The princess (brush) ___ her long hair.", a: ["has brushed"] },
+        { q: "The ghost (scare) ___ the little kids.", a: ["has scared"] },
+        { q: "The heavy rain (stop) ___ now.", a: ["has stopped"] },
+        { q: "The storm (destroy) ___ the old tree.", a: ["has destroyed"] },
+        { q: "The hot water (boil) ___.", a: ["has boiled"] },
+        { q: "The light (flicker) ___ in the room.", a: ["has flickered"] },
+        { q: "The kids (shout) ___ with joy.", a: ["have shouted"] },
+        { q: "The friend (help) ___ us with work.", a: ["has helped"] },
+        { q: "The mother (tidy) ___ the whole house.", a: ["has tidied"] },
+        { q: "The boy (kick) ___ the ball away.", a: ["has kicked"] },
+
+        // --- 50 ONTKENNENDE ZINNEN (NEGATIVE) ---
+        { q: "Mister Sebel (not correct) ___ the test yet.", a: ["hasn't corrected", "has not corrected"] },
+        { q: "Agent Smith (not watch) ___ the base.", a: ["hasn't watched", "has not watched"] },
+        { q: "Miss Lane (not call) ___ the boss.", a: ["hasn't called", "has not called"] },
+        { q: "The robot (not carry) ___ the suitcase.", a: ["hasn't carried", "has not carried"] },
+        { q: "The guards (not close) ___ the main gate.", a: ["haven't closed", "have not closed"] },
+        { q: "Iker (not play) ___ football today.", a: ["hasn't played", "has not played"] },
+        { q: "The students (not visit) ___ the museum.", a: ["haven't visited", "have not visited"] },
+        { q: "My father (not wash) ___ the car.", a: ["hasn't washed", "has not washed"] },
+        { q: "Miss Parker (not open) ___ the safe.", a: ["hasn't opened", "has not opened"] },
+        { q: "Those men (not climb) ___ over the wall.", a: ["haven't climbed", "have not climbed"] },
+        { q: "The tech expert (not fix) ___ the laser.", a: ["hasn't fixed", "has not fixed"] },
+        { q: "The Queen (not visit) ___ the park.", a: ["hasn't visited", "has not visited"] },
+        { q: "The general (not start) ___ the attack.", a: ["hasn't started", "has not started"] },
+        { q: "The driver (not stop) ___ at the light.", a: ["hasn't stopped", "has not stopped"] },
+        { q: "The chef (not cook) ___ dinner.", a: ["hasn't cooked", "has not cooked"] },
+        { q: "The thief (not drop) ___ the bag.", a: ["hasn't dropped", "has not dropped"] },
+        { q: "The mechanic (not repair) ___ the van.", a: ["hasn't repaired", "has not repaired"] },
+        { q: "The artist (not paint) ___ a picture.", a: ["hasn't painted", "has not painted"] },
+        { q: "The actor (not learn) ___ his lines.", a: ["hasn't learned", "has not learned", "hasn't learnt", "has not learnt"] },
+        { q: "The team (not enjoy) ___ the game.", a: ["hasn't enjoyed", "have not enjoyed", "haven't enjoyed"] },
+        { q: "The audience (not clap) ___ yet.", a: ["haven't clapped", "have not clapped", "hasn't clapped"] },
+        { q: "The dancer (not dance) ___ today.", a: ["hasn't danced", "has not danced"] },
+        { q: "The student (not pass) ___ the exam.", a: ["hasn't passed", "has not passed"] },
+        { q: "The teacher (not explain) ___ it.", a: ["hasn't explained", "has not explained"] },
+        { q: "The doctor (not help) ___ him.", a: ["hasn't helped", "has not helped"] },
+        { q: "The police officer (not arrest) ___ him.", a: ["hasn't arrested", "has not arrested"] },
+        { q: "The firefighter (not stop) ___ the fire.", a: ["hasn't stopped", "has not stopped"] },
+        { q: "The pilot (not land) ___ the plane.", a: ["hasn't landed", "has not landed"] },
+        { q: "The sailor (not cross) ___ the sea.", a: ["hasn't crossed", "has not crossed"] },
+        { q: "The driver (not turn) ___ left.", a: ["hasn't turned", "has not turned"] },
+        { q: "The passenger (not wait) ___ long.", a: ["hasn't waited", "has not waited"] },
+        { q: "The player (not score) ___ a goal.", a: ["hasn't scored", "has not scored"] },
+        { q: "The coach (not shout) ___ at him.", a: ["hasn't shouted", "has not shouted"] },
+        { q: "The runner (not finish) ___ the race.", a: ["hasn't finished", "has not finished"] },
+        { q: "The climber (not reach) ___ the top.", a: ["hasn't reached", "has not reached"] },
+        { q: "The hiker (not walk) ___ far.", a: ["hasn't walked", "has not walked"] },
+        { q: "The builder (not mix) ___ the cement.", a: ["hasn't mixed", "has not mixed"] },
+        { q: "The gardener (not plant) ___ seeds.", a: ["hasn't planted", "has not planted"] },
+        { q: "The hunter (not watch) ___ closely.", a: ["hasn't watched", "has not watched"] },
+        { q: "The soldier (not march) ___ away.", a: ["hasn't marched", "has not marched"] },
+        { q: "The princess (not brush) ___ her hair.", a: ["hasn't brushed", "has not brushed"] },
+        { q: "The ghost (not scare) ___ anyone.", a: ["hasn't scared", "has not scared"] },
+        { q: "The heavy rain (not stop) ___ yet.", a: ["hasn't stopped", "has not stopped"] },
+        { q: "The storm (not destroy) ___ it.", a: ["hasn't destroyed", "has not destroyed"] },
+        { q: "The hot water (not boil) ___ yet.", a: ["hasn't boiled", "has not boiled"] },
+        { q: "The light (not flicker) ___ anymore.", a: ["hasn't flickered", "has not flickered"] },
+        { q: "The kids (not shout) ___ today.", a: ["haven't shouted", "have not shouted"] },
+        { q: "The friend (not help) ___ us.", a: ["hasn't helped", "has not helped"] },
+        { q: "The mother (not tidy) ___ the room.", a: ["hasn't tidied", "has not tidied"] },
+        { q: "The boy (not kick) ___ the ball.", a: ["hasn't kicked", "has not kicked"] },
+
+        // --- 50 VRAGENDE ZINNEN (INTERROGATIVE) ---
+        { q: "(Mister Sebel / correct) ___ the test?", a: ["Has Mister Sebel corrected", "Has ... corrected"] },
+        { q: "(Agent Smith / watch) ___ the base?", a: ["Has Agent Smith watched", "Has ... watched"] },
+        { q: "(Miss Lane / call) ___ the boss?", a: ["Has Miss Lane called", "Has ... called"] },
+        { q: "(the robot / carry) ___ the suitcase?", a: ["Has the robot carried", "Has ... carried"] },
+        { q: "(the guards / close) ___ the main gate?", a: ["Have the guards closed", "Have ... closed"] },
+        { q: "(Iker / play) ___ football?", a: ["Has Iker played", "Has ... played"] },
+        { q: "(the students / visit) ___ the museum?", a: ["Have the students visited", "Have ... visited"] },
+        { q: "(your father / wash) ___ the car?", a: ["Has your father washed", "Has ... washed"] },
+        { q: "(Miss Parker / open) ___ the safe?", a: ["Has Miss Parker opened", "Has ... opened"] },
+        { q: "(those men / climb) ___ over the wall?", a: ["Have those men climbed", "Have ... climbed"] },
+        { q: "(the tech expert / fix) ___ the laser?", a: ["Has the tech expert fixed", "Has ... fixed"] },
+        { q: "(the Queen / visit) ___ the park?", a: ["Has the Queen visited", "Has ... visited"] },
+        { q: "(the general / start) ___ the attack?", a: ["Has the general started", "Has ... started"] },
+        { q: "(the driver / stop) ___ at the light?", a: ["Has the driver stopped", "Has ... stopped"] },
+        { q: "(the chef / cook) ___ dinner?", a: ["Has the chef cooked", "Has ... cooked"] },
+        { q: "(the thief / drop) ___ the bag?", a: ["Has the thief dropped", "Has ... dropped"] },
+        { q: "(the mechanic / repair) ___ the van?", a: ["Has the mechanic repaired", "Has ... repaired"] },
+        { q: "(the artist / paint) ___ a picture?", a: ["Has the artist painted", "Has ... painted"] },
+        { q: "(the actor / learn) ___ his lines?", a: ["Has the actor learned", "Has the actor learnt", "Has ... learned", "Has ... learnt"] },
+        { q: "(the team / enjoy) ___ the victory?", a: ["Has the team enjoyed", "Have the team enjoyed", "Has ... enjoyed", "Have ... enjoyed"] },
+        { q: "(the audience / clap) ___?", a: ["Have the audience clapped", "Has the audience clapped", "Have ... clapped", "Has ... clapped"] },
+        { q: "(the dancer / dance) ___ on stage?", a: ["Has the dancer danced", "Has ... danced"] },
+        { q: "(the student / pass) ___ the exam?", a: ["Has the student passed", "Has ... passed"] },
+        { q: "(the teacher / explain) ___ it?", a: ["Has the teacher explained", "Has ... explained"] },
+        { q: "(the doctor / help) ___ him?", a: ["Has the doctor helped", "Has ... helped"] },
+        { q: "(the police officer / arrest) ___ him?", a: ["Has the police officer arrested", "Has ... arrested"] },
+        { q: "(the firefighter / stop) ___ the fire?", a: ["Has the firefighter stopped", "Has ... stopped"] },
+        { q: "(the pilot / land) ___ the plane?", a: ["Has the pilot landed", "Has ... landed"] },
+        { q: "(the sailor / cross) ___ the sea?", a: ["Has the sailor crossed", "Has ... crossed"] },
+        { q: "(the driver / turn) ___ left?", a: ["Has the driver turned", "Has ... turned"] },
+        { q: "(the passenger / wait) ___ long?", a: ["Has the passenger waited", "Has ... waited"] },
+        { q: "(the player / score) ___ a goal?", a: ["Has the player scored", "Has ... scored"] },
+        { q: "(the coach / shout) ___ at him?", a: ["Has the coach shouted", "Has ... shouted"] },
+        { q: "(the runner / finish) ___ the race?", a: ["Has the runner finished", "Has ... finished"] },
+        { q: "(the climber / reach) ___ the top?", a: ["Has the climber reached", "Has ... reached"] },
+        { q: "(the hiker / walk) ___ far?", a: ["Has the hiker walked", "Has ... walked"] },
+        { q: "(the builder / mix) ___ the cement?", a: ["Has the builder mixed", "Has ... mixed"] },
+        { q: "(the gardener / plant) ___ seeds?", a: ["Has the gardener planted", "Has ... planted"] },
+        { q: "(the hunter / watch) ___ closely?", a: ["Has the hunter watched", "Has ... watched"] },
+        { q: "(the soldier / march) ___ away?", a: ["Has the soldier marched", "Has ... marched"] },
+        { q: "(the princess / brush) ___ her hair?", a: ["Has the princess brushed", "Has ... brushed"] },
+        { q: "(the ghost / scare) ___ anyone?", a: ["Has the ghost scared", "Has ... scared"] },
+        { q: "(the heavy rain / stop) ___?", a: ["Has the heavy rain stopped", "Has ... stopped"] },
+        { q: "(the storm / destroy) ___ it?", a: ["Has the storm destroyed", "Has ... destroyed"] },
+        { q: "(the hot water / boil) ___?", a: ["Has the hot water boiled", "Has ... boiled"] },
+        { q: "(the light / flicker) ___?", a: ["Has the light flickered", "Has ... flickered"] },
+        { q: "(the kids / shout) ___?", a: ["Have the kids shouted", "Have ... shouted"] },
+        { q: "(the friend / help) ___ us?", a: ["Has the friend helped", "Has ... helped"] },
+        { q: "(the mother / tidy) ___ the room?", a: ["Has the mother tidied", "Has ... tidied"] },
+        { q: "(the boy / kick) ___ the ball?", a: ["Has the boy kicked", "Has ... kicked"] }
+    ];
+
+    let currentQuestions = [];
+    let qIndex = 0;
+    let score = 0;
+    let userMistakes = [];
+
+    function startGame() {
+        document.getElementById('screen-intro').style.display = 'none';
+        document.getElementById('quiz-screen').style.display = 'block';
+        
+        let shuffled = [...masterQuestionDatabase];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        currentQuestions = shuffled.slice(0, 10);
+        
+        qIndex = 0;
+        score = 0;
+        userMistakes = [];
+        document.getElementById('chat-window').innerHTML = '';
+        document.getElementById('score-display').innerText = `⚡ Score: ${score}`;
+        showQuestion();
+    }
+
+    function addBubble(text, type, sender = "") {
+        const chatWindow = document.getElementById('chat-window');
+        const bubble = document.createElement('div');
+        bubble.className = `bubble ${type === 'in' ? 'bubble-in' : 'bubble-out'}`;
+        
+        let html = "";
+        if (sender) html += `<span class="sender">${sender}</span>`;
+        html += `<span>${text}</span>`;
+        
+        bubble.innerHTML = html;
+        chatWindow.appendChild(bubble);
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
+    function showQuestion() {
+        const q = currentQuestions[qIndex];
+        document.getElementById('question-number').innerText = `Missie: ${qIndex + 1} / 10`;
+        
+        const input = document.getElementById('user-answer');
+        input.disabled = false;
+        input.value = "";
+        input.placeholder = "Typ de werkwoordsvorm...";
+        
+        addBubble(q.q, 'in', 'COMMANDER');
+        setTimeout(() => input.focus(), 100);
+    }
+
+    function checkAnswer() {
+        const input = document.getElementById('user-answer');
+        let val = input.value.trim();
+        if (!val || input.disabled) return;
+
+        addBubble(val, 'out');
+        input.disabled = true;
+
+        const processedInput = val.toLowerCase().trim();
+        const correctAnswers = currentQuestions[qIndex].a;
+        
+        const isCorrect = correctAnswers.some(ans => {
+            if (ans.includes("...")) {
+                const parts = ans.split("...").map(p => p.toLowerCase().trim());
+                return processedInput.startsWith(parts[0]) && processedInput.endsWith(parts[1]);
+            }
+            return processedInput === ans.toLowerCase().trim();
+        });
+
+        setTimeout(() => {
+            if (isCorrect) {
+                score++;
+                addBubble("✅ ACCESS GRANTED! Signal decoded.", "in", "COMMANDER");
+                document.getElementById('flash').style.opacity = '0.2';
+                setTimeout(() => document.getElementById('flash').style.opacity = '0', 150);
+            } else {
+                let displayAns = correctAnswers[0].replace("...", " [onderwerp] ");
+                addBubble(`❌ ACCESS DENIED! Correct signal: "${displayAns}"`, "in", "COMMANDER");
+                document.body.classList.add('shake');
+                setTimeout(() => document.body.classList.remove('shake'), 200);
+
+                userMistakes.push({
+                    question: currentQuestions[qIndex].q,
+                    given: val,
+                    correct: displayAns
+                });
+            }
+            document.getElementById('score-display').innerText = `⚡ Score: ${score}`;
+
+            setTimeout(() => {
+                nextQuestion();
+            }, 1200);
+
+        }, 400);
+    }
+
+    function nextQuestion() {
+        qIndex++;
+        if (qIndex < 10) {
+            showQuestion();
+        } else {
+            document.getElementById('quiz-screen').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'block';
+            document.getElementById('final-score').innerText = `Jouw score: ${score} / 10`;
+
+            const recapDiv = document.getElementById('recap-container');
+            if(score === 10) {
+                document.getElementById('result-title').innerText = "👑 MISSION ACCOMPLISHED!";
+                document.getElementById('result-comment').innerText = "Perfect! Jij kent de Present Perfect als een echte superheld!";
+                recapDiv.style.display = 'none';
+            } else {
+                document.getElementById('result-title').innerText = "🚨 MISSION FINISHED";
+                document.getElementById('result-comment').innerText = "Bekijk hieronder de zinnen die je nog even moet oefenen:";
+                recapDiv.innerHTML = "<h3>Recap van je fouten:</h3>";
+                userMistakes.forEach(m => {
+                    recapDiv.innerHTML += `
+                        <div class="recap-item">
+                            <div class="recap-q">${m.question}</div>
+                            <div>Jouw antwoord: <span class="recap-given">${m.given}</span></div>
+                            <div>Juiste antwoord: <span class="recap-correct">${m.correct}</span></div>
+                        </div>
+                    `;
+                });
+                recapDiv.style.display = 'block';
+            }
+        }
+    }
+
+    function restartQuiz() {
+        document.getElementById('result-screen').style.display = 'none';
+        startGame();
+    }
+
+    document.getElementById('user-answer').addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            checkAnswer();
+        }
+    });
+</script></body></html>

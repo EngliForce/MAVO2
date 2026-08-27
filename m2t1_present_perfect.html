@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EngliForce Academy: Present Perfect Masterclass</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Lexend:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hero-purple-main: #7b2cbf;
+            --hero-purple-dark: #3c096c;
+            --hero-yellow: #ffb703;
+            --hero-cyan: #00f5d4;
+            --dark-bg: #05101a;
+            --hero-orange: #ff5722;
+            --hero-orange-dark: #bf360c;
+            --hero-green: #4caf50;
+            --hero-blue: #4361ee;
+            --hero-red: #d32f2f;
+            --hero-pink: #ff60a8;
+        }
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: #05101a;
+            background: radial-gradient(circle at center, #1a102a 0%, #05101a 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+        header {
+            background: var(--hero-orange);
+            padding: 2.5rem 1rem;
+            text-align: center;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            border-bottom: 5px solid var(--hero-yellow);
+        }
+        h1 {
+            font-family: 'Bangers', cursive;
+            font-size: 3.5rem;
+            letter-spacing: 3px;
+            margin: 0;
+            text-shadow: 4px 4px 0px var(--hero-orange-dark);
+        }
+        h2 {
+            font-family: 'Bangers', cursive;
+            color: var(--hero-yellow);
+            font-size: 2.2rem;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: var(--hero-cyan);
+            font-family: 'Bangers';
+            font-size: 1.8rem;
+            margin-top: 0;
+        }
+        main {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            flex: 1;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .briefing-box {
+            background: rgba(26, 16, 42, 0.9);
+            border: 2px solid var(--hero-blue);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+        .video-container {
+            background: #000;
+            border: 4px solid var(--hero-yellow);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            padding-top: 56.25%;
+            margin-bottom: 40px;
+            box-shadow: 0 0 40px rgba(255, 183, 3, 0.3);
+        }
+        .video-container iframe {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;
+        }
+        .explanation-text {
+            font-size: 1.1rem; line-height: 1.6; margin-bottom: 15px;
+            border-left: 4px solid var(--hero-blue); padding-left: 20px;
+            background: rgba(67, 97, 238, 0.05); padding-top: 15px; padding-bottom: 15px; padding-right: 20px;
+        }
+        .split-box-container {
+            display: flex;
+            gap: 20px;
+            margin: 25px 0;
+        }
+        .split-box {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            border: 3px dashed var(--hero-cyan);
+            box-shadow: 0 0 15px rgba(0, 245, 212, 0.1);
+        }
+        .split-box.irreg {
+            border-color: var(--hero-pink);
+            box-shadow: 0 0 15px rgba(255, 96, 168, 0.1);
+        }
+        .split-box-title {
+            font-family: 'Bangers', cursive;
+            font-size: 2.2rem;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            color: var(--hero-cyan);
+        }
+        .split-box.irreg .split-box-title {
+            color: var(--hero-pink);
+        }
+        /* GROTE GEKLEURDE FORMULE BLOKKEN - Aangepast tegen afkappen */
+        .formula-card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 18px 10px;
+            margin: 15px 0;
+            font-family: 'Bangers', cursive;
+            font-size: 1.35rem;
+            letter-spacing: 0.5px;
+            line-height: 1.4;
+            white-space: nowrap;
+            overflow-x: auto;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+        }
+        .formula-sub {
+            font-family: 'Lexend', sans-serif;
+            font-weight: normal;
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 8px;
+            display: block;
+            white-space: normal;
+        }
+        /* Woordkleuren in de formule */
+        .f-subj { color: var(--hero-yellow); }
+        .f-have { color: var(--hero-cyan); }
+        .f-hasns { color: var(--hero-orange); }
+        .f-verb { color: #ffffff; }
+        .f-ed   { color: #a0c4ff; border-bottom: 3px solid #a0c4ff; padding: 0 2px; }
+        .f-irreg { color: var(--hero-pink); border-bottom: 3px solid #a0c4ff; padding: 0 2px; }
+
+        .example-box {
+            background: rgba(255,255,255,0.08);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-size: 1rem;
+            text-align: left;
+        }
+        .toggle-container {
+            display: flex; gap: 15px; justify-content: center; margin-bottom: 30px; flex-wrap: wrap;
+        }
+        .btn-toggle {
+            background: var(--hero-purple-main); color: white; border: none;
+            padding: 15px 30px; border-radius: 50px; font-family: 'Bangers', cursive;
+            font-size: 1.3rem; cursor: pointer; transition: 0.2s;
+            border-bottom: 5px solid var(--hero-purple-dark);
+        }
+        .btn-toggle:hover {
+            transform: translateY(-3px);
+            background: var(--hero-blue);
+            color: white;
+        }
+        .btn-video {
+            background: var(--hero-orange);
+            border-bottom: 5px solid var(--hero-orange-dark);
+        }
+        .content-section { display: none; animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .pickle-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 15px; 
+            margin-top: 20px; 
+        }
+        .card {
+            background: #1a102a;
+            border: 3px solid #3c096c;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .card:hover {
+            border-color: var(--hero-yellow);
+            transform: scale(1.05);
+        }
+        .flash-effect { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; opacity: 0; pointer-events: none; z-index: 1999; }
+        .boom-text { position: fixed; pointer-events: none; font-family: 'Bangers', cursive; color: var(--hero-yellow); font-size: 5rem; z-index: 2001; text-shadow: 5px 5px 0px #000; animation: boomAnim 0.6s ease-out forwards; }
+        @keyframes boomAnim {
+            0% { transform: scale(0) rotate(-20deg); opacity: 1; }
+            100% { transform: scale(2) rotate(10deg); opacity: 0; }
+        }
+        footer {
+            background: #05101a;
+            color: rgba(255,255,255,0.8);
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 2px solid var(--hero-purple-dark);
+            margin-top: 50px;
+        }
+        .highlight-ed { color: #a0c4ff; text-decoration: underline; }
+        .highlight-irreg { color: var(--hero-pink); font-weight: bold; }
+        .table-container { background: #1a102a; border-radius: 15px; overflow: hidden; margin-top: 15px; }
+        .table-container table { width: 100%; border-collapse: collapse; }
+        .table-container th { background: var(--hero-blue); padding: 15px; text-align: left; }
+        .table-container td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .fyne-list { list-style: none; padding-left: 0; font-size: 1.2rem; }
+        .fyne-list li { margin-bottom: 8px; }
+        .fyne-letter { font-family: 'Bangers'; font-size: 1.6rem; color: var(--hero-yellow); display: inline-block; width: 30px; }
+        @media (max-width: 900px) {
+            .split-box-container { flex-direction: column; }
+            .pickle-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="flash-effect" id="flash"></div>
+<header>
+    <h1>ENGLIFORCE ACADEMY</h1>
+    <p>TIME TRAVEL CENTER: PRESENT PERFECT (HAVE/HAS + VOLTOOID DEELWOORD)</p>
+</header>
+<main>
+    <section class="briefing-box">
+        <h2>🚨 MISSION: THE PRESENT PERFECT</h2>
+        <div class="explanation-text">
+            <p>Met de <strong>Present Perfect</strong> leg je een brug tussen het verleden en nu. Je gebruikt deze tijd voor acties die in het verleden zijn gebeurd, maar waarvan het <strong>resultaat nu nog belangrijk is</strong>!</p>
+            <p style="margin-top: 10px;">⚠️ <strong>Wanneer kies je HAVE en wanneer HAS?</strong><br>
+            - Je gebruikt <strong style="color: var(--hero-cyan);">HAVE</strong> bij: <em>I, You, We, They</em> (en meervoud, bijv. <em>the cats</em>).<br>
+            - Je gebruikt <strong style="color: var(--hero-yellow);">HAS</strong> bij: <em>He, She, It</em> (en enkelvoud/één persoon, bijv. <em>my brother, Sarah</em>).</p>
+        </div>
+        
+        <div class="table-container" style="margin-bottom: 20px;">
+            <table>
+                <thead>
+                    <tr><th>Onderwerp (Wie?)</th><th>Hulpwerkwoord</th><th>Voorbeeld</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>I, You, We, They</strong></td><td><strong style="color: var(--hero-cyan);">HAVE</strong></td><td>We <strong style="color: var(--hero-cyan);">have</strong> played a game.</td></tr>
+                    <tr><td><strong>He, She, It</strong> (enkelvoud)</td><td><strong style="color: var(--hero-yellow);">HAS</strong></td><td>She <strong style="color: var(--hero-yellow);">has</strong> cleaned her room.</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="example-box" style="border-left: 4px solid var(--hero-cyan); background: rgba(0, 245, 212, 0.1);">
+            <strong style="color: var(--hero-cyan); font-family: 'Bangers'; font-size: 1.4rem;">🧥 HET EZELSBRUGGETJE: FYNE JAS</strong><br>
+            Hoe weet je dat een zin in de Present Perfect staat? Ontmoet <strong>FYNE JAS</strong>! Dit zijn de handige signaalwoorden:
+            <ul class="fyne-list" style="margin-top: 15px;">
+                <li><span class="fyne-letter">F</span> <strong>For...</strong> <span style="color: rgba(255,255,255,0.6); font-size: 0.95rem;">(for three years, for a long time)</span></li>
+                <li><span class="fyne-letter">Y</span> <strong>Yet</strong> <span style="color: rgba(255,255,255,0.6); font-size: 0.95rem;">(I haven't eaten yet - aan het eind van ontkennende/vragende zinnen)</span></li>
+                <li><span class="fyne-letter">N</span> <strong>Never</strong> <span style="color: rgba(255,255,255,0.6); font-size: 0.95rem;">(I have never flown in a plane)</span></li>
+                <li><span class="fyne-letter">E</span> <strong>Ever</strong> <span style="color: rgba(255,255,255,0.6); font-size: 0.95rem;">(Have you ever been to London?)</span></li>
+                <li><span class="fyne-letter">J</span> <strong>Just</strong> <span style="color: rgba(255,255,255,0.6); font-size: 0.95rem;">(I have just finished my homework)</span></li>
+                <li><span class="fyne-letter">A</span> <strong>Already</strong> <span style="color: rgba(255,255,255,0.6); font-size: 0.95rem;">(I have already seen that movie)</span></li>
+                <li><span class="fyne-letter">S</span> <strong>Since...</strong> <span style="color: rgba(255,255,255,0.6); font-size: 0.95rem;">(since 2010, since last Monday)</span></li>
+            </ul>
+        </div>
+    </section>
+
+    <div class="toggle-container">
+        <button class="btn-toggle" onclick="showSection(event, 'rules', 'ZAP!')">Checklist</button>
+        <button class="btn-toggle" onclick="showSection(event, 'bevestigen', 'POW!')">Bevestigen</button>
+        <button class="btn-toggle" onclick="showSection(event, 'vragen', 'QUESTION?')">Vragen</button>
+        <button class="btn-toggle" onclick="showSection(event, 'ontkennen', 'NOPE!')">Ontkennen</button>
+        <button class="btn-toggle btn-video" onclick="showSection(event, 'video-section', 'ACTION!')">🎬 Mission Video</button>
+    </div>
+
+    <div id="rules" class="content-section" style="display: block;">
+        <h3>Quick Scan Checklist</h3>
+        <div class="explanation-text">
+            <p>✅ <strong>WANNEER:</strong> Gebeurd in het verleden, verbonden met het heden.</p>
+            <p>✅ <strong>HULPWERKWOORD (HAVE of HAS?):</strong> 
+               <br>• Gebruik <strong style="color: var(--hero-cyan);">HAVE</strong> bij <em>I, You, We, They</em>.
+               <br>• Gebruik <strong style="color: var(--hero-yellow);">HAS</strong> bij <em>He, She, It</em>.</p>
+            <p>✅ <strong>HET VOLTOOID DEELWOORD (REGELMATIG VS ONREGELMATIG):</strong> 
+               <br>• <strong>Regelmatig:</strong> Hele werkwoord + <strong style="color: var(--hero-yellow);">-ed</strong> (bijv. <em>play → played</em>).
+               <br>• <strong>Onregelmatig:</strong> Verandert van vorm! Je gebruikt de <strong style="color: var(--hero-pink);">3e vorm</strong> uit de werkwoordenlijst (bijv. <em>go → gone</em>, <em>see → seen</em>).</p>
+            <p>✅ <strong>HERKENNING:</strong> Gebruik het ezelsbruggetje <strong>FYNE JAS</strong> om de signaalwoorden te onthouden.</p>
+        </div>
+    </div>
+
+    <div id="bevestigen" class="content-section">
+        <h3>Time Travel Lab: Bevestigende zinnen</h3>
+        <div class="explanation-text">
+            <p>In een bevestigende zin gebruik je de volgende formules voor regelmatig en onregelmatig:</p>
+            
+            <div class="split-box-container">
+                <div class="split-box">
+                    <div class="split-box-title">REGELMATIG</div>
+                    <div class="formula-card">
+                        <span class="f-subj">Onderwerp</span> + <span class="f-have">have/has</span> + <span class="f-verb">werkwoord</span> + <span class="f-ed">-ed</span>
+                        <span class="formula-sub">Bijv: I <span class="f-have">have</span> play<span class="f-ed">ed</span> / She <span class="f-have">has</span> clean<span class="f-ed">ed</span></span>
+                    </div>
+                </div>
+                <div class="split-box irreg">
+                    <div class="split-box-title">ONREGELMATIG</div>
+                    <div class="formula-card">
+                        <span class="f-subj">Onderwerp</span> + <span class="f-have">have/has</span> + <span class="f-irreg">3e vorm</span>
+                        <span class="formula-sub">Bijv: We <span class="f-have">have</span> <span class="f-irreg">gone</span> / He <span class="f-have">has</span> <span class="f-irreg">seen</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr><th>Type</th><th>Formule Overzicht</th><th>Voorbeeldzin (Positive)</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Regelmatig</td><td>I / You / We / They + <strong style="color: var(--hero-cyan);">have</strong> + hele werkwoord + <strong class="highlight-ed">-ed</strong></td><td>I <strong style="color: var(--hero-cyan);">have</strong> <strong class="highlight-ed">played</strong> football.</td></tr>
+                    <tr><td>Regelmatig</td><td>He / She / It + <strong style="color: var(--hero-yellow);">has</strong> + hele werkwoord + <strong class="highlight-ed">-ed</strong></td><td>She <strong style="color: var(--hero-yellow);">has</strong> <strong class="highlight-ed">cleaned</strong> her room.</td></tr>
+                    <tr><td>Onregelmatig</td><td>I / You / We / They + <strong style="color: var(--hero-cyan);">have</strong> + <strong class="highlight-irreg">3e vorm</strong> uit lijst</td><td>We <strong style="color: var(--hero-cyan);">have</strong> <strong class="highlight-irreg">seen</strong> that movie.</td></tr>
+                    <tr><td>Onregelmatig</td><td>He / She / It + <strong style="color: var(--hero-yellow);">has</strong> + <strong class="highlight-irreg">3e vorm</strong> uit lijst</td><td>He <strong style="color: var(--hero-yellow);">has</strong> <strong class="highlight-irreg">gone</strong> to the store.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="vragen" class="content-section">
+        <h3>Time Travel Lab: Vragende zinnen</h3>
+        <div class="explanation-text">
+            <p>Bij een vragende zin zet je <em>have</em> of <em>has</em> vooraan. Bekijk de formules:</p>
+            
+            <div class="split-box-container">
+                <div class="split-box">
+                    <div class="split-box-title">REGELMATIG</div>
+                    <div class="formula-card">
+                        <span class="f-have">Have/Has</span> + <span class="f-subj">onderwerp</span> + <span class="f-verb">werkwoord</span> + <span class="f-ed">-ed</span> ?
+                        <span class="formula-sub">Bijv: <span class="f-have">Have</span> you play<span class="f-ed">ed</span>? / <span class="f-have">Has</span> she clean<span class="f-ed">ed</span>?</span>
+                    </div>
+                </div>
+                <div class="split-box irreg">
+                    <div class="split-box-title">ONREGELMATIG</div>
+                    <div class="formula-card">
+                        <span class="f-have">Have/Has</span> + <span class="f-subj">onderwerp</span> + <span class="f-irreg">3e vorm</span> ?
+                        <span class="formula-sub">Bijv: <span class="f-have">Have</span> you <span class="f-irreg">gone</span>? / <span class="f-have">Has</span> he <span class="f-irreg">seen</span>?</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr><th>Type</th><th>Formule Overzicht</th><th>Voorbeeldzin (Question)</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Regelmatig</td><td><strong style="color: var(--hero-cyan);">Have</strong> / <strong style="color: var(--hero-yellow);">Has</strong> + onderwerp + hele werkwoord + <strong class="highlight-ed">-ed</strong>?</td><td><strong style="color: var(--hero-cyan);">Have</strong> you <strong class="highlight-ed">finished</strong> your homework?</td></tr>
+                    <tr><td>Onregelmatig</td><td><strong style="color: var(--hero-cyan);">Have</strong> / <strong style="color: var(--hero-yellow);">Has</strong> + onderwerp + <strong class="highlight-irreg">3e vorm</strong>?</td><td><strong style="color: var(--hero-yellow);">Has</strong> he <strong class="highlight-irreg">been</strong> to Paris?</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="ontkennen" class="content-section">
+        <h3>Time Travel Lab: Ontkennende zinnen</h3>
+        <div class="explanation-text">
+            <p>Bij een ontkennende zin gebruik je <em>haven't</em> of <em>hasn't</em>. Bekijk de formules:</p>
+            
+            <div class="split-box-container">
+                <div class="split-box">
+                    <div class="split-box-title">REGELMATIG</div>
+                    <div class="formula-card">
+                        <span class="f-subj">Onderwerp</span> + <span class="f-hasns">haven't/hasn't</span> + <span class="f-verb">werkwoord</span> + <span class="f-ed">-ed</span>
+                        <span class="formula-sub">Bijv: I <span class="f-hasns">haven't</span> play<span class="f-ed">ed</span> / She <span class="f-hasns">hasn't</span> clean<span class="f-ed">ed</span></span>
+                    </div>
+                </div>
+                <div class="split-box irreg">
+                    <div class="split-box-title">ONREGELMATIG</div>
+                    <div class="formula-card">
+                        <span class="f-subj">Onderwerp</span> + <span class="f-hasns">haven't/hasn't</span> + <span class="f-irreg">3e vorm</span>
+                        <span class="formula-sub">Bijv: We <span class="f-hasns">haven't</span> <span class="f-irreg">gone</span> / He <span class="f-hasns">hasn't</span> <span class="f-irreg">seen</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr><th>Type</th><th>Formule Overzicht</th><th>Voorbeeldzin (Negative)</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Regelmatig</td><td>Onderwerp + <strong style="color: var(--hero-orange);">haven't / hasn't</strong> + hele werkwoord + <strong class="highlight-ed">-ed</strong></td><td>I <strong style="color: var(--hero-orange);">haven't visited</strong> my grandma yet.</td></tr>
+                    <tr><td>Onregelmatig</td><td>Onderwerp + <strong style="color: var(--hero-orange);">haven't / hasn't</strong> + <strong class="highlight-irreg">3e vorm</strong></td><td>He <strong style="color: var(--hero-orange);">hasn't eaten</strong> his dinner yet.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="video-section" class="content-section">
+        <h3>🎬 MISSION VIDEO: PRESENT PERFECT</h3>
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/pizDDp5P1sQ" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <h2>⚔️ PICKLE MISSIONS</h2>
+    <div class="pickle-grid">
+        <div class="card" onclick="createExplosion(event, 'CRUNCH!', 'm2t2_present_perfect_pickle_1.html')">
+            <span style="font-size: 2.5rem;">🖊️</span>
+            <div class="title" style="font-family: 'Bangers'; color: var(--hero-cyan);">Pickle 1</div>
+            <p>Fill in the blanks</p>
+        </div>
+        <div class="card" onclick="createExplosion(event, 'SMART!', 'm2t2_present_perfect_pickle_2.html')">
+            <span style="font-size: 2.5rem;">📱</span>
+            <div class="title" style="font-family: 'Bangers'; color: var(--hero-yellow);">Pickle 2</div>
+            <p>Whatsapp Interceptor</p>
+        </div>
+        <div class="card" onclick="createExplosion(event, 'BOOM!', 'm2t2_present_perfect_pickle_3.html')">
+            <span style="font-size: 2.5rem;">✈️</span>
+            <div class="title" style="font-family: 'Bangers'; color: var(--hero-orange);">Pickle 3</div>
+            <p>Airport</p>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-text">&copy; 2026, EngliForce: <span style="color: var(--hero-yellow);">Make English Your Superpower!</span></div>
+</footer>
+
+<script>
+    function showSection(e, id, boomMessage) {
+        document.querySelectorAll('.content-section').forEach(s => s.style.display = 'none');
+        document.getElementById(id).style.display = 'block';
+        createExplosion(e, boomMessage);
+    }
+
+    function createExplosion(e, message, redirectUrl) {
+        const x = e.clientX, y = e.clientY;
+        const flash = document.getElementById('flash');
+        flash.style.opacity = '0.3';
+        setTimeout(() => flash.style.opacity = '0', 200);
+        
+        const txt = document.createElement('div');
+        txt.className = 'boom-text';
+        txt.innerText = message;
+        txt.style.left = (x - 50) + 'px'; txt.style.top = (y - 50) + 'px';
+        document.body.appendChild(txt);
+        setTimeout(() => txt.remove(), 600);
+        
+        if (redirectUrl) {
+            setTimeout(() => {
+                window.location.href = redirectUrl;
+            }, 300);
+        }
+    }
+</script>
+
+</body>
+</html>

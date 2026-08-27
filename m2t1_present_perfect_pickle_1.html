@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EngliForce Academy - Present Perfect Hero ⏳</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Lexend:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hero-orange-main: #ff7043;
+            --hero-orange-dark: #e65c30;
+            --hero-orange-glow: rgba(255, 112, 67, 0.4);
+            --hero-yellow: #ffb703;
+            --dark-bg: #0b1a2a;
+            --card-bg: #102a43;
+            --card-border: #243b53;
+            --card-bg-done: #05101a;
+            --wrong-red: #ef4444;
+            --correct-green: #22c55e;
+        }
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: radial-gradient(circle at center, #102a43 0%, #05101a 100%);
+            color: white;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background: var(--hero-orange-main);
+            padding: 2.5rem 1rem;
+            text-align: center;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            border-bottom: 5px solid var(--hero-yellow);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            color: white;
+        }
+        h1 { 
+            font-family: 'Bangers', cursive; 
+            font-size: 3.5rem; 
+            letter-spacing: 3px; 
+            margin: 0; 
+            text-shadow: 4px 4px 0px var(--hero-orange-dark); 
+        }
+        header p { 
+            font-size: 1.2rem; 
+            font-weight: bold; 
+            margin-top: 5px; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+        }
+        main { 
+            flex: 1;
+            max-width: 650px; 
+            width: 90%;
+            margin: 40px auto; 
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .panel { 
+            background: var(--card-bg); 
+            padding: 40px; 
+            border-radius: 20px; 
+            border: 3px solid var(--card-border);
+            text-align: center; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); 
+        }
+        .panel h2 {
+            font-family: 'Bangers', cursive;
+            font-size: 2rem;
+            color: var(--hero-yellow);
+            letter-spacing: 1px;
+            margin-top: 0;
+        }
+        .intro-text {
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            color: #cbd5e1;
+        }
+        .sentence { 
+            font-size: 1.3rem; 
+            margin: 30px 0; 
+            color: #f8fafc; 
+            font-weight: bold; 
+            min-height: 60px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        input[type="text"] { 
+            padding: 15px; 
+            font-size: 1.1rem; 
+            font-family: 'Lexend', sans-serif;
+            border-radius: 12px; 
+            border: 2px solid var(--card-border); 
+            width: 80%; 
+            background: var(--dark-bg); 
+            color: white; 
+            text-align: center; 
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus {
+            border-color: var(--hero-orange-main);
+        }
+        .btn { 
+            background: var(--hero-orange-main); 
+            color: white; 
+            border: none; 
+            padding: 15px 40px; 
+            border-radius: 50px; 
+            font-family: 'Bangers', cursive;
+            font-size: 1.4rem; 
+            letter-spacing: 1px;
+            cursor: pointer; 
+            margin-top: 20px; 
+            transition: 0.3s; 
+            box-shadow: 0 4px 15px rgba(255, 112, 67, 0.4);
+        }
+        .btn:hover { 
+            background: var(--hero-orange-dark); 
+            transform: translateY(-2px);
+        }
+        .hidden { display: none; }
+        #badge { font-size: 80px; display: none; animation: spin 4s linear infinite; }
+        #status { color: var(--hero-yellow); font-weight: bold; font-size: 1.1rem; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .recap-container {
+            margin-top: 20px;
+            text-align: left;
+            max-height: 250px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        .recap-item {
+            background: var(--dark-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+        .recap-q { font-weight: bold; margin-bottom: 5px; color: #f8fafc; }
+        .recap-given { color: var(--wrong-red); }
+        .recap-correct { color: var(--correct-green); font-weight: bold; }
+        footer {
+            text-align: center; 
+            opacity: 0.5; 
+            padding: 40px 0 20px 0;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>ENGLIFORCE ACADEMY</h1>
+        <p>PRESENT PERFECT HERO ⏳</p>
+    </header>
+    <main>
+        <div class="panel">
+            <div id="start">
+                <h2>Klaar om te oefenen?</h2>
+                <p class="intro-text">Test je kennis van de Present Perfect (bevestigend, ontkennend en vragend)!</p>
+                <button class="btn" onclick="start()">START QUEST</button>
+            </div>
+            <div id="quiz" class="hidden">
+                <div id="status">Vraag 1/10</div>
+                <div class="sentence" id="sentence">---</div>
+                <input type="text" id="answer" placeholder="Typ je antwoord (bijv. have played)..." autocomplete="off" onkeypress="handleKeyPress(event)">
+                <br><button class="btn" onclick="check()">CHECK</button>
+            </div>
+            <div id="end" class="hidden">
+                <div id="badge">⏳</div>
+                <h2 id="msg"></h2>
+                <div id="recap" class="recap-container hidden"></div>
+                <button class="btn" onclick="location.reload()">OPNIEUW</button>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2026 EngliForce – Make English Your Superpower!</p>
+    </footer>
+    <script>
+    const db = [
+        // Bevestigend
+        {s: "I (play) ___ soccer today.", a: "have played"}, 
+        {s: "She (cook) ___ dinner already.", a: "has cooked"},
+        {s: "We (walk) ___ to the park.", a: "have walked"}, 
+        {s: "He (watch) ___ a movie.", a: "has watched"},
+        {s: "They (clean) ___ the kitchen.", a: "have cleaned"}, 
+        {s: "You (work) ___ hard today.", a: "have worked"},
+        {s: "She (paint) ___ the fence.", a: "has painted"}, 
+        {s: "We (visit) ___ our friends.", a: "have visited"},
+        {s: "He (wash) ___ his hands.", a: "has washed"}, 
+        {s: "I (help) ___ my sister.", a: "have helped"},
+        {s: "They (jump) ___ high.", a: "have jumped"}, 
+        {s: "She (phone) ___ her grandma.", a: "has phoned"},
+        {s: "We (climb) ___ the hill.", a: "have climbed"}, 
+        {s: "He (dance) ___ well.", a: "has danced"},
+        {s: "I (open) ___ the box.", a: "have opened"}, 
+        {s: "They (look) ___ at the stars.", a: "have looked"},
+        {s: "She (smile) ___ at me.", a: "has smiled"}, 
+        {s: "We (wait) ___ for an hour.", a: "have waited"},
+        {s: "I (shut) ___ the window.", a: "have shut"}, 
+        {s: "It (cost) ___ a lot.", a: "has cost"},
+        {s: "He (let) ___ us enter.", a: "has let"}, 
+        {s: "She (read) ___ a great book.", a: "has read"},
+        {s: "I (put) ___ the dish away.", a: "have put"}, 
+        {s: "His leg (hurt) ___ all day.", a: "has hurt"},
+        {s: "He (hit) ___ the ball.", a: "has hit"}, 
+        {s: "She (cut) ___ the paper.", a: "has cut"},
+        {s: "They (quit) ___ the game.", a: "have quit"}, 
+        {s: "We (split) ___ the bill.", a: "have split"},
+        {s: "They (beat) ___ the record.", a: "have beaten"}, 
+        {s: "He (come) ___ back home.", a: "has come"},
+        {s: "She (become) ___ a doctor.", a: "has become"}, 
+        {s: "I (run) ___ five kilometers.", a: "have run"},
+        {s: "He (dig) ___ a hole.", a: "has dug"}, 
+        {s: "We (get) ___ a new dog.", a: "have got"},
+        {s: "She (lay) ___ the book down.", a: "has laid"}, 
+        {s: "I (pay) ___ for the drinks.", a: "have paid"},
+        {s: "He (say) ___ goodbye.", a: "has said"}, 
+        {s: "They (sit) ___ on the bench.", a: "have sat"},
+        {s: "We (win) ___ the cup.", a: "have won"}, 
+        {s: "I (buy) ___ some snacks.", a: "have bought"},
+        {s: "He (bend) ___ the wire.", a: "has bent"}, 
+        {s: "I (feel) ___ very tired.", a: "have felt"},
+        {s: "They (find) ___ a treasure.", a: "have found"}, 
+        {s: "She (hang) ___ her coat up.", a: "has hung"},
+        {s: "We (have) ___ a good time.", a: "have had"}, 
+        {s: "He (hear) ___ a strange noise.", a: "has heard"},
+        {s: "I (hold) ___ her hand.", a: "have held"}, 
+        {s: "She (keep) ___ the secret.", a: "has kept"},
+        {s: "They (lead) ___ the group.", a: "have led"}, 
+        {s: "He (lend) ___ me a pen.", a: "has lent"},
+
+        // Ontkennend
+        {s: "I (not play) ___ soccer yet.", a: "have not played"},
+        {s: "She (not cook) ___ dinner.", a: "has not cooked"},
+        {s: "We (not walk) ___ home.", a: "have not walked"},
+        {s: "He (not watch) ___ TV.", a: "has not watched"},
+        {s: "They (not clean) ___ up.", a: "have not cleaned"},
+        {s: "You (not work) ___ hard.", a: "have not worked"},
+        {s: "She (not paint) ___ it.", a: "has not painted"},
+        {s: "We (not visit) ___ them.", a: "have not visited"},
+        {s: "He (not wash) ___ his car.", a: "has not washed"},
+        {s: "I (not help) ___ her.", a: "have not helped"},
+        {s: "They (not jump) ___ far.", a: "have not jumped"},
+        {s: "She (not phone) ___ me.", a: "has not phoned"},
+        {s: "We (not climb) ___ up.", a: "have not climbed"},
+        {s: "He (not dance) ___ well.", a: "has not danced"},
+        {s: "I (not open) ___ it.", a: "have not opened"},
+        {s: "They (not look) ___ there.", a: "have not looked"},
+        {s: "She (not smile) ___ at him.", a: "has not smiled"},
+        {s: "We (not wait) ___ long.", a: "have not waited"},
+        {s: "I (not lose) ___ my key.", a: "have not lost"},
+        {s: "He (not mean) ___ that.", a: "has not meant"},
+        {s: "She (not meet) ___ him.", a: "has not met"},
+        {s: "They (not sell) ___ the car.", a: "have not sold"},
+        {s: "We (not send) ___ a text.", a: "have not sent"},
+        {s: "I (not make) ___ lunch.", a: "have not made"},
+        {s: "He (not tell) ___ a joke.", a: "has not told"},
+        {s: "She (not bring) ___ food.", a: "has not brought"},
+        {s: "They (not build) ___ a house.", a: "have not built"},
+        {s: "I (not catch) ___ the ball.", a: "have not caught"},
+        {s: "We (not dream) ___ a lot.", a: "have not dreamt"},
+        {s: "He (not fight) ___ back.", a: "has not fought"},
+        {s: "They (not learn) ___ English.", a: "have not learnt"},
+        {s: "She (not leave) ___ early.", a: "has not left"},
+        {s: "It (not smell) ___ bad.", a: "has not smelled"},
+        {s: "I (not spend) ___ money.", a: "have not spent"},
+        {s: "We (not stand) ___ outside.", a: "have not stood"},
+        {s: "It (not stick) ___ there.", a: "has not stuck"},
+        {s: "A bee (not sting) ___ me.", a: "has not stung"},
+        {s: "He (not sweep) ___ the floor.", a: "has not swept"},
+        {s: "She (not teach) ___ math.", a: "has not taught"},
+        {s: "I (not think) ___ so.", a: "have not thought"},
+        {s: "They (not sleep) ___ well.", a: "have not slept"},
+        {s: "We (not do) ___ the work.", a: "have not done"},
+        {s: "He (not go) ___ away.", a: "has not gone"},
+        {s: "She (not eat) ___ cake.", a: "has not eaten"},
+        {s: "I (not see) ___ him.", a: "have not seen"},
+        {s: "They (not fly) ___ to Rome.", a: "have not flown"},
+        {s: "He (not lie) ___ in bed.", a: "has not lain"},
+        {s: "It (not bite) ___ my finger.", a: "has not bitten"},
+        {s: "The wind (not blow) ___ hard.", a: "has not blown"},
+        {s: "She (not draw) ___ a cat.", a: "has not drawn"},
+
+        // Vragend
+        {s: "___ you (play) ___ soccer?", a: "have played"},
+        {s: "___ she (cook) ___ dinner?", a: "has cooked"},
+        {s: "___ we (walk) ___ home?", a: "have walked"},
+        {s: "___ he (watch) ___ TV?", a: "has watched"},
+        {s: "___ they (clean) ___ up?", a: "have cleaned"},
+        {s: "___ you (work) ___ hard?", a: "have worked"},
+        {s: "___ she (paint) ___ it?", a: "has painted"},
+        {s: "___ we (visit) ___ them?", a: "have visited"},
+        {s: "___ he (wash) ___ his car?", a: "has washed"},
+        {s: "___ I (help) ___ her?", a: "have helped"},
+        {s: "___ they (jump) ___ far?", a: "have jumped"},
+        {s: "___ she (phone) ___ me?", a: "has phoned"},
+        {s: "___ we (climb) ___ up?", a: "have climbed"},
+        {s: "___ he (dance) ___ well?", a: "has danced"},
+        {s: "___ I (open) ___ it?", a: "have opened"},
+        {s: "___ they (look) ___ there?", a: "have looked"},
+        {s: "___ she (smile) ___ at him?", a: "has smiled"},
+        {s: "___ we (wait) ___ long?", a: "have waited"},
+        {s: "___ he (fall) ___ down?", a: "has fallen"},
+        {s: "___ she (give) ___ a gift?", a: "has given"},
+        {s: "___ they (grow) ___ fast?", a: "have grown"},
+        {s: "___ you (know) ___ that?", a: "have known"},
+        {s: "___ the bell (ring) ___?", a: "has rung"},
+        {s: "___ he (ride) ___ a horse?", a: "has ridden"},
+        {s: "___ she (sing) ___ a song?", a: "has sung"},
+        {s: "___ the ship (sink) ___?", a: "has sunken"},
+        {s: "___ we (swim) ___ far?", a: "have swum"},
+        {s: "___ I (take) ___ the bus?", a: "have taken"},
+        {s: "___ he (tear) ___ the paper?", a: "has torn"},
+        {s: "___ she (wear) ___ a dress?", a: "has worn"},
+        {s: "___ it (begin) ___ late?", a: "has begun"},
+        {s: "___ they (break) ___ it?", a: "have broken"},
+        {s: "___ we (choose) ___ option A?", a: "have chosen"},
+        {s: "___ he (drink) ___ water?", a: "has drunk"},
+        {s: "___ she (drive) ___ home?", a: "has driven"},
+        {s: "___ I (forget) ___ my lunch?", a: "have forgotten"},
+        {s: "___ water (freeze) ___ solid?", a: "has frozen"},
+        {s: "___ they (speak) ___ clearly?", a: "have spoken"},
+        {s: "___ he (steal) ___ money?", a: "has stolen"},
+        {s: "___ she (throw) ___ the ball?", a: "has thrown"},
+        {s: "___ I (write) ___ a note?", a: "have written"},
+        {s: "___ he (wake) ___ up early?", a: "has woken up"},
+        {s: "___ they (read) ___ the book?", a: "have read"},
+        {s: "___ we (come) ___ home?", a: "have come"},
+        {s: "___ I (get) ___ a letter?", a: "have got"},
+        {s: "___ she (buy) ___ shoes?", a: "has bought"},
+        {s: "___ he (find) ___ the key?", a: "has found"},
+        {s: "___ they (make) ___ dinner?", a: "have made"},
+        {s: "___ we (go) ___ home?", a: "have gone"},
+        {s: "___ I (see) ___ the movie?", a: "have seen"}
+    ];
+
+    let q = [], i = 0, score = 0;
+    let mistakes = [];
+
+    function start() {
+        q = [...db].sort(() => 0.5 - Math.random()).slice(0, 10);
+        mistakes = [];
+        score = 0;
+        i = 0;
+        
+        document.getElementById('start').classList.add('hidden');
+        document.getElementById('quiz').classList.remove('hidden');
+        show();
+    }
+
+    function show() {
+        document.getElementById('status').innerText = `Vraag ${i + 1}/10`;
+        document.getElementById('sentence').innerText = q[i].s;
+        document.getElementById('answer').value = "";
+        document.getElementById('answer').focus();
+    }
+
+    function handleKeyPress(e) {
+        if (e.key === "Enter") {
+            check();
+        }
+    }
+
+    function check() {
+        let val = document.getElementById('answer').value.toLowerCase().trim();
+        let correct = q[i].a;
+
+        if (val === correct) {
+            score++;
+        } else {
+            mistakes.push({
+                question: q[i].s,
+                given: val === "" ? "(Niets ingevuld)" : val,
+                correct: correct
+            });
+        }
+
+        if (++i < 10) {
+            show();
+        } else {
+            document.getElementById('quiz').classList.add('hidden');
+            document.getElementById('end').classList.remove('hidden');
+            
+            if(score === 10) {
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#ff7043', '#ffb703', '#ffffff'] });
+                document.getElementById('badge').style.display = 'block';
+                document.getElementById('msg').innerHTML = "LEGENDARY! <br>Time Traveler Badge behaald!";
+            } else {
+                document.getElementById('msg').innerText = `Score: ${score}/10. Haal 10/10 voor de badge!`;
+                
+                let recapDiv = document.getElementById('recap');
+                recapDiv.innerHTML = "<h3>Recap van je fouten:</h3>";
+                mistakes.forEach(m => {
+                    recapDiv.innerHTML += `
+                        <div class="recap-item">
+                            <div class="recap-q">${m.question}</div>
+                            <div>Jouw antwoord: <span class="recap-given">${m.given}</span></div>
+                            <div>Juiste antwoord: <span class="recap-correct">${m.correct}</span></div>
+                        </div>
+                    `;
+                });
+                recapDiv.classList.remove('hidden');
+            }
+        }
+    }
+    </script>
+</body>
+</html>
