@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EngliForce Academy: Much, Many, Little & Few Masterclass</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Lexend:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hero-purple-main: #7b2cbf;
+            --hero-purple-dark: #3c096c;
+            --hero-yellow: #ffb703;
+            --hero-cyan: #00f5d4;
+            --dark-bg: #05101a;
+            --hero-orange: #ff5722;
+            --hero-orange-dark: #bf360c;
+            --hero-green: #4caf50;
+            --hero-blue: #4361ee;
+            --hero-red: #d32f2f;
+        }
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: #05101a;
+            background: radial-gradient(circle at center, #1a102a 0%, #05101a 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+        header {
+            background: var(--hero-orange);
+            padding: 2.5rem 1rem;
+            text-align: center;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            border-bottom: 5px solid var(--hero-yellow);
+        }
+        h1 {
+            font-family: 'Bangers', cursive;
+            font-size: 3.5rem;
+            letter-spacing: 3px;
+            margin: 0;
+            text-shadow: 4px 4px 0px var(--hero-orange-dark);
+        }
+        h2 {
+            font-family: 'Bangers', cursive;
+            color: var(--hero-yellow);
+            font-size: 2.2rem;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: var(--hero-cyan);
+            font-family: 'Bangers';
+            font-size: 1.8rem;
+            margin-top: 0;
+        }
+        main {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            flex: 1;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .briefing-box {
+            background: rgba(26, 16, 42, 0.9);
+            border: 2px solid var(--hero-blue);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+        .video-container {
+            background: #000;
+            border: 4px solid var(--hero-yellow);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            padding-top: 56.25%;
+            margin-bottom: 40px;
+            box-shadow: 0 0 40px rgba(255, 183, 3, 0.3);
+        }
+        .video-container iframe {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;
+        }
+        .explanation-text {
+            font-size: 1.1rem; line-height: 1.6; margin-bottom: 15px;
+            border-left: 4px solid var(--hero-blue); padding-left: 20px;
+            background: rgba(67, 97, 238, 0.05); padding-top: 15px; padding-bottom: 15px; padding-right: 20px;
+        }
+        .split-box-container {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .split-box {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 2px dashed var(--hero-cyan);
+        }
+        .split-box-title {
+            font-family: 'Bangers', cursive;
+            font-size: 2.2rem;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            color: var(--hero-cyan);
+        }
+        .example-box {
+            background: rgba(255,255,255,0.08);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-size: 1rem;
+            text-align: left;
+        }
+        .toggle-container {
+            display: flex; 
+            gap: 15px; 
+            justify-content: center; 
+            align-items: center;
+            margin-bottom: 30px; 
+            flex-wrap: wrap;
+        }
+        .btn-toggle {
+            background: var(--hero-purple-main); color: white; border: none;
+            padding: 15px 30px; border-radius: 50px; font-family: 'Bangers', cursive;
+            font-size: 1.3rem; cursor: pointer; transition: 0.2s;
+            border-bottom: 5px solid var(--hero-purple-dark);
+            white-space: nowrap;
+        }
+        .btn-toggle:hover {
+            transform: translateY(-3px);
+            background: var(--hero-blue);
+            color: white;
+        }
+        .btn-video {
+            background: var(--hero-orange);
+            border-bottom: 5px solid var(--hero-orange-dark);
+        }
+        .content-section { display: none; animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .pickle-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 15px; 
+            margin-top: 20px; 
+        }
+        .card {
+            background: #1a102a;
+            border: 3px solid #3c096c;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .card:hover {
+            border-color: var(--hero-yellow);
+            transform: scale(1.05);
+        }
+        .flash-effect { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; opacity: 0; pointer-events: none; z-index: 1999; }
+        .boom-text { position: fixed; pointer-events: none; font-family: 'Bangers', cursive; color: var(--hero-yellow); font-size: 5rem; z-index: 2001; text-shadow: 5px 5px 0px #000; animation: boomAnim 0.6s ease-out forwards; }
+        @keyframes boomAnim {
+            0% { transform: scale(0) rotate(-20deg); opacity: 1; }
+            100% { transform: scale(2) rotate(10deg); opacity: 0; }
+        }
+        footer {
+            background: #05101a;
+            color: rgba(255,255,255,0.8);
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 2px solid var(--hero-purple-dark);
+            margin-top: 50px;
+        }
+        .table-container { background: #1a102a; border-radius: 15px; overflow: hidden; margin-top: 15px; }
+        .table-container table { width: 100%; border-collapse: collapse; }
+        .table-container th { background: var(--hero-blue); padding: 15px; text-align: left; }
+        .table-container td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        @media (max-width: 900px) {
+            .split-box-container { flex-direction: column; }
+            .pickle-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="flash-effect" id="flash"></div>
+<header>
+    <h1>ENGLIFORCE ACADEMY</h1>
+    <p>QUANTIFIERS CENTER: MUCH, MANY, LITTLE & FEW</p>
+</header>
+<main>
+    <section class="briefing-box">
+        <h2>🚨 MISSION: QUANTIFIERS</h2>
+        <div class="explanation-text">
+            <p>Hoeveel is 'veel' of 'weinig'? In het Engels hangt dit volledig af van of je te maken hebt met <strong>telbare</strong> (countables) of <strong>ontelbare</strong> (uncountables) zelfstandige naamwoorden!</p>
+        </div>
+        <div class="example-box" style="border-left: 4px solid var(--hero-cyan); background: rgba(0, 245, 212, 0.1);">
+            <strong style="color: var(--hero-cyan); font-family: 'Bangers'; font-size: 1.4rem;">💡 HET BASISPRINCIPE</strong><br>
+            <ul style="margin-top: 10px; padding-left: 20px;">
+                <li><strong>Telbaar (Countable):</strong> Dingen die je kunt tellen (1 boek, 2 boeken / 1 friend, 2 friends).</li>
+                <li><strong>Ontelbaar (Uncountable):</strong> Dingen die je niet los kunt tellen (water, tijd, geld, informatie; je zegt niet "1 water, 2 waters").</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Knoppenbalk met alle knoppen netjes op één rij en videoknoppen met enkel 'Video' -->
+    <div class="toggle-container">
+        <button class="btn-toggle" onclick="showSection(event, 'rules', 'ZAP!')">Checklist</button>
+        <button class="btn-toggle" onclick="showSection(event, 'countables-page-info', 'ZOEF!')">Countables & Uncountables</button>
+        <button class="btn-toggle btn-video" onclick="showSection(event, 'video-section-1', 'ACTION!')">Video</button>
+        <button class="btn-toggle" onclick="showSection(event, 'much-many', 'POW!')">Much & Many</button>
+        <button class="btn-toggle" onclick="showSection(event, 'little-few', 'BAM!')">(a) Little & (a) Few</button>
+        <button class="btn-toggle btn-video" onclick="showSection(event, 'video-section-2', 'ACTION!')">Video</button>
+    </div>
+
+    <div id="rules" class="content-section" style="display: block;">
+        <h3>Quick Scan Checklist</h3>
+        <div class="explanation-text">
+            <p>✅ <strong>MUCH:</strong> Gebruik je bij grote hoeveelheden met <em>ontelbare</em> zelfstandige naamwoorden (bijv. <em>much time</em>, <em>much money</em>).</p>
+            <p>✅ <strong>MANY:</strong> Gebruik je bij grote aantallen met <em>telbare</em> zelfstandige naamwoorden in meervoud (bijv. <em>many friends</em>, <em>many books</em>).</p>
+            <p>✅ <strong>LITTLE:</strong> Gebruik je bij een kleine (onvoldoende) hoeveelheid met <em>ontelbare</em> woorden (negatief: <em>little money</em> = bijna geen geld).</p>
+            <p>✅ <strong>A LITTLE:</strong> Gebruik je bij een kleine (voldoende) hoeveelheid met <em>ontelbare</em> woorden (positief: <em>a little time</em> = een beetje tijd).</p>
+            <p>✅ <strong>FEW:</strong> Gebruik je bij een klein (onvoldoende) aantal met <em>telbare</em> woorden (negatief: <em>few friends</em> = bijna geen vrienden).</p>
+            <p>✅ <strong>A FEW:</strong> Gebruik je bij een klein (voldoende) aantal met <em>telbare</em> woorden (positief: <em>a few questions</em> = een paar vragen).</p>
+        </div>
+    </div>
+
+    <!-- Uitlegpagina specifiek voor Countable & Uncountable Nouns (zonder video) -->
+    <div id="countables-page-info" class="content-section">
+        <h3>Countable & Uncountable Nouns</h3>
+        <div class="explanation-text">
+            <p>In het Engels zijn zelfstandige naamwoorden óf <strong>telbaar (countable)</strong> óf <strong>ontelbaar (uncountable)</strong>.</p>
+            <div class="table-container">
+                <table>
+                    <tr>
+                        <th>Type</th>
+                        <th>Kenmerk</th>
+                        <th>Voorbeelden</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Countable</strong><br>(telbaar)</td>
+                        <td>Kun je tellen<br>→ Meervoudsvorm is mogelijk</td>
+                        <td>apple → apples<br>dog → dogs<br>chair → chairs</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Uncountable</strong><br>(ontelbaar)</td>
+                        <td>Kun je niet tellen<br>→ Geen meervoudsvorm</td>
+                        <td>milk<br>flour<br>gas<br>love<br>money</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="briefing-box" style="margin-top: 20px;">
+            <h3 style="color: var(--hero-yellow);">💡 Handige Tips</h3>
+            <ul style="list-style: none; padding-left: 0;">
+                <li style="margin-bottom: 8px;">🧪 Vloeistoffen zijn meestal ontelbaar: <em>water, oil, juice</em></li>
+                <li style="margin-bottom: 8px;">🧂 Poeders zijn ontelbaar: <em>flour, sugar, coffee</em></li>
+                <li style="margin-bottom: 8px;">🌬️ Gassen zijn ontelbaar: <em>air, oxygen, smoke</em></li>
+                <li style="margin-bottom: 8px;">🧠 Begrippen zijn ontelbaar: <em>knowledge, love, information</em></li>
+            </ul>
+        </div>
+
+        <div class="briefing-box" style="margin-top: 20px;">
+            <h3 style="color: var(--hero-orange);">🥒 Super Pickles – Countable / Uncountable</h3>
+            <p>Test je kennis met deze interactieve Pickle-oefeningen!</p>
+            <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 2rem;">
+                <div class="links" style="min-width: 200px; text-align: left;">
+                    <a style="display: inline-block; margin: 0.3rem 0; padding: 0.5rem 1rem; background-color: var(--hero-blue); color: white; border-radius: 6px; text-decoration: none; font-size: 0.9rem;" href="https://wordwall.net/embed/193e1d5f62c440c6ae67bb524dc38347?themeId=1&templateId=35&fontStackId=0" target="_blank">Pickle 1: Countable or uncountable 1</a><br>
+                    <a style="display: inline-block; margin: 0.3rem 0; padding: 0.5rem 1rem; background-color: var(--hero-blue); color: white; border-radius: 6px; text-decoration: none; font-size: 0.9rem;" href="https://wordwall.net/embed/d72a2cfff8424deab9dbc18f0ed99e6f?themeId=1&templateId=2&fontStackId=0" target="_blank">Pickle 2: Countable or uncountable 2</a><br>
+                    <a style="display: inline-block; margin: 0.3rem 0; padding: 0.5rem 1rem; background-color: var(--hero-blue); color: white; border-radius: 6px; text-decoration: none; font-size: 0.9rem;" href="https://wordwall.net/embed/eec1ab62e4b54f04ac1f0d74cda5f9b1?themeId=22&templateId=45&fontStackId=0" target="_blank">Pickle 3: Whack-a-mole!</a><br>
+                    <a style="display: inline-block; margin: 0.3rem 0; padding: 0.5rem 1rem; background-color: var(--hero-blue); color: white; border-radius: 6px; text-decoration: none; font-size: 0.9rem;" href="https://wordwall.net/embed/2a77bb5c2eb546d2803594312c812542?themeId=26&templateId=49&fontStackId=0" target="_blank">Pickle 4: Haunted mansion</a><br>
+                    <a style="display: inline-block; margin: 0.3rem 0; padding: 0.5rem 1rem; background-color: var(--hero-blue); color: white; border-radius: 6px; text-decoration: none; font-size: 0.9rem;" href="https://wordwall.net/embed/b78e1474c57e4471a40d185d46d05e44?themeId=22&templateId=71&fontStackId=0" target="_blank">Pickle 5: Balloon pop</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Eerste videosectie achter de eerste videoknop -->
+    <div id="video-section-1" class="content-section">
+        <h3>🎬 MISSION VIDEO: COUNTABLES</h3>
+        <div class="briefing-box">
+            <h4 style="color: var(--hero-cyan); font-family: 'Bangers'; font-size: 1.4rem; margin-top: 0;">Countable & Uncountable Nouns Uitleg</h4>
+            <p>Bekijk deze video over het verschil tussen telbare en ontelbare woorden.</p>
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/xJEtmpKdvWo" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <div id="much-many" class="content-section">
+        <h3>Much & Many (Veel)</h3>
+        <div class="explanation-text">
+            <p>Beide woorden betekenen <strong>veel</strong>, maar ze kunnen nooit door elkaar worden gebruikt!</p>
+            <div class="split-box-container">
+                <div class="split-box">
+                    <div class="split-box-title">MUCH</div>
+                    <p style="font-size: 1.2rem;">Ontelbare zelfstandige naamwoorden</p>
+                    <p style="font-size: 0.95rem; color: rgba(255,255,255,0.7);">time, water, money, information</p>
+                    <div class="example-box">I don’t have <strong>much</strong> time.</div>
+                </div>
+                <div class="split-box" style="border-color: #ff60a8;">
+                    <div class="split-box-title" style="color: #ff60a8;">MANY</div>
+                    <p style="font-size: 1.2rem;">Telbare zelfstandige naamwoorden (meervoud)</p>
+                    <p style="font-size: 0.95rem; color: rgba(255,255,255,0.7);">friends, cars, questions, days</p>
+                    <div class="example-box">She has <strong>many</strong> friends.</div>
+                </div>
+            </div>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr><th>Word</th><th>Category</th><th>Example Sentence</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong style="color: var(--hero-cyan);">Much</strong></td><td>Ontelbaar</td><td>How <strong style="color: var(--hero-cyan);">much</strong> money do you need?</td></tr>
+                    <tr><td><strong style="color: var(--hero-cyan);">Much</strong></td><td>Ontelbaar</td><td>There isn't <strong style="color: var(--hero-cyan);">much</strong> hope left.</td></tr>
+                    <tr><td><strong style="color: #ff60a8;">Many</strong></td><td>Telbaar</td><td>How <strong style="color: #ff60a8;">many</strong> books did you read?</td></tr>
+                    <tr><td><strong style="color: #ff60a8;">Many</strong></td><td>Telbaar</td><td>There are <strong style="color: #ff60a8;">many</strong> students in the hall.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="little-few" class="content-section">
+        <h3>Little, A Little, Few & A Few (Weinig / Een beetje)</h3>
+        <div class="explanation-text">
+            <p>Wanneer het om kleine hoeveelheden gaat, maakt het ontzettend veel uit of er een <strong>'a'</strong> voor staat of niet. Dat verandert de betekenis volledig van <strong>negatief</strong> naar <strong>positief</strong>!</p>
+            
+            <div class="split-box-container">
+                <div class="split-box">
+                    <div class="split-box-title">ONTELBAAR (Water, geld, tijd)</div>
+                    <div style="text-align: left; margin-top: 10px;">
+                        <p>❌ <strong style="color: var(--hero-yellow);">Little</strong> = <strong>Weinig</strong> (Negatief: bijna niets, onvoldoende)<br>
+                        <em>Voorbeeld:</em> "I have <strong>little</strong> money." (Ik heb bijna geen geld.)</p>
+                        <p>✅ <strong style="color: var(--hero-cyan);">A little</strong> = <strong>Een beetje</strong> (Posatief: niet veel, maar genoeg om vooruit te komen)<br>
+                        <em>Voorbeeld:</em> "I have <strong>a little</strong> time." (Ik heb een beetje tijd [om te helpen].)</p>
+                    </div>
+                </div>
+                
+                <div class="split-box" style="border-color: #ff60a8;">
+                    <div class="split-box-title" style="color: #ff60a8;">TELBAAR (Vrienden, boeken, vragen)</div>
+                    <div style="text-align: left; margin-top: 10px;">
+                        <p>❌ <strong style="color: var(--hero-yellow);">Few</strong> = <strong>Weinig</strong> (Negatief: bijna niemand, bijna geen)<br>
+                        <em>Voorbeeld:</em> "He has <strong>few</strong> friends." (Hij heeft heel weinig vrienden / is bijna eenzaam.)</p>
+                        <p>✅ <strong style="color: var(--hero-cyan);">A few</strong> = <strong>Een paar</strong> (Positief: een klein aantal, het is er wel)<br>
+                        <em>Voorbeeld:</em> "She has <strong>a few</strong> questions." (Ze heeft een paar vragen.)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr><th>Expression</th><th>Type</th><th>Meaning & Vibe</th><th>Example Sentence</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong style="color: var(--hero-yellow);">Little</strong></td><td>Ontelbaar</td><td>Weinig (Negatief 📉)</td><td>There is <strong style="color: var(--hero-yellow);">little</strong> hope. (Bijna geen hoop)</td></tr>
+                    <tr><td><strong style="color: var(--hero-cyan);">A little</strong></td><td>Ontelbaar</td><td>Een beetje (Positief 📈)</td><td>Can I have <strong style="color: var(--hero-cyan);">a little</strong> water? (Een beetje water)</td></tr>
+                    <tr><td><strong style="color: var(--hero-yellow);">Few</strong></td><td>Telbaar</td><td>Weinig (Negatief 📉)</td><td><strong style="color: var(--hero-yellow);">Few</strong> people know this. (Bijna niemand)</td></tr>
+                    <tr><td><strong style="color: var(--hero-cyan);">A few</strong></td><td>Telbaar</td><td>Een paar (Positief 📈)</td><td>I bought <strong style="color: var(--hero-cyan);">a few</strong> apples. (Een paar appels)</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Tweede videosectie achter de tweede videoknop -->
+    <div id="video-section-2" class="content-section">
+        <h3>🎬 MISSION VIDEO: MASTERCLASS</h3>
+        <div class="briefing-box">
+            <h4 style="color: var(--hero-yellow); font-family: 'Bangers'; font-size: 1.4rem; margin-top: 0;">Much, Many, Little & Few Masterclass</h4>
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/Atghhwn_gs8" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-divider"></div>
+    <h2>⚔️ PICKLE MISSIONS</h2>
+    <div class="pickle-grid">
+        <div class="card" onclick="createExplosion(event, 'CRUNCH!', 'm2t1_quantifiers_pickle_1.html')">
+            <span style="font-size: 2.5rem;">🖊️</span>
+            <div class="title" style="font-family: 'Bangers'; color: var(--hero-cyan);">Pickle 1</div>
+            <p>Fill in the blanks</p>
+        </div>
+        <div class="card" onclick="createExplosion(event, 'SMART!', 'm2t1_quantifiers_pickle_2.html')">
+            <span style="font-size: 2.5rem;">💣</span>
+            <div class="title" style="font-family: 'Bangers'; color: var(--hero-yellow);">Pickle 2</div>
+            <p>Bombsquad</p>
+        </div>
+        <div class="card" onclick="createExplosion(event, 'BOOM!', 'm2t1_quantifiers_pickle_3.html')">
+            <span style="font-size: 2.5rem;">🕵🏼</span>
+            <div class="title" style="font-family: 'Bangers'; color: var(--hero-orange);">Pickle 3</div>
+            <p>Find the mistake</p>
+        </div>
+    </div>
+</main>
+<footer>
+    <div class="footer-text">&copy; 2026, EngliForce: <span style="color: var(--hero-yellow);">Make English Your Superpower!</span></div>
+</footer>
+<script>
+    function showSection(e, id, boomMessage) {
+        document.querySelectorAll('.content-section').forEach(s => s.style.display = 'none');
+        document.getElementById(id).style.display = 'block';
+        createExplosion(e, boomMessage);
+    }
+
+    function createExplosion(e, message, redirectUrl) {
+        const x = e.clientX, y = e.clientY;
+        const flash = document.getElementById('flash');
+        flash.style.opacity = '0.3';
+        setTimeout(() => flash.style.opacity = '0', 200);
+                
+        const txt = document.createElement('div');
+        txt.className = 'boom-text';
+        txt.innerText = message;
+        txt.style.left = (x - 50) + 'px'; txt.style.top = (y - 50) + 'px';
+        document.body.appendChild(txt);
+        setTimeout(() => txt.remove(), 600);
+                
+        if (redirectUrl) {
+            setTimeout(() => {
+                window.location.href = redirectUrl;
+            }, 300);
+        }
+    }
+</script>
+</body>
+</html>

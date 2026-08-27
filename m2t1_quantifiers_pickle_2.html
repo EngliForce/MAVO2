@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bomb Squad: Quantifiers Edition - High Stakes</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Lexend:wght@400;700&family=Share+Tech+Mono&family=Orbitron:wght@600;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hero-orange-main: #ff7043;
+            --hero-orange-dark: #e65c30;
+            --hero-orange-glow: rgba(255, 112, 67, 0.4);
+            --hero-yellow: #ffb703;
+            --dark-bg: #0b1a2a;
+            --card-bg: #102a43;
+            --card-border: #243b53;
+        }
+
+        body { 
+            font-family: 'Lexend', sans-serif; 
+            background: radial-gradient(circle at center, #102a43 0%, #05101a 100%);
+            color: #ff3333; 
+            overflow-x: hidden; 
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .font-orbitron { font-family: 'Orbitron', sans-serif; }
+        .font-bangers { font-family: 'Bangers', cursive; }
+
+        header {
+            background: var(--hero-orange-main);
+            padding: 2rem 1rem;
+            text-align: center;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            border-bottom: 5px solid var(--hero-yellow);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            color: white;
+        }
+
+        header h1 { 
+            font-family: 'Bangers', cursive; 
+            font-size: 3.5rem; 
+            letter-spacing: 3px; 
+            margin: 0; 
+            text-shadow: 4px 4px 0px var(--hero-orange-dark); 
+        }
+
+        header p { 
+            font-size: 1.2rem; 
+            font-weight: bold; 
+            margin-top: 5px; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            font-family: 'Lexend', sans-serif;
+            color: #fff;
+        }
+
+        .lcd-text { 
+            text-shadow: 0 0 15px rgba(255, 51, 51, 0.75); 
+        }
+
+        .lcd-green {
+            text-shadow: 0 0 15px rgba(34, 197, 94, 0.75);
+        }
+        
+        .shake {
+            animation: shake 0.35s cubic-bezier(.36,.07,.19,.97) infinite;
+        }
+
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-5px, 0, 0); }
+            20%, 80% { transform: translate3d(10px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-14px, 0, 0); }
+            40%, 60% { transform: translate3d(14px, 0, 0); }
+        }
+
+        .flash-red {
+            animation: flash 0.5s ease-out;
+        }
+
+        @keyframes flash {
+            0% { background-color: rgba(239, 68, 68, 0.4); }
+            100% { background-color: transparent; }
+        }
+
+        .bomb-panel {
+            background: linear-gradient(145deg, #18181b, #09090b);
+            border: 4px solid #27272a;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9), inset 0 0 35px #000;
+        }
+
+        .wire-btn {
+            transition: all 0.15s ease;
+            box-shadow: 0 4px 0 0 rgba(0,0,0,0.6);
+            font-family: 'Share Tech Mono', monospace;
+        }
+        .wire-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 0 rgba(0,0,0,0.6);
+        }
+
+        .star-pop {
+            animation: starPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes starPop {
+            0% { transform: scale(0) rotate(-45deg); opacity: 0; }
+            80% { transform: scale(1.2) rotate(10deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        .penalty-badge {
+            animation: floatUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-40px) scale(1.15); }
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        footer {
+            text-align: center; 
+            opacity: 0.5; 
+            padding: 40px 0;
+            font-family: 'Lexend', sans-serif;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>ENGLIFORCE ACADEMY</h1>
+        <p>BOMB SQUAD: QUANTIFIERS PROTOCOL</p>
+    </header>
+
+    <div id="root"></div>
+
+    <footer>
+        <p>&copy; 2026 EngliForce – Make English Your Superpower!</p>
+    </footer>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        const ALL_QUESTIONS = [
+            { start: "How", end: "water is in the bottle?", ans: "much" },
+            { start: "There isn't", end: "sugar in my tea.", ans: "much" },
+            { start: "How", end: "money do you need?", ans: "much" },
+            { start: "Too", end: "salt is bad for you.", ans: "much" },
+            { start: "We don't have", end: "time left!", ans: "much" },
+            { start: "How", end: "coffee do you drink?", ans: "much" },
+            { start: "How", end: "milk is in the fridge?", ans: "much" },
+            { start: "I have too", end: "homework tonight.", ans: "much" },
+            { start: "There isn't", end: "info about the trip.", ans: "much" },
+            { start: "Is there", end: "butter on the bread?", ans: "much" },
+            { start: "There is too", end: "noise in here!", ans: "much" },
+            { start: "I don't put", end: "oil in the pan.", ans: "much" },
+            { start: "There isn't", end: "hope left.", ans: "much" },
+            { start: "We didn't take", end: "luggage with us.", ans: "much" },
+            { start: "There is so", end: "dust on the table.", ans: "much" },
+            { start: "I don't eat", end: "meat.", ans: "much" },
+            { start: "There wasn't", end: "traffic this morning.", ans: "much" },
+            { start: "Is there", end: "soup in the pot?", ans: "much" },
+            { start: "There is too", end: "rain today.", ans: "much" },
+            { start: "I don't spend", end: "time online.", ans: "much" },
+            { start: "There isn't", end: "bread in the bin.", ans: "much" },
+            { start: "Do you have", end: "furniture?", ans: "much" },
+            { start: "There isn't", end: "snow in Africa.", ans: "much" },
+            { start: "We don't need", end: "help right now.", ans: "much" },
+            { start: "There is too", end: "furniture in here.", ans: "much" },
+
+            { start: "How", end: "people are at the party?", ans: "many" },
+            { start: "I don't have", end: "friends in London.", ans: "many" },
+            { start: "Are there", end: "cars on the road?", ans: "many" },
+            { start: "How", end: "times do I have to tell you?", ans: "many" },
+            { start: "How", end: "apples do you want?", ans: "many" },
+            { start: "There are too", end: "mistakes here.", ans: "many" },
+            { start: "Not", end: "children like vegetables.", ans: "many" },
+            { start: "How", end: "books did you read?", ans: "many" },
+            { start: "How", end: "days until Christmas?", ans: "many" },
+            { start: "We saw", end: "animals at the zoo.", ans: "many" },
+            { start: "How", end: "questions are left?", ans: "many" },
+            { start: "How", end: "countries are in Europe?", ans: "many" },
+            { start: "How", end: "stars can you see?", ans: "many" },
+            { start: "How", end: "players are in a team?", ans: "many" },
+            { start: "How", end: "cups of tea do you want?", ans: "many" },
+            { start: "How", end: "pages is this book?", ans: "many" },
+            { start: "How", end: "seats are available?", ans: "many" },
+            { start: "How", end: "languages do you speak?", ans: "many" },
+            { start: "How", end: "hours do you sleep?", ans: "many" },
+            { start: "How", end: "bottles of wine?", ans: "many" },
+            { start: "How", end: "emails did you send?", ans: "many" },
+            { start: "How", end: "students are in class?", ans: "many" },
+            { start: "How", end: "cows are in the field?", ans: "many" },
+            { start: "How", end: "photos did you take?", ans: "many" },
+            { start: "How", end: "windows are in the room?", ans: "many" },
+
+            { start: "He speaks very", end: "English, so communication is hard.", ans: "little" },
+            { start: "There is", end: "hope of finding survivors in the storm.", ans: "little" },
+            { start: "She showed", end: "interest in the presentation.", ans: "little" },
+            { start: "We have", end: "time to spare before the train leaves.", ans: "little" },
+            { start: "There is", end: "doubt that he is guilty.", ans: "little" },
+            { start: "He has", end: "experience in accounting.", ans: "little" },
+            { start: "They paid", end: "attention to the warnings.", ans: "little" },
+            { start: "There was", end: "rain this winter, causing a drought.", ans: "little" },
+            { start: "She had", end: "money left after paying rent.", ans: "little" },
+            { start: "The plan has", end: "chance of success.", ans: "little" },
+            { start: "He takes", end: "care of his health.", ans: "little" },
+            { start: "There is", end: "evidence to support this claim.", ans: "little" },
+            { start: "I have", end: "patience left for this nonsense.", ans: "little" },
+            { start: "She spent", end: "effort on the final project.", ans: "little" },
+            { start: "There was", end: "traffic late at night.", ans: "little" },
+            { start: "The doctor gave him", end: "progress updates.", ans: "little" },
+            { start: "He showed", end: "emotion during the film.", ans: "little" },
+            { start: "There is", end: "warmth in this old house.", ans: "little" },
+            { start: "She gets", end: "sleep during exam week.", ans: "little" },
+            { start: "The dish had", end: "flavor without spices.", ans: "little" },
+            { start: "We made", end: "progress on the project today.", ans: "little" },
+            { start: "He paid", end: "regard to our advice.", ans: "little" },
+            { start: "There is", end: "privacy in this open office.", ans: "little" },
+            { start: "She feels", end: "sympathy for dishonest people.", ans: "little" },
+            { start: "The soil has", end: "moisture left in summer.", ans: "little" },
+
+            { start: "Very", end: "students passed the difficult test.", ans: "few" },
+            { start: "He has", end: "friends because he is very quiet.", ans: "few" },
+            { start: "There are", end: "reasons to doubt his honesty.", ans: "few" },
+            { start: "Very", end: "people know the secret location.", ans: "few" },
+            { start: "She made", end: "mistakes on her grammar test.", ans: "few" },
+            { start: "Very", end: "cities are as old as Rome.", ans: "few" },
+            { start: "There were", end: "survivors after the crash.", ans: "few" },
+            { start: "He received", end: "replies to his job applications.", ans: "few" },
+            { start: "Very", end: "politicians keep all their promises.", ans: "few" },
+            { start: "We saw", end: "animals in the desert during the day.", ans: "few" },
+            { start: "Very", end: "details were released to the public.", ans: "few" },
+            { start: "She has", end: "hobbies outside of work.", ans: "few" },
+            { start: "Only a", end: "passengers remained on the bus.", ans: "few" },
+            { start: "There were", end: "complaints about the service.", ans: "few" },
+            { start: "Very", end: "trees survive in such harsh climates.", ans: "few" },
+            { start: "He gave", end: "clear answers during the interview.", ans: "few" },
+            { start: "Very", end: "visitors came to the remote museum.", ans: "few" },
+            { start: "She bought", end: "items at the luxury store.", ans: "few" },
+            { start: "Very", end: "candidates met all requirements.", ans: "few" },
+            { start: "There are", end: "spots available in the workshop.", ans: "few" },
+            { start: "Very", end: "birds fly north in the winter.", ans: "few" },
+            { start: "He found", end: "options when searching the menu.", ans: "few" },
+            { start: "Very", end: "cars were parked in the lot at midnight.", ans: "few" },
+            { start: "She wrote", end: "sentences in her short essay.", ans: "few" },
+            { start: "Very", end: "patients recovered without medication.", ans: "few" },
+
+            { start: "Could I have", end: "milk in my coffee, please?", ans: "a little" },
+            { start: "I need", end: "advice about buying a car.", ans: "a little" },
+            { start: "Add", end: "salt to taste.", ans: "a little" },
+            { start: "She speaks", end: "French from her trip to Paris.", ans: "a little" },
+            { start: "We still have", end: "time before the movie starts.", ans: "a little" },
+            { start: "Please give me", end: "extra time to finish.", ans: "a little" },
+            { start: "There is", end: "soup left in the fridge.", ans: "a little" },
+            { start: "He saved", end: "money for emergencies.", ans: "a little" },
+            { start: "I feel", end: "better after taking a nap.", ans: "a little" },
+            { start: "Can you give me", end: "help with this box?", ans: "a little" },
+            { start: "Put", end: "butter on the hot toast.", ans: "a little" },
+            { start: "We need", end: "patience while they investigate.", ans: "a little" },
+            { start: "There is", end: "sunshine coming through.", ans: "a little" },
+            { start: "She enjoys", end: "quiet time in the morning.", ans: "a little" },
+            { start: "He added", end: "lemon juice to the tea.", ans: "a little" },
+            { start: "I have", end: "experience with graphic design.", ans: "a little" },
+            { start: "We heard", end: "music playing in the distance.", ans: "a little" },
+            { start: "Give the dough", end: "rest before baking.", ans: "a little" },
+            { start: "There is", end: "water left in the pitcher.", ans: "a little" },
+            { start: "She showed", end: "interest, so I explained more.", ans: "a little" },
+            { start: "I need", end: "rest before the evening shift.", ans: "a little" },
+            { start: "Add", end: "sugar to balance the acidity.", ans: "a little" },
+            { start: "He has", end: "influence in the decision.", ans: "a little" },
+            { start: "We got", end: "information from the front desk.", ans: "a little" },
+            { start: "There was", end: "rain, but not enough to stop us.", ans: "a little" },
+
+            { start: "I have", end: "friends coming over tonight.", ans: "a few" },
+            { start: "She bought", end: "apples at the local market.", ans: "a few" },
+            { start: "We will stay here for", end: "days.", ans: "a few" },
+            { start: "Can I ask", end: "questions about the project?", ans: "a few" },
+            { start: "There are", end: "books on the shelf.", ans: "a few" },
+            { start: "He invited", end: "colleagues to the dinner.", ans: "a few" },
+            { start: "I took", end: "photos during our vacation.", ans: "a few" },
+            { start: "She has", end: "ideas for the new design.", ans: "a few" },
+            { start: "We saw", end: "deer near the forest line.", ans: "a few" },
+            { start: "Wait", end: "minutes; I will be ready.", ans: "a few" },
+            { start: "He brought", end: "slices of cake to share.", ans: "a few" },
+            { start: "There are", end: "errors, but overall it's great.", ans: "a few" },
+            { start: "She kept", end: "coins for the parking meter.", ans: "a few" },
+            { start: "I need to make", end: "phone calls today.", ans: "a few" },
+            { start: "We visited", end: "museums during our trip.", ans: "a few" },
+            { start: "He wrote", end: "notes on the whiteboard.", ans: "a few" },
+            { start: "She saved", end: "cookies for her brother.", ans: "a few" },
+            { start: "There were", end: "cars parked outside.", ans: "a few" },
+            { start: "I have", end: "errands to run this afternoon.", ans: "a few" },
+            { start: "We collected", end: "shells on the beach.", ans: "a few" },
+            { start: "He gave", end: "examples to clarify the rule.", ans: "a few" },
+            { start: "She has", end: "tickets for the concert.", ans: "a few" },
+            { start: "I found", end: "old letters in the drawer.", ans: "a few" },
+            { start: "We took", end: "breaks during the long drive.", ans: "a few" },
+            { start: "There are", end: "spots remaining for the tour.", ans: "a few" }
+        ];
+
+        const playSound = (type) => {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                if (type === 'beep') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(880, ctx.currentTime);
+                    gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.1);
+                } else if (type === 'penalty') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(150, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(60, ctx.currentTime + 0.4);
+                    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.4);
+                } else if (type === 'defused') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+                    osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.15);
+                    osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.3);
+                    gain.gain.setValueAtTime(0.2, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.6);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.6);
+                } else if (type === 'explode') {
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(100, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(20, ctx.currentTime + 0.8);
+                    gain.gain.setValueAtTime(0.4, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.8);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.8);
+                }
+            } catch (e) { }
+        };
+
+        const triggerConfetti = () => {
+            if (window.confetti) {
+                confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 }, colors: ['#ff7043', '#ffb703', '#ffffff'] });
+            } else {
+                const canvas = document.createElement('canvas');
+                canvas.style.position = 'fixed';
+                canvas.style.top = '0';
+                canvas.style.left = '0';
+                canvas.style.width = '100vw';
+                canvas.style.height = '100vh';
+                canvas.style.pointerEvents = 'none';
+                canvas.style.zIndex = '9999';
+                document.body.appendChild(canvas);
+
+                const ctx = canvas.getContext('2d');
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+
+                const particles = [];
+                const colors = ['#22c55e', '#3b82f6', '#eab308', '#ec4899', '#a855f7'];
+
+                for (let i = 0; i < 120; i++) {
+                    particles.push({
+                        x: canvas.width / 2,
+                        y: canvas.height / 2,
+                        vx: (Math.random() - 0.5) * 18,
+                        vy: (Math.random() - 0.7) * 18,
+                        size: Math.random() * 8 + 4,
+                        color: colors[Math.floor(Math.random() * colors.length)],
+                        life: 1,
+                        decay: Math.random() * 0.015 + 0.01
+                    });
+                }
+
+                const animate = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    let alive = false;
+                    particles.forEach(p => {
+                        if (p.life > 0) {
+                            alive = true;
+                            p.x += p.vx;
+                            p.y += p.vy;
+                            p.vy += 0.3;
+                            p.life -= p.decay;
+                            ctx.fillStyle = p.color;
+                            ctx.globalAlpha = Math.max(0, p.life);
+                            ctx.fillRect(p.x, p.y, p.size, p.size);
+                        }
+                    });
+                    if (alive) requestAnimationFrame(animate);
+                    else canvas.remove();
+                };
+                animate();
+            }
+        };
+
+        const App = () => {
+            const TARGET_COUNT = 10;
+            const INITIAL_TIME = 300;
+
+            const [phase, setPhase] = useState('START');
+            const [timeLeft, setTimeLeft] = useState(INITIAL_TIME);
+            const [correctCount, setCorrectCount] = useState(0);
+            const [currentIdx, setCurrentIdx] = useState(0);
+            const [input, setInput] = useState("");
+            const [status, setStatus] = useState("ACTIVE");
+            const [showPenalty, setShowPenalty] = useState(false);
+            const [questions, setQuestions] = useState([]);
+            const [highScore, setHighScore] = useState(0);
+            
+            // FEEDBACK & MISTAKES TRACKING
+            const [feedbackState, setFeedbackState] = useState(null); 
+            const [wrongAnswersList, setWrongAnswersList] = useState([]);
+
+            const timerRef = useRef(null);
+            const inputRef = useRef(null);
+
+            useEffect(() => {
+                const saved = localStorage.getItem('bomb_squad_highscore');
+                if (saved) setHighScore(parseInt(saved, 10));
+            }, []);
+
+            const startMission = () => {
+                const shuffled = [...ALL_QUESTIONS].sort(() => Math.random() - 0.5);
+                setQuestions(shuffled);
+                setPhase('GAME');
+                setStatus('ACTIVE');
+                setTimeLeft(INITIAL_TIME);
+                setCorrectCount(0);
+                setCurrentIdx(0);
+                setWrongAnswersList([]);
+                setInput("");
+                setFeedbackState(null);
+            };
+
+            useEffect(() => {
+                if (phase === 'GAME' && status === 'ACTIVE' && !feedbackState) {
+                    timerRef.current = setInterval(() => {
+                        setTimeLeft(prev => {
+                            if (prev <= 1) {
+                                setStatus("EXPLODED");
+                                playSound('explode');
+                                return 0;
+                            }
+                            if (prev % 5 === 0) playSound('beep');
+                            return prev - 1;
+                        });
+                    }, 1000);
+                }
+                return () => clearInterval(timerRef.current);
+            }, [phase, status, feedbackState]);
+
+            useEffect(() => {
+                if (phase === 'GAME' && status === 'ACTIVE' && !feedbackState && inputRef.current) {
+                    inputRef.current.focus();
+                }
+            }, [phase, status, currentIdx, feedbackState]);
+
+            const evaluateAnswer = (selectedVal) => {
+                if (feedbackState) return;
+                const val = (selectedVal || input).toLowerCase().trim();
+                if (!val) return;
+
+                const currentQ = questions[currentIdx];
+                
+                if (val === currentQ.ans) {
+                    playSound('beep');
+                    setFeedbackState({ type: 'CORRECT', given: val, correct: currentQ.ans });
+
+                    setTimeout(() => {
+                        const nextCorrect = correctCount + 1;
+                        setCorrectCount(nextCorrect);
+
+                        if (nextCorrect > highScore) {
+                            setHighScore(nextCorrect);
+                            localStorage.setItem('bomb_squad_highscore', nextCorrect.toString());
+                        }
+
+                        if (nextCorrect >= TARGET_COUNT) {
+                            setStatus("DEFUSED");
+                            playSound('defused');
+                            triggerConfetti();
+                        } else {
+                            setCurrentIdx(prev => prev + 1);
+                            setInput("");
+                        }
+                        setFeedbackState(null);
+                    }, 900);
+
+                } else {
+                    playSound('penalty');
+                    
+                    setWrongAnswersList(prev => [
+                        ...prev, 
+                        { sentence: `${currentQ.start} [ ... ] ${currentQ.end}`, given: val, correct: currentQ.ans }
+                    ]);
+
+                    setTimeLeft(prev => {
+                        const newTime = prev - 60;
+                        if (newTime <= 0) {
+                            setStatus("EXPLODED");
+                            playSound('explode');
+                            return 0;
+                        }
+                        return newTime;
+                    });
+                    
+                    setShowPenalty(true);
+                    setTimeout(() => setShowPenalty(false), 900);
+
+                    setFeedbackState({ type: 'WRONG', given: val, correct: currentQ.ans });
+
+                    setTimeout(() => {
+                        setInput("");
+                        setFeedbackState(null);
+                        if (status === 'ACTIVE') {
+                            setCurrentIdx(prev => prev + 1);
+                        }
+                    }, 1500);
+                }
+            };
+
+            const handleKeyDown = (e) => {
+                if (e.key === 'Enter') {
+                    evaluateAnswer();
+                }
+            };
+
+            const formatTime = (seconds) => {
+                const m = Math.floor(seconds / 60);
+                const s = seconds % 60;
+                return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+            };
+
+            const calculateStars = () => {
+                const mistakesCount = wrongAnswersList.length;
+                if (mistakesCount === 0 && timeLeft > 180) return 3;
+                if (mistakesCount <= 2) return 2;
+                return 1;
+            };
+
+            const options = ["much", "many", "little", "few", "a little", "a few"];
+
+            return (
+                <main className={`transition-all duration-500 ${
+                    status === 'EXPLODED' && timeLeft === 0 ? 'bg-red-950' : status === 'DEFUSED' ? 'bg-emerald-950' : ''
+                }`}>
+                    
+                    {/* START SCREEN */}
+                    {phase === 'START' && (
+                        <div className="text-center p-8 md:p-12 bomb-panel rounded-3xl border-red-900/60 max-w-xl w-full">
+                            <div className="inline-block bg-red-950/80 border border-red-600/50 text-red-400 text-xs px-3 py-1 rounded-full uppercase tracking-widest mb-4 font-semibold">
+                                Tactical Grammar Op
+                            </div>
+                            <h1 className="text-4xl md:text-5xl font-black mb-3 lcd-text tracking-tighter text-red-500 font-orbitron">
+                                BOMB SQUAD
+                            </h1>
+                            <p className="text-sm md:text-base mb-6 text-zinc-400 uppercase tracking-[0.25em]">
+                                Quantifiers Protocol
+                            </p>
+
+                            <div className="bg-zinc-900/80 p-4 rounded-xl border border-zinc-800 mb-6 text-left text-xs text-zinc-300 space-y-2">
+                                <div className="flex justify-between border-b border-zinc-800 pb-2">
+                                    <span className="text-zinc-500">WIRES (OPTIONS):</span>
+                                    <span className="text-red-400 font-bold">much | many | little | few | a little | a few</span>
+                                </div>
+                                <div className="flex justify-between border-b border-zinc-800 pb-2">
+                                    <span className="text-zinc-500">FEEDBACK:</span>
+                                    <span className="text-emerald-400 font-bold">Direct Goed/Fout + Overzicht</span>
+                                </div>
+                                <div className="flex justify-between">
+                                    <span className="text-zinc-500">PENALTY:</span>
+                                    <span className="text-red-500 font-bold">-60 sec per fout antwoord</span>
+                                </div>
+                            </div>
+
+                            {highScore > 0 && (
+                                <div className="mb-6 bg-amber-950/40 border border-amber-600/40 text-amber-400 py-2 px-4 rounded-xl text-sm font-semibold flex items-center justify-center gap-2">
+                                    <span>🏆 HIGHEST STABILITY RECORD:</span>
+                                    <span className="text-lg font-bold">{highScore} / {TARGET_COUNT}</span>
+                                </div>
+                            )}
+
+                            <button 
+                                onClick={startMission} 
+                                className="w-full py-5 border-2 border-red-600 text-red-500 hover:bg-red-600 hover:text-white transition-all text-xl font-bold font-orbitron tracking-wider rounded-xl shadow-lg cursor-pointer"
+                            >
+                                INITIATE DISPOSAL
+                            </button>
+                        </div>
+                    )}
+
+                    {/* GAMEPLAY SCREEN */}
+                    {phase === 'GAME' && status === 'ACTIVE' && (
+                        <div className={`w-full max-w-4xl p-6 md:p-12 bomb-panel rounded-3xl relative ${showPenalty ? 'flash-red' : ''}`}>
+                            
+                            {/* TOP STATUS BAR */}
+                            <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 border-b border-zinc-800 pb-6">
+                                <div className="relative text-center md:text-left">
+                                    <div className="flex items-center gap-2">
+                                        <div className="text-xs text-zinc-500 uppercase tracking-widest">Detonation Timer</div>
+                                        <div className="bg-red-950 text-red-400 text-[10px] px-2 py-0.5 rounded border border-red-800 font-bold animate-pulse">
+                                            LIVE TIMER
+                                        </div>
+                                    </div>
+                                    <div className="text-6xl md:text-7xl font-bold lcd-text tabular-nums tracking-wider text-red-500 font-orbitron">
+                                        {formatTime(timeLeft)}
+                                    </div>
+                                    {showPenalty && (
+                                        <span className="penalty-badge text-3xl text-red-500 font-black absolute top-2 right-[-60px]">
+                                            -1:00
+                                        </span>
+                                    )}
+                                </div>
+
+                                <div className="flex md:flex-col items-center md:items-end justify-between w-full md:w-auto">
+                                    <div className="text-xs text-zinc-500 uppercase tracking-widest mb-1">Stability Progress</div>
+                                    <div className="text-4xl md:text-5xl font-bold text-sky-400 font-orbitron">
+                                        {correctCount}<span className="text-zinc-600 text-2xl">/{TARGET_COUNT}</span>
+                                    </div>
+                                    {highScore > 0 && (
+                                        <div className="text-[11px] text-amber-500 mt-1">BEST: {highScore}</div>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* PROGRESS BAR */}
+                            <div className="h-3 w-full bg-zinc-950 rounded-full mb-10 overflow-hidden border border-zinc-800 p-0.5">
+                                <div 
+                                    className="h-full bg-red-600 rounded-full shadow-[0_0_12px_rgba(220,38,38,0.8)] transition-all duration-500" 
+                                    style={{ width: `${(timeLeft / INITIAL_TIME) * 100}%` }}
+                                ></div>
+                            </div>
+
+                            {/* QUESTION DISPLAY */}
+                            <div className="text-center mb-8 min-h-[120px] flex flex-col justify-center items-center">
+                                <div className="text-2xl md:text-4xl font-bold text-zinc-100 leading-snug max-w-2xl">
+                                    {questions[currentIdx]?.start}{' '}
+                                    <span className={`inline-block border-b-4 px-3 bg-zinc-900/60 rounded transition-colors ${
+                                        feedbackState?.type === 'CORRECT' ? 'border-emerald-500 text-emerald-400' :
+                                        feedbackState?.type === 'WRONG' ? 'border-red-500 text-red-400' :
+                                        'border-red-500 text-red-400'
+                                    }`}>
+                                        {input || "_______"}
+                                    </span>{' '}
+                                    {questions[currentIdx]?.end}
+                                </div>
+
+                                {/* DIRECT FEEDBACK NOTIFICATION */}
+                                {feedbackState && (
+                                    <div className="mt-4 animate-bounce">
+                                        {feedbackState.type === 'CORRECT' ? (
+                                            <span className="bg-emerald-950 border border-emerald-500 text-emerald-400 text-sm font-bold px-4 py-1.5 rounded-full uppercase tracking-wider shadow-lg">
+                                                ✔ GOED!
+                                            </span>
+                                        ) : (
+                                            <div className="bg-red-950/90 border border-red-500 text-red-300 text-sm font-bold px-4 py-2 rounded-xl uppercase tracking-wider shadow-lg flex flex-col gap-1">
+                                                <div>✖ FOUT! (Jouw antwoord: "{feedbackState.given}")</div>
+                                                <div className="text-emerald-400 font-normal normal-case text-xs">
+                                                    Juiste antwoord: <span className="font-bold underline">{feedbackState.correct}</span>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* INPUT AND WIRE BUTTON CONTROLS */}
+                            <div className="space-y-6">
+                                <div className="flex gap-2 max-w-md mx-auto">
+                                    <input
+                                        ref={inputRef}
+                                        type="text"
+                                        value={input}
+                                        disabled={feedbackState !== null}
+                                        onChange={(e) => setInput(e.target.value)}
+                                        onKeyDown={handleKeyDown}
+                                        placeholder="Type or click wire..."
+                                        className="flex-1 bg-zinc-900 border-2 border-zinc-700 focus:border-red-500 text-zinc-100 px-4 py-3 rounded-xl outline-none font-bold text-lg text-center tracking-wide transition-colors"
+                                    />
+                                    <button
+                                        onClick={() => evaluateAnswer()}
+                                        disabled={feedbackState !== null}
+                                        className="bg-red-600 hover:bg-red-500 active:bg-red-700 text-white font-bold px-6 py-3 rounded-xl font-orbitron tracking-wider transition-colors shadow-lg cursor-pointer"
+                                    >
+                                        CUT
+                                    </button>
+                                </div>
+
+                                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 pt-2">
+                                    {options.map((opt) => (
+                                        <button
+                                            key={opt}
+                                            onClick={() => evaluateAnswer(opt)}
+                                            disabled={feedbackState !== null}
+                                            className="wire-btn bg-zinc-900 border-2 border-zinc-700 hover:border-red-500 hover:bg-zinc-800 text-zinc-200 font-bold py-3 px-4 rounded-xl text-center text-sm md:text-base tracking-wider transition-all cursor-pointer"
+                                        >
+                                            ✂️ {opt}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* DEFUSED (VICTORY) OR EXPLODED (DEFEAT) END SCREENS WITH SUMMARY */}
+                    {(status === 'DEFUSED' || status === 'EXPLODED') && (
+                        <div className="text-center p-6 md:p-10 bomb-panel rounded-3xl max-w-2xl w-full my-8">
+                            <div className={`inline-block px-3 py-1 rounded-full uppercase tracking-widest mb-3 text-xs font-semibold ${
+                                status === 'DEFUSED' ? 'bg-emerald-950/80 border border-emerald-600/50 text-emerald-400' : 'bg-red-950/80 border border-red-600/50 text-red-400'
+                            }`}>
+                                {status === 'DEFUSED' ? 'Threat Neutralized' : 'Critical Failure'}
+                            </div>
+
+                            <h1 className={`text-4xl md:text-5xl font-black mb-3 font-orbitron tracking-tighter ${
+                                status === 'DEFUSED' ? 'lcd-green text-emerald-500' : 'lcd-text text-red-600'
+                            }`}>
+                                {status === 'DEFUSED' ? 'BOMB DEFUSED!' : 'DETONATED!'}
+                            </h1>
+                            
+                            {status === 'DEFUSED' && (
+                                <div className="flex justify-center gap-3 my-4 text-4xl">
+                                    {[1, 2, 3].map((star) => (
+                                        <span 
+                                            key={star} 
+                                            className={`transition-all ${star <= calculateStars() ? 'text-amber-400 star-pop' : 'text-zinc-700'}`}
+                                            style={{ animationDelay: `${star * 0.2}s` }}
+                                        >
+                                            ★
+                                        </span>
+                                    ))}
+                                </div>
+                            )}
+
+                            <p className="text-zinc-300 mb-6 text-sm">
+                                {status === 'DEFUSED' 
+                                    ? `Succesvol gestabiliseerd met ${formatTime(timeLeft)} resterend op de klok.` 
+                                    : 'Het apparaat is ontploft voordat de missie voltooid kon worden.'}
+                            </p>
+
+                            {/* OVERZICHT VAN FOUTE ANTWOORDEN */}
+                            <div className="bg-zinc-900/90 border border-zinc-800 rounded-2xl p-4 mb-6 text-left max-h-60 overflow-y-auto">
+                                <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-3 border-b border-zinc-800 pb-2 flex justify-between">
+                                    <span>Overzicht gemaakte fouten:</span>
+                                    <span className="text-red-400">{wrongAnswersList.length} fout(en)</span>
+                                </h3>
+
+                                {wrongAnswersList.length === 0 ? (
+                                    <div className="text-emerald-400 text-sm py-4 text-center font-semibold">
+                                        🌟 Geweldig! Je hebt geen enkele fout gemaakt!
+                                    </div>
+                                ) : (
+                                    <div className="space-y-3">
+                                        {wrongAnswersList.map((item, index) => (
+                                            <div key={index} className="bg-zinc-950/80 p-3 rounded-xl border border-zinc-800/80 text-xs">
+                                                <div className="text-zinc-300 font-medium mb-1">{item.sentence}</div>
+                                                <div className="flex gap-4">
+                                                    <span className="text-red-400">Jouw antwoord: <strong className="underline">{item.given || 'geen'}</strong></span>
+                                                    <span className="text-emerald-400">Goed antwoord: <strong className="underline">{item.correct}</strong></span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+
+                            <button 
+                                onClick={startMission}
+                                className={`w-full py-4 font-bold font-orbitron tracking-wider text-base rounded-xl transition-all shadow-lg cursor-pointer ${
+                                    status === 'DEFUSED' ? 'bg-emerald-600 hover:bg-emerald-500 text-white' : 'border-2 border-red-600 text-red-500 hover:bg-red-600 hover:text-white'
+                                }`}
+                            >
+                                {status === 'DEFUSED' ? 'NWE DISPOSAL MISSIE' : 'RETRY DISPOSAL'}
+                            </button>
+                        </div>
+                    )}
+                </main>
+            );
+        };
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+</html>
