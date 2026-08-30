@@ -604,7 +604,7 @@
         // UI Updates
         document.getElementById('status-msg').innerText = `Nog ${availablePool.length} over in deze ronde`;
         document.getElementById('current-word').innerText = item.nl;
-        document.getElementById('target-form-info').innerText = `Zoek: ${labelsMap[targetFormKey]}`;
+        document.getElementById('target-form-info').innerText = labelsMap[targetFormKey];
 
         // Voeg toe aan tabel Geweest
         const tr = document.createElement('tr');
