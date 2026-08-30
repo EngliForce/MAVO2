@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EngliForce: Irregular Verbs Bingo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Lexend:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hero-purple-main: #7b2cbf; 
+            --hero-purple-dark: #3c096c;
+            --hero-yellow: #ffb703; 
+            --hero-red: #d32f2f;
+            --hero-green: #2a9d8f; 
+            --dark: #1a102a; 
+            --header-bg: #ff7043;
+        }
+
+        html, body { 
+            height: 100vh; 
+            width: 100vw; 
+            margin: 0; 
+            overflow: hidden; 
+            background: radial-gradient(circle at center, #1a102a 0%, #05101a 100%); 
+            font-family: 'Lexend', sans-serif; 
+            color: white; 
+            display: flex; 
+            flex-direction: column; 
+        }
+
+        header { 
+            background: var(--header-bg); 
+            padding: 1rem; 
+            text-align: center; 
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%); 
+            border-bottom: 5px solid var(--hero-yellow); 
+            flex-shrink: 0; 
+        }
+
+        h1 { 
+            font-family: 'Bangers', cursive; 
+            font-size: 3rem; 
+            margin: 0; 
+            letter-spacing: 2px;
+            text-shadow: 3px 3px 0px var(--hero-purple-dark); 
+        }
+
+        main { 
+            flex: 1; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            overflow-y: auto; 
+            padding: 20px; 
+            position: relative;
+        }
+
+        .game-panel { 
+            background: rgba(26, 16, 42, 0.95); 
+            backdrop-filter: blur(10px);
+            border: 3px solid var(--hero-purple-main); 
+            border-radius: 24px; 
+            padding: 30px; 
+            width: 95%; 
+            max-width: 900px; 
+            text-align: center; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .prompt-label {
+            font-size: 1.8rem;
+            color: var(--hero-yellow);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        #current-word { 
+            font-family: 'Bangers', cursive; 
+            font-size: 5.5rem; 
+            color: #ffffff; 
+            margin: 15px 0; 
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-shadow: 4px 4px 0px var(--hero-purple-main);
+            line-height: 1.1;
+        }
+
+        #target-form-info {
+            font-size: 2.2rem;
+            color: #00f5d4;
+            font-weight: 900;
+            margin-bottom: 25px;
+            min-height: 45px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+
+        #status-msg { 
+            font-size: 1.4rem; 
+            color: #bbb; 
+            margin-bottom: 10px; 
+            font-weight: bold;
+        }
+
+        .controls { 
+            display: flex; 
+            gap: 15px; 
+            justify-content: center; 
+            margin-top: 10px; 
+            flex-wrap: wrap;
+        }
+
+        .btn-action { 
+            background: var(--hero-purple-main); 
+            color: white; 
+            border: none; 
+            padding: 15px 35px; 
+            border-radius: 16px; 
+            font-family: 'Bangers'; 
+            font-size: 2rem; 
+            cursor: pointer; 
+            transition: 0.2s; 
+            letter-spacing: 1px;
+            box-shadow: 0 5px 0px var(--hero-purple-dark);
+        }
+
+        .btn-action:hover { 
+            transform: translateY(-2px); 
+            background: #5a189a; 
+            box-shadow: 0 7px 0px var(--hero-purple-dark);
+        }
+
+        .btn-secondary { 
+            background: #3c096c; 
+            border: 3px solid var(--hero-yellow); 
+            color: white; 
+            padding: 12px 25px; 
+            border-radius: 16px; 
+            cursor: pointer; 
+            font-family: 'Bangers';
+            font-size: 1.6rem;
+            letter-spacing: 1px;
+            transition: 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background: var(--hero-yellow);
+            color: var(--dark);
+        }
+
+        /* Modals & Overlays */
+        .modal {
+            display: none;
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(10, 5, 20, 0.98);
+            border-radius: 20px;
+            padding: 25px;
+            box-sizing: border-box;
+            flex-direction: column;
+            z-index: 10;
+            overflow-y: auto;
+        }
+
+        .modal.active { display: flex; }
+
+        .modal h2 {
+            font-family: 'Bangers';
+            color: var(--hero-yellow);
+            font-size: 2.8rem;
+            margin-top: 0;
+            text-align: center;
+            letter-spacing: 1.5px;
+        }
+
+        .settings-section {
+            margin-bottom: 25px;
+        }
+
+        .settings-section h3 {
+            margin-bottom: 12px;
+            color: #00f5d4;
+            font-size: 1.6rem;
+            border-bottom: 2px solid #00f5d4;
+            padding-bottom: 5px;
+        }
+
+        /* Toggle Switches Grid */
+        .toggle-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 12px;
+        }
+
+        .toggle-item {
+            background: rgba(255, 255, 255, 0.07);
+            padding: 12px 18px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* CSS Toggle Switch Styles */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 32px;
+            flex-shrink: 0;
+        }
+
+        .switch input { 
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #444;
+            transition: .3s;
+            border-radius: 32px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 24px;
+            width: 24px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--hero-green);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(28px);
+        }
+
+        /* History Modal Table */
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1.5rem;
+            margin-top: 10px;
+        }
+
+        .history-table th, .history-table td {
+            border: 2px solid rgba(255,255,255,0.2);
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        .history-table th {
+            background: var(--hero-purple-dark);
+            color: var(--hero-yellow);
+            font-family: 'Bangers';
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+        }
+
+        .history-table td {
+            background: rgba(255,255,255,0.03);
+        }
+
+        .history-table tr:nth-child(even) td {
+            background: rgba(255,255,255,0.08);
+        }
+
+        footer { 
+            text-align: center; 
+            padding: 10px; 
+            background: rgba(0,0,0,0.3); 
+            font-family: 'Lexend'; 
+            font-size: 1rem; 
+            border-top: 2px solid rgba(0,0,0,0.2); 
+            flex-shrink: 0; 
+            color: #aaa; 
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🎲 IRREGULAR VERBS BINGO</h1>
+</header>
+
+<main>
+    <div class="game-panel">
+        <div id="status-msg">Druk op VOLGENDE om te starten</div>
+        <div class="prompt-label">Nederlands woord:</div>
+        <div id="current-word">-</div>
+        <div id="target-form-info"></div>
+                
+        <div class="controls">
+            <button class="btn-action" onclick="nextWord()">VOLGENDE</button>
+            <button class="btn-secondary" onclick="openModal('history-modal')">🎱 BINGO</button>
+            <button class="btn-secondary" onclick="openModal('settings-modal')">⚙️ INSTELLINGEN</button>
+        </div>
+    </div>
+
+    <!-- Instellingen Scherm (Standaard geopend bij het opstarten) -->
+    <div id="settings-modal" class="modal active">
+        <h2>SPELINSTELLINGEN</h2>
+        
+        <div class="settings-section">
+            <h3>1. Kies de Spelmodus (welke vorm spelen we?):</h3>
+            <div class="toggle-grid">
+                <div class="toggle-item">
+                    <span>Present Simple (1e rijtje)</span>
+                    <label class="switch">
+                        <input type="checkbox" class="mode-switch" value="inf" onchange="handleModeSwitch(this)">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="toggle-item">
+                    <span>Past Simple (2e rijtje)</span>
+                    <label class="switch">
+                        <input type="checkbox" class="mode-switch" value="past" onchange="handleModeSwitch(this)">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="toggle-item">
+                    <span>Past Participle (3e rijtje)</span>
+                    <label class="switch">
+                        <input type="checkbox" class="mode-switch" value="part" onchange="handleModeSwitch(this)">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="toggle-item">
+                    <span>Alle vormen door elkaar</span>
+                    <label class="switch">
+                        <input type="checkbox" class="mode-switch" value="all" id="mode-all" checked onchange="handleModeSwitch(this)">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h3>2. Selecteer Werkwoordgroepen:</h3>
+            <div class="toggle-grid">
+                <div class="toggle-item">
+                    <span>Gr 1: Alle 3 de vormen hetzelfde</span>
+                    <label class="switch"><input type="checkbox" class="group-switch" value="1" checked><span class="slider"></span></label>
+                </div>
+                <div class="toggle-item">
+                    <span>Gr 2: 1e en 2e vorm hetzelfde</span>
+                    <label class="switch"><input type="checkbox" class="group-switch" value="2" checked><span class="slider"></span></label>
+                </div>
+                <div class="toggle-item">
+                    <span>Gr 3: 1e en 3e vorm hetzelfde</span>
+                    <label class="switch"><input type="checkbox" class="group-switch" value="3" checked><span class="slider"></span></label>
+                </div>
+                <div class="toggle-item">
+                    <span>Gr 4a: 2e/3e hetzelfde (3 lett.)</span>
+                    <label class="switch"><input type="checkbox" class="group-switch" value="4a" checked><span class="slider"></span></label>
+                </div>
+                <div class="toggle-item">
+                    <span>Gr 4b: 2e/3e hetzelfde (4 lett.)</span>
+                    <label class="switch"><input type="checkbox" class="group-switch" value="4b" checked><span class="slider"></span></label>
+                </div>
+                <div class="toggle-item">
+                    <span>Gr 4c: 2e/3e hetzelfde (5 lett.)</span>
+                    <label class="switch"><input type="checkbox" class="group-switch" value="4c" checked><span class="slider"></span></label>
+                </div>
+                <div class="toggle-item">
+                    <span>Gr 5a: Vormen versch. (2/3 lett.)</span>
+                    <label class="switch"><input type="checkbox" class="group-switch" value="5a" checked><span class="slider"></span></label>
+                </div>
+                <div class="toggle-item">
+                    <span>Gr 5b: Vormen versch. (4 lett.)</span>
+                    <label class="switch"><input type="checkbox" class="group-switch" value="5b" checked><span class="slider"></span></label>
+                </div>
+                <div class="toggle-item">
+                    <span>Gr 5c: Vormen versch. (5/6 lett.)</span>
+                    <label class="switch"><input type="checkbox" class="group-switch" value="5c" checked><span class="slider"></span></label>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: auto; padding-top: 15px; text-align: center;">
+            <button class="btn-action" style="width: 100%; max-width: 400px;" onclick="applySettingsAndStart()">START SPEL ▶</button>
+        </div>
+    </div>
+
+    <!-- Geweest Scherm -->
+    <div id="history-modal" class="modal">
+        <h2>GESPEELDE WOORDEN</h2>
+        <div style="flex: 1; overflow-y: auto;">
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th>Nederlands</th>
+                        <th>Gevraagde Vorm</th>
+                        <th>Antwoord (Engels)</th>
+                    </tr>
+                </thead>
+                <tbody id="history-list">
+                    <!-- Geweest rijen komen hier -->
+                </tbody>
+            </table>
+        </div>
+        <div style="text-align: center; margin-top: 15px;">
+            <button class="btn-action" onclick="closeModal('history-modal')">SLUITEN</button>
+        </div>
+    </div>
+</main>
+
+<footer>&copy; 2026, Engliforce: Make English your superpower!</footer>
+
+<script>
+    const verbsData = [
+        // Groep 1
+        { group: "1", inf: "(to) shut", past: "shut", part: "shut", nl: "dichtdoen" },
+        { group: "1", inf: "(to) cost", past: "cost", part: "cost", nl: "kosten" },
+        { group: "1", inf: "(to) let", past: "let", part: "let", nl: "laten" },
+        { group: "1", inf: "(to) read", past: "read", part: "read", nl: "lezen" },
+        { group: "1", inf: "(to) put", past: "put", part: "put", nl: "(neer)zetten" },
+        { group: "1", inf: "(to) hurt", past: "hurt", part: "hurt", nl: "pijn doen" },
+        { group: "1", inf: "(to) hit", past: "hit", part: "hit", nl: "slaan, raken" },
+        { group: "1", inf: "(to) cut", past: "cut", part: "cut", nl: "snijden" },
+        { group: "1", inf: "(to) quit", past: "quit", part: "quit", nl: "stoppen" },
+        { group: "1", inf: "(to) split", past: "split", part: "split", nl: "uit elkaar gaan" },
+        // Groep 2
+        { group: "2", inf: "(to) beat", past: "beat", part: "beaten", nl: "(ver)slaan" },
+        // Groep 3
+        { group: "3", inf: "(to) come", past: "came", part: "come", nl: "komen" },
+        { group: "3", inf: "(to) become", past: "became", part: "become", nl: "worden" },
+        { group: "3", inf: "(to) run", past: "ran", part: "run", nl: "rennen" },
+        // Groep 4a
+        { group: "4a", inf: "(to) dig", past: "dug", part: "dug", nl: "graven" },
+        { group: "4a", inf: "(to) get", past: "got", part: "got", nl: "krijgen" },
+        { group: "4a", inf: "(to) lay", past: "laid", part: "laid", nl: "leggen" },
+        { group: "4a", inf: "(to) pay", past: "paid", part: "paid", nl: "betalen" },
+        { group: "4a", inf: "(to) say", past: "said", part: "said", nl: "zeggen" },
+        { group: "4a", inf: "(to) sit", past: "sat", part: "sat", nl: "zitten" },
+        { group: "4a", inf: "(to) win", past: "won", part: "won", nl: "winnen" },
+        { group: "4a", inf: "(to) buy", past: "bought", part: "bought", nl: "kopen" },
+        // Groep 4b
+        { group: "4b", inf: "(to) bend", past: "bent", part: "bent", nl: "buigen" },
+        { group: "4b", inf: "(to) feel", past: "felt", part: "felt", nl: "voelen" },
+        { group: "4b", inf: "(to) find", past: "found", part: "found", nl: "vinden" },
+        { group: "4b", inf: "(to) hang", past: "hung", part: "hung", nl: "hangen" },
+        { group: "4b", inf: "(to) have", past: "had", part: "had", nl: "hebben" },
+        { group: "4b", inf: "(to) hear", past: "heard", part: "heard", nl: "horen" },
+        { group: "4b", inf: "(to) hold", past: "held", part: "held", nl: "vasthouden" },
+        { group: "4b", inf: "(to) keep", past: "kept", part: "kept", nl: "houden" },
+        { group: "4b", inf: "(to) lead", past: "led", part: "led", nl: "leiden" },
+        { group: "4b", inf: "(to) lend", past: "lent", part: "lent", nl: "(uit)lenen" },
+        { group: "4b", inf: "(to) lose", past: "lost", part: "lost", nl: "verliezen" },
+        { group: "4b", inf: "(to) mean", past: "meant", part: "meant", nl: "bedoelen" },
+        { group: "4b", inf: "(to) meet", past: "met", part: "met", nl: "ontmoeten" },
+        { group: "4b", inf: "(to) sell", past: "sold", part: "sold", nl: "verkopen" },
+        { group: "4b", inf: "(to) send", past: "sent", part: "sent", nl: "zenden, versturen" },
+        { group: "4b", inf: "(to) make", past: "made", part: "made", nl: "maken" },
+        { group: "4b", inf: "(to) tell", past: "told", part: "told", nl: "vertellen" },
+        // Groep 4c
+        { group: "4c", inf: "(to) breed", past: "bred", part: "bred", nl: "fokken" },
+        { group: "4c", inf: "(to) bring", past: "brought", part: "brought", nl: "brengen" },
+        { group: "4c", inf: "(to) build", past: "built", part: "built", nl: "bouwen" },
+        { group: "4c", inf: "(to) catch", past: "caught", part: "caught", nl: "pakken, vangen" },
+        { group: "4c", inf: "(to) dream", past: "dreamt", part: "dreamt", nl: "dromen" },
+        { group: "4c", inf: "(to) fight", past: "fought", part: "fought", nl: "vechten" },
+        { group: "4c", inf: "(to) learn", past: "learnt", part: "learnt", nl: "leren" },
+        { group: "4c", inf: "(to) leave", past: "left", part: "left", nl: "verlaten, vertrekken" },
+        { group: "4c", inf: "(to) smell", past: "smelt", part: "smelt", nl: "ruiken" },
+        { group: "4c", inf: "(to) spend", past: "spent", part: "spent", nl: "doorbrengen, uitgeven" },
+        { group: "4c", inf: "(to) stand", past: "stood", part: "stood", nl: "staan" },
+        { group: "4c", inf: "(to) stick", past: "stuck", part: "stuck", nl: "vastzitten" },
+        { group: "4c", inf: "(to) sting", past: "stung", part: "stung", nl: "steken" },
+        { group: "4c", inf: "(to) sweep", past: "swept", part: "swept", nl: "vegen" },
+        { group: "4c", inf: "(to) teach", past: "taught", part: "taught", nl: "lesgeven" },
+        { group: "4c", inf: "(to) think", past: "thought", part: "thought", nl: "denken" },
+        { group: "4c", inf: "(to) sleep", past: "slept", part: "slept", nl: "slapen" },
+        // Groep 5a
+        { group: "5a", inf: "(to) do", past: "did", part: "done", nl: "doen, maken" },
+        { group: "5a", inf: "(to) go", past: "went", part: "gone", nl: "gaan" },
+        { group: "5a", inf: "(to) be", past: "was/were", part: "been", nl: "zijn" },
+        { group: "5a", inf: "(to) eat", past: "ate", part: "eaten", nl: "eten" },
+        { group: "5a", inf: "(to) see", past: "saw", part: "seen", nl: "zien" },
+        { group: "5a", inf: "(to) fly", past: "flew", part: "flown", nl: "vliegen" },
+        { group: "5a", inf: "(to) lie", past: "lay", part: "lain", nl: "liggen" },
+        // Groep 5b
+        { group: "5b", inf: "(to) bite", past: "bit", part: "bitten", nl: "bijten" },
+        { group: "5b", inf: "(to) blow", past: "blew", part: "blown", nl: "blazen" },
+        { group: "5b", inf: "(to) draw", past: "drew", part: "drawn", nl: "tekenen" },
+        { group: "5b", inf: "(to) fall", past: "fell", part: "fallen", nl: "vallen" },
+        { group: "5b", inf: "(to) give", past: "gave", part: "given", nl: "geven" },
+        { group: "5b", inf: "(to) grow", past: "grew", part: "grown", nl: "groeien" },
+        { group: "5b", inf: "(to) know", past: "knew", part: "known", nl: "weten" },
+        { group: "5b", inf: "(to) ring", past: "rang", part: "rung", nl: "bellen" },
+        { group: "5b", inf: "(to) ride", past: "rode", part: "ridden", nl: "rijden (fiets/paard)" },
+        { group: "5b", inf: "(to) sing", past: "sang", part: "sung", nl: "zingen" },
+        { group: "5b", inf: "(to) sink", past: "sank", part: "sunk", nl: "zinken" },
+        { group: "5b", inf: "(to) swim", past: "swam", part: "swum", nl: "zwemmen" },
+        { group: "5b", inf: "(to) take", past: "took", part: "taken", nl: "nemen" },
+        { group: "5b", inf: "(to) tear", past: "tore", part: "torn", nl: "scheuren" },
+        { group: "5b", inf: "(to) wear", past: "wore", part: "worn", nl: "dragen" },
+        // Groep 5c
+        { group: "5c", inf: "(to) begin", past: "began", part: "begun", nl: "beginnen" },
+        { group: "5c", inf: "(to) break", past: "broke", part: "broken", nl: "breken" },
+        { group: "5c", inf: "(to) choose", past: "chose", part: "chosen", nl: "kiezen" },
+        { group: "5c", inf: "(to) drink", past: "drank", part: "drunk", nl: "drinken" },
+        { group: "5c", inf: "(to) drive", past: "drove", part: "driven", nl: "rijden (auto)" },
+        { group: "5c", inf: "(to) forget", past: "forgot", part: "forgotten", nl: "vergeten" },
+        { group: "5c", inf: "(to) freeze", past: "froze", part: "frozen", nl: "bevriezen" },
+        { group: "5c", inf: "(to) speak", past: "spoke", part: "spoken", nl: "spreken" },
+        { group: "5c", inf: "(to) steal", past: "stole", part: "stolen", nl: "stelen" },
+        { group: "5c", inf: "(to) throw", past: "threw", part: "thrown", nl: "gooien" },
+        { group: "5c", inf: "(to) write", past: "wrote", part: "written", nl: "schrijven" },
+        { group: "5c", inf: "(to) wake (up)", past: "woke (up)", part: "woken (up)", nl: "wakker worden" }
+    ];
+
+    let availablePool = [];
+    let playedHistory = [];
+    let currentItem = null;
+
+    const labelsMap = {
+        inf: "Present Simple (1e rijtje)",
+        past: "Past Simple (2e rijtje)",
+        part: "Past Participle (3e rijtje)"
+    };
+
+    // Zorg dat er altijd exact één modus-schuifje actief is (Radio behavior)
+    function handleModeSwitch(changedElement) {
+        const modeSwitches = document.querySelectorAll('.mode-switch');
+        if (changedElement.checked) {
+            modeSwitches.forEach(sw => {
+                if (sw !== changedElement) sw.checked = false;
+            });
+        } else {
+            // Voorkom dat er geen enkele modus geselecteerd is
+            changedElement.checked = true;
+        }
+    }
+
+    function getSelectedMode() {
+        const selected = document.querySelector('.mode-switch:checked');
+        return selected ? selected.value : 'all';
+    }
+
+    function applySettingsAndStart() {
+        const selectedGroups = Array.from(document.querySelectorAll('.group-switch:checked')).map(cb => cb.value);
+        
+        if (selectedGroups.length === 0) {
+            alert("Selecteer minimaal één werkwoordgroep!");
+            return;
+        }
+
+        availablePool = verbsData.filter(item => selectedGroups.includes(item.group));
+        playedHistory = [];
+        currentItem = null;
+        
+        document.getElementById('history-list').innerHTML = '';
+        document.getElementById('current-word').innerText = "KLAAR VOOR START";
+        document.getElementById('target-form-info').innerText = "";
+        document.getElementById('status-msg').innerText = `Klaar! Pool bevat ${availablePool.length} woorden`;
+
+        closeModal('settings-modal');
+    }
+
+    function getRandomFormKey() {
+        const mode = getSelectedMode();
+        if (mode !== 'all') return mode;
+        const keys = ['inf', 'past', 'part'];
+        return keys[Math.floor(Math.random() * keys.length)];
+    }
+
+    function nextWord() {
+        if (availablePool.length === 0) {
+            document.getElementById('status-msg').innerText = "Alle gekozen woorden zijn geweest!";
+            return;
+        }
+
+        const randomIndex = Math.floor(Math.random() * availablePool.length);
+        const item = availablePool.splice(randomIndex, 1)[0];
+        const targetFormKey = getRandomFormKey();
+        
+        currentItem = {
+            item: item,
+            formKey: targetFormKey,
+            answer: item[targetFormKey]
+        };
+
+        playedHistory.push(currentItem);
+
+        // UI Updates
+        document.getElementById('status-msg').innerText = `Nog ${availablePool.length} over in deze ronde`;
+        document.getElementById('current-word').innerText = item.nl;
+        document.getElementById('target-form-info').innerText = `Zoek: ${labelsMap[targetFormKey]}`;
+
+        // Voeg toe aan tabel Geweest
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td><b>${item.nl}</b></td><td>${labelsMap[targetFormKey]}</td><td><b style="color:var(--hero-yellow);">${currentItem.answer}</b></td>`;
+        document.getElementById('history-list').prepend(tr);
+    }
+
+    function openModal(id) {
+        document.getElementById(id).classList.add('active');
+    }
+
+    function closeModal(id) {
+        document.getElementById(id).classList.remove('active');
+    }
+</script>
+</body>
+</html>
