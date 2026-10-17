@@ -1,0 +1,207 @@
+<!doctype html><html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>EngliForce · MAVO 2 Mission 1 · Toetsbespreking</title><style>
+:root{font-family:Arial,Helvetica,sans-serif;color:#132b4f;background:#eaf2fa;font-synthesis:none}*{box-sizing:border-box}body{margin:0;overflow:hidden}button{font:inherit;cursor:pointer}header{height:74px;background:#102e54;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 2.4vw;gap:16px} .logo{font-weight:900;font-size:clamp(20px,2vw,31px)}.logo span{color:#fb5b60}.strap{font-size:clamp(11px,1.05vw,16px);opacity:.8}.headline{display:flex;flex-direction:column}.topright{display:flex;align-items:center;gap:14px}.pill{background:#294d79;border-radius:999px;padding:8px 16px;font-weight:700}.iconbtn{border:1px solid #8098b6;background:#244a77;color:#fff;border-radius:12px;padding:10px 15px;font-size:17px}main{height:calc(100dvh - 154px);display:flex;flex-direction:column;padding:1.2vh 2.4vw 1vh;gap:1vh}.heading{display:flex;align-items:baseline;gap:17px;flex-shrink:0}.letter{background:#dce9f8;color:#0c3a72;border-radius:13px;padding:6px 16px;font-size:clamp(26px,3vw,43px);font-weight:900}.heading h1{font-size:clamp(28px,3vw,46px);line-height:1;margin:0}.category{color:#617993;text-transform:uppercase;font-weight:bold;letter-spacing:.1em;font-size:clamp(11px,1.1vw,16px)}.instruction{font-size:clamp(17px,1.65vw,25px);font-weight:600;color:#375575;flex-shrink:0}.content{flex:1;min-height:0;background:#fff;border:1px solid #d3e2f2;border-radius:19px;box-shadow:0 8px 30px #1b376216;padding:1.3vh 1.7vw;display:flex;flex-direction:column;overflow:hidden}.questions{display:flex;flex-direction:column;justify-content:space-around;flex:1;min-height:0;gap:2px}.qrow{display:grid;grid-template-columns:clamp(30px,3vw,55px) minmax(0,1fr) minmax(180px,30%);align-items:center;border-bottom:1px solid #e8eef6;padding:3px 10px;gap:14px;min-height:0;flex:1;font-size:var(--row-size,clamp(19px,1.8vw,29px));line-height:1.17}.qrow:last-child{border-bottom:0}.qrow.current{background:#edf5ff;border-radius:10px}.num{font-weight:900;color:#58759b}.prompt{overflow-wrap:anywhere}.prompt b{color:#172d4c}.prompt em{font-style:normal;color:#ca4947;font-weight:800}.answer{font-weight:800;color:#138052;opacity:0;transform:translateY(3px);transition:opacity .14s,transform .14s;overflow-wrap:anywhere}.qrow.shown .answer{opacity:1;transform:none}.qrow.shown{background:#f1fbf5;border-radius:10px}.qrow.current.shown{background:#e5f6ec}.answer small{font-size:.78em}.groupTitle{font-size:var(--group-size,clamp(14px,1.2vw,19px));font-weight:900;color:#d3424c;text-transform:uppercase;letter-spacing:.035em;flex-shrink:0;display:flex;align-items:center;gap:14px;margin:3px 0}.groupTitle:after{content:"";height:2px;flex:1;background:#f3d6d8}.wordbank{background:#edf3fa;border-radius:8px;font-size:var(--bank-size,clamp(12px,1.04vw,16px));padding:4px 10px;margin:0 0 2px;color:#284768;font-weight:600}.group{display:flex;flex-direction:column;flex:1;min-height:0}.group .qrow{font-size:var(--row-size,clamp(15px,1.36vw,23px));padding:2px 7px;gap:9px}.group .questions{flex:1}.dense .qrow{font-size:var(--row-size,clamp(16px,1.55vw,26px))}.dense .answer{font-size:.93em}.j-note{font-size:clamp(14px,1.3vw,19px);color:#69809a}footer{height:80px;background:#fff;border-top:1px solid #ccddee;display:flex;align-items:center;justify-content:space-between;gap:13px;padding:0 2.4vw}.leftbuttons,.rightbuttons{display:flex;align-items:center;gap:10px}footer button{border:0;border-radius:12px;padding:12px 22px;background:#e6eef8;color:#153a64;font-weight:800;font-size:clamp(14px,1.2vw,19px)}footer .primary{background:#c83f4a;color:white}footer button:disabled{opacity:.35;cursor:default}.progress{font-size:clamp(13px,1.1vw,18px);font-weight:800;color:#406080;text-align:center}.track{width:clamp(100px,14vw,230px);height:8px;background:#dce8f5;border-radius:8px;margin:7px auto 0;overflow:hidden}.fill{background:#cc4650;width:0;height:100%;transition:width .18s}.overlay{position:fixed;inset:0;background:#081e39b9;display:none;align-items:center;justify-content:center;padding:26px;z-index:9}.overlay.open{display:flex}.modal{background:white;border-radius:18px;padding:30px;max-width:800px;width:100%;max-height:85vh;overflow:auto;box-shadow:0 20px 60px #0017}.modal h2{font-size:28px;margin:0 0 12px}.modal p{line-height:1.45}.modal .close{float:right;background:#123b6d;color:#fff;border:0;border-radius:10px;padding:9px 16px}.note{padding:11px 0;border-top:1px solid #dce6f2}.note p{margin:6px 0} .keyboard{font-size:13px;color:#64809e;margin-top:10px}button:focus-visible{outline:4px solid #eda90f;outline-offset:2px}@media(max-width:850px){header{height:65px}main{height:calc(100dvh - 135px);padding:9px}.content{padding:8px}.qrow{grid-template-columns:30px minmax(0,1fr) minmax(115px,34%);gap:5px;font-size:clamp(11px,1.7vw,17px)!important}.group .qrow{font-size:clamp(10px,1.5vw,16px)!important}footer{height:70px;padding:0 10px}footer button{padding:10px}.strap{display:none}.instruction{font-size:14px}.heading h1{font-size:27px}}
+
+/* Presentation layout: topic-based pagination and in-sentence highlighting. */
+main{padding:1.2vh 2.4vw 1.2vh;gap:1vh}
+.content{padding:2vh 2.1vw}
+.questions{justify-content:stretch;gap:1vh}
+.qrow,.group .qrow{grid-template-columns:clamp(45px,4vw,72px) minmax(0,1.5fr) minmax(210px,1fr);font-size:var(--row-size,clamp(25px,2.35vw,39px))!important;line-height:1.25;padding:1.2vh 1vw;gap:1.5vw;min-height:0;flex:1}
+.answer{font-size:1em!important}
+.groupTitle{font-size:clamp(20px,1.8vw,28px);margin:0 0 1vh}
+.wordbank{font-size:clamp(19px,1.65vw,26px);line-height:1.3;padding:12px 16px;margin:0 0 1vh}
+.instruction{font-size:clamp(21px,1.65vw,28px)}
+@media(max-width:850px){.qrow,.group .qrow{grid-template-columns:36px minmax(0,1.3fr) minmax(135px,1fr);font-size:clamp(19px,2.55vw,29px)!important;gap:9px}.wordbank{font-size:18px}.instruction{font-size:18px}}
+@media(max-height:700px){header{height:62px}footer{height:66px}main{height:calc(100dvh - 128px)}.heading h1{font-size:clamp(23px,2.4vw,35px)}.qrow,.group .qrow{font-size:clamp(21px,2.15vw,33px)!important;padding:4px 10px}.content{padding:10px 18px}}
+
+/* Larger questions with a layout that makes full use of the screen. */
+.questions{gap:.5vh}
+.qrow,.group .qrow{font-size:clamp(27px,2.45vw,43px)!important;line-height:1.23}
+.alphabet-list .qrow{font-size:clamp(30px,2.8vw,49px)!important}
+.correction-list{gap:2vh}
+.correction-row{grid-template-columns:clamp(46px,4vw,72px) minmax(0,1fr)!important;font-size:clamp(31px,2.65vw,48px)!important;line-height:1.5;padding:1.6vh 1.2vw}
+.correction-row .prompt{overflow-wrap:normal;word-break:normal}
+.fix{border-radius:5px;transition:background .18s,color .18s;padding:0 2px}
+.fix.fixed{background:#ffe78a;color:#a51d2f;font-weight:900;box-shadow:0 2px 0 #eeb73d}
+@media(max-height:700px){.correction-row{font-size:clamp(24px,2.25vw,37px)!important}}
+
+/* Fit the complete exercise at browser zoom 100%, including short-height boards. */
+html,body{width:100%;height:100%;height:100dvh;overflow:hidden}
+body{display:grid;grid-template-rows:auto minmax(0,1fr) auto}
+header{height:auto;min-height:0;padding:9px 2vw;gap:8px}
+.logo{font-size:clamp(18px,2vw,27px)}
+.strap{font-size:clamp(10px,.95vw,14px)}
+.topright{gap:7px}.pill{padding:6px 10px;font-size:clamp(11px,1vw,15px)}
+.iconbtn{padding:7px 10px;font-size:clamp(12px,1vw,16px)}
+main{height:auto!important;min-height:0;padding:8px 2vw!important;gap:7px!important}
+.heading{gap:11px}.letter{font-size:clamp(24px,2.65vw,36px);padding:4px 12px}
+.heading h1{font-size:clamp(24px,2.65vw,38px);line-height:1.08}
+.category{font-size:clamp(11px,1vw,14px)}
+.instruction{font-size:clamp(16px,1.4vw,22px)!important;line-height:1.2}
+.content{min-height:0;padding:9px 1.5vw!important;border-radius:14px}
+.questions{gap:3px!important;min-height:0}
+.qrow,.group .qrow,.alphabet-list .qrow,.correction-row{font-size:var(--fit-size,clamp(22px,2.2vw,36px))!important;padding:3px .7vw!important;line-height:1.16!important;gap:1vw;min-height:0}
+.qrow,.group .qrow{grid-template-columns:clamp(33px,3vw,55px) minmax(0,1.45fr) minmax(0,1fr)}
+.correction-row{grid-template-columns:clamp(33px,3vw,55px) minmax(0,1fr)!important}
+.answer{line-height:1.16}.groupTitle{font-size:clamp(16px,1.55vw,23px);margin:0 0 3px}
+.wordbank{font-size:clamp(14px,1.25vw,19px);padding:5px 9px;line-height:1.2;margin-bottom:4px}
+footer{height:auto;min-height:0;padding:7px 2vw;gap:8px}
+footer button{font-size:clamp(12px,1.15vw,17px);padding:9px 13px;border-radius:9px}
+.progress{font-size:clamp(11px,1vw,15px)}.track{margin:3px auto 0;height:5px}
+.leftbuttons,.rightbuttons{gap:6px}
+@media(max-width:950px){header{padding:7px 12px}main{padding:6px 12px!important}.content{padding:7px!important}footer{padding:6px 10px}footer button{padding:8px 9px}.pill{display:none}.qrow,.group .qrow{grid-template-columns:30px minmax(0,1.25fr) minmax(0,1fr)} }
+@media(max-height:650px){header{padding-top:5px;padding-bottom:5px}.strap{display:none}.heading h1{font-size:clamp(20px,2.3vw,31px)}.letter{font-size:25px}.instruction{font-size:15px!important}footer{padding-top:4px;padding-bottom:4px}footer button{padding:7px 10px}}
+/* MAVO 2: long, history-themed questions and full answers. */
+.qrow .prompt{hyphens:auto}.qrow .answer{hyphens:auto}
+@media(max-width:1150px){.qrow,.group .qrow{grid-template-columns:clamp(30px,3vw,45px) minmax(0,1.45fr) minmax(0,1.05fr)}}
+@media(max-height:620px){.groupTitle{font-size:15px}.wordbank{padding:3px 7px;font-size:13px}}
+
+/* One screen for all six irregular verbs; 18 individually revealable blanks. */
+.verb-table{width:100%;height:100%;min-height:0;display:grid;grid-template-rows:minmax(30px,.68fr) repeat(6,minmax(0,1fr));gap:4px;overflow:hidden}
+.verb-head,.verb-row{display:grid;grid-template-columns:clamp(26px,3.4vw,52px) minmax(0,1.42fr) repeat(3,minmax(0,1fr));gap:6px;min-height:0;align-items:stretch}
+.verb-head-cell{border-radius:7px;background:#183b68;color:white;font-size:clamp(13px,1.5vw,22px);font-weight:800;display:flex;align-items:center;justify-content:center;text-align:center;padding:2px 4px;min-width:0}
+.verb-number,.verb-cell{display:flex;align-items:center;justify-content:center;min-width:0;min-height:0;border-radius:8px;padding:2px 5px;text-align:center;font-size:var(--verb-font,clamp(17px,2vw,31px));line-height:1.07;overflow-wrap:break-word}
+.verb-number{color:#58759b;font-weight:900;background:#f5f8fd}
+.verb-given{background:#e7effa;color:#143961;border:1px solid #bdd2e8}
+.verb-given strong{font-weight:900}
+.verb-blank{border:2px dashed #c0cfdf;background:#f7fafc;position:relative;color:#778fa8}
+.verb-placeholder{display:block;color:#7893ad;font-size:1.4em;line-height:.7}
+.verb-answer{display:none;color:#128050;font-weight:900}
+.verb-blank.verb-shown{border:2px solid #b7e1cb;background:#e7f8ed}
+.verb-blank.verb-shown .verb-placeholder{display:none}
+.verb-blank.verb-shown .verb-answer{display:block}
+.verb-blank.verb-active{outline:2px solid #e7b34f;outline-offset:-2px}
+@media(max-width:750px){.verb-head,.verb-row{grid-template-columns:24px minmax(0,1.25fr) repeat(3,minmax(0,1fr));gap:3px}.verb-cell{padding:2px;font-size:clamp(12px,2vw,18px)}.verb-head-cell{font-size:12px;padding:1px}.verb-table{gap:3px}}
+@media(max-height:560px){.verb-table{gap:2px;grid-template-rows:minmax(24px,.58fr) repeat(6,minmax(0,1fr))}.verb-number,.verb-cell{font-size:clamp(13px,1.55vw,22px)}.verb-head-cell{font-size:clamp(11px,1.25vw,17px)}}
+</style></head><body><header><div class="headline"><div class="logo">Engli<span>Force</span></div><div class="strap">Make English your superpower!</div></div><div class="topright"><span class="pill">MAVO 2 · MISSION 1</span><button class="iconbtn" id="full" title="Volledig scherm">⛶ Full screen</button><button class="iconbtn" id="notes" title="Alleen voor docent">⚙ Teacher</button></div></header><main><div class="heading"><span class="letter" id="letter"></span><div><div class="category" id="category"></div><h1 id="title"></h1></div></div><div class="instruction" id="instruction"></div><div class="content" id="content"></div></main><footer><div class="leftbuttons"><button id="prevSection">← Exercise</button><button id="prevAnswer">↶ Answer</button></div><div class="progress"><div id="progressLabel" aria-live="polite"></div><div class="track"><div class="fill" id="fill"></div></div></div><div class="rightbuttons"><button id="reset">Hide all</button><button class="primary" id="nextAnswer">Show answer →</button><button id="nextSection">Exercise →</button></div></footer><div class="overlay" id="teacherOverlay"><div class="modal"><button class="close" id="close">Close ✕</button><h2>Teacher notes · Mission 1 (MAVO 2)</h2>
+<p><strong>Totaal: 72 punten.</strong> Gebruik bij het nakijken de bijbehorende nakijkinstructie. Deze klassikale toetsbespreking toont de originele vragen van <i>M2T1 Test (1)</i> en de antwoorden van <i>M2T1 Answers</i>.</p>
+<div class="note"><strong>A · Words — 15 punten</strong><p>Bij 1–2: 1 punt per vetgedrukt woord. Bij 7–9: het odd-one-out woord én een passende uitleg in het Nederlands. Bij 10–13: 0,5 punt voor de juiste keuze en 0,5 punt voor de vertaling. Spelfout: maximaal −0,5 per item. A9 heeft geen onbetwistbare indeling; accepteer andere goed onderbouwde antwoorden.</p></div>
+<div class="note"><strong>B · Irregular verbs — 9 punten</strong><p>De vetgedrukte woorden zijn gegeven. De drie overige vormen per rij zijn invulwoorden: 18 vakken × 0,5 punt. Alle zes werkwoorden staan op één nakijkpagina; elk ontbrekend woord wordt afzonderlijk zichtbaar.</p></div>
+<div class="note"><strong>C · Past Simple — 10 punten</strong><p>1 punt per correct ingevulde vorm, geen 0,5 punten. Zowel volledige als samengetrokken ontkenningen zijn goed.</p></div>
+<div class="note"><strong>D · WH-questions — 7 punten</strong><p>Maximaal 1 punt per vraag; bij gedeeltelijk juist 0,5 punt. Omdat “Give all possibilities” open is geformuleerd, zijn ook andere grammaticaal correcte en betekenisvolle vraagwoorden goed.</p></div>
+<div class="note"><strong>E · Past Continuous — 8 punten</strong><p>1 punt per volledige goede vorm, geen halve punten. Volledige en samengetrokken ontkenningen zijn mogelijk.</p></div>
+<div class="note"><strong>F · Quantifiers — 8 punten</strong><p>1 punt per antwoord. Bij vraag 2 noemt het aangeleverde antwoordblad <i>little</i>. Bij vraag 6 is <i>few</i> het hoofdantwoord; <i>a few</i> is eveneens correct.</p></div>
+<div class="note"><strong>G · Present Perfect — 10 punten</strong><p>1 punt per correct antwoord, geen halve punten. Bij vraag 5 zijn <i>has not / hasn't</i> én <i>have not / haven't</i> correct in Brits Engels.</p></div>
+<div class="note"><strong>H · Writing — 5 punten</strong><p>Maximaal 1 punt per zin. Minimaal zeven woorden en de gevraagde grammatica correct. Spelling, hoofdletters en een ontbrekend/fout vraagteken kosten 0,5 punt per fout. Elk woord onder zeven woorden kost 0,5 punt. Bij ontbrekende/foutieve gevraagde constructie: 0 punten voor de zin, nooit negatief. De app toont voorbeelden, geen verplichte modelzinnen.</p></div>
+<div class="keyboard">Bediening: → of spatie = volgend antwoord; ← = vorig antwoord; PageDown/PageUp = volgende/vorige pagina; F = volledig scherm; Esc = sluiten.</div></div></div><script>
+const SECTIONS=[{"id":"A","title":"Words","kind":"Vocabulary","points":15,"instructions":"Check your vocabulary answers. For the odd one out, explain your choice in Dutch.","rows":[],"groups":[{"heading":"Translate the words in bold into Dutch","rows":[["1.","People in the nineteenth <b>century</b> wore very different <b>clothes</b>.","century = eeuw · clothes = kleding / kleren"],["2.","The <b>battle</b> ended in a <b>victory</b> for the army.","battle = veldslag / gevecht · victory = overwinning"]],"support":""},{"heading":"Fill in the correct word","rows":[["3.","The inventor built a model in his <em>…</em>.","workshop"],["4.","People received a <em>…</em> before the storm arrived.","warning"],["5.","Cleopatra was a famous <em>…</em> of Egypt.","ruler"],["6.","Eating dinner together can be an old <em>…</em>.","custom"]],"support":"household · spacecraft · ruler · warning · behavior · custom · victory · workshop"},{"heading":"Odd one out · Explain your answer in Dutch","rows":[["7.","disaster – accident – battle – discovery","discovery — de andere woorden beschrijven meestal schadelijke gebeurtenissen."],["8.","rebuild – recover – improve – escape","escape — de andere woorden gaan over herstel of verbetering."]],"support":""},{"heading":"Odd one out · Explain your answer in Dutch","rows":[["9.","origin – result – difference – impact","origin — oorsprong of begin; de andere woorden kunnen een gevolg, effect of verschil beschrijven."]],"support":""},{"heading":"Choose the correct English word AND translate it into Dutch","rows":[["10.","The firefighters came to (rescue / rebuild) the people from the burning building.","rescue = redden"],["11.","After the long battle, the enemy army suffered a serious (defeat / disaster).","defeat = nederlaag"]],"support":""},{"heading":"Choose the correct English word AND translate it into Dutch","rows":[["12.","The new computer had a huge (impact / result) on the way people worked.","impact = invloed / effect"],["13.","The mechanic used special (equipment / spacecraft) to repair the broken engine.","equipment = apparatuur / uitrusting"]],"support":""}],"note":"15 punten. Bij 1–2 elk vetgedrukt woord 1 punt. Bij 7–9 een juist woord én een passende Nederlandse uitleg. Bij 10–13: 0,5 punt voor de keuze en 0,5 punt voor de vertaling. Spelfout: maximaal 0,5 punt aftrek per item. Bij A9 is een goed uitgelegd alternatief verdedigbaar."},{"id":"B","title":"Irregular verbs","kind":"Grammar","points":9,"instructions":"Fill in the missing forms. The words in bold are given. Each correct blank = 0.5 point.","rows":[],"groups":[],"note":"9 punten: 18 in te vullen vakken × 0,5 punt. De vetgedrukte woorden waren al gegeven op het antwoordenblad; de overige drie vormen per regel moeten leerlingen zelf invullen.","verbGrid":[{"all":["zijn","be","was / were","been"],"given":0},{"all":["maken","make","made","made"],"given":1},{"all":["verlaten / vertrekken","leave","left","left"],"given":2},{"all":["vergeten","forget","forgot","forgotten"],"given":3},{"all":["stoppen","quit","quit","quit"],"given":0},{"all":["lezen","read","read","read"],"given":1}]},{"id":"C","title":"Past Simple","kind":"Grammar","points":10,"instructions":"Write the correct Past Simple form of the verb in brackets.","rows":[["1.","Henry VIII <em>…</em> England for many years. (rule)","ruled"],["2.","The soldiers <em>…</em> in a famous battle. (fight)","fought"],["3.","The inventor <em>…</em> a new machine in his workshop. (build)","built"],["4.","People <em>…</em> not <em>…</em> much modern equipment in 1850. (have)","did not have / didn't have"],["5.","<em>…</em> the storm <em>…</em> a lot of damage? (cause)","Did … cause?"],["6.","The family <em>…</em> from the burning building. (escape)","escaped"],["7.","The queen <em>…</em> her people during the war. (lead)","led"],["8.","Thomas Edison <em>…</em> many things. (invent)","invented"],["9.","We <em>…</em> a text about Roman history yesterday. (read)","read"],["10.","<em>…</em> they <em>…</em> the town after the war? (rebuild)","Did … rebuild?"]],"groups":[],"note":"10 punten: 1 punt per vraag. De volledige werkwoordsvorm moet juist zijn; geen halve punten."},{"id":"D","title":"WH-questions","kind":"Grammar","points":7,"instructions":"Fill in: why, which, how, who, where, when or what. Give all meaningful possibilities.","rows":[["1.","<em>…</em> did the Great Fire of London start?","when / where / why / how"],["2.","<em>…</em> was Henry VIII?","who / what"],["3.","<em>…</em> did the inventor build his model?","where / when / why / how"],["4.","<em>…</em> did people leave the burning building?","when / where / why / how"],["5.","<em>…</em> did the inventor create in his workshop?","what"],["6.","<em>…</em> did people travel before cars?","how · ook why / where bij passende betekenis"],["7.","<em>…</em> invention was more important, the steam engine or the telephone?","which / what"]],"groups":[],"note":"7 punten: maximaal 1 punt per vraag; bij gedeeltelijk juiste antwoorden 0,5 punt. Accepteer ook andere grammaticaal correcte en betekenisvolle mogelijkheden. “Give all possibilities” is niet volledig eenduidig."},{"id":"E","title":"Past Continuous","kind":"Grammar","points":8,"instructions":"Write the correct Past Continuous form of the verb in brackets.","rows":[["1.","At 8 o'clock, the soldiers <em>…</em> through the town. (march)","were marching"],["2.","The inventor <em>…</em> in his workshop when the light went out. (work)","was working"],["3.","While people <em>…</em>, the fire started. (sleep)","were sleeping"],["4.","We <em>…</em> TV when we heard the news. (watch)","were watching"],["5.","She <em>…</em> not <em>…</em> attention at that moment. (pay)","was not paying / wasn't paying"],["6.","They <em>…</em> not <em>…</em> for help when the firefighters arrived. (wait)","were not waiting / weren't waiting"],["7.","<em>…</em> he <em>…</em> a letter when you entered? (write)","Was he writing?"],["8.","<em>…</em> the children <em>…</em> outside while it was raining? (play)","Were the children playing?"]],"groups":[],"note":"8 punten: 1 punt per volledig juiste vraag; geen halve punten."},{"id":"F","title":"Much / Many / Little / Few","kind":"Grammar","points":8,"instructions":"Fill in: much, many, little, a little, few or a few.","rows":[["1.","There were <em>…</em> people at the museum, so it was almost empty.","few"],["2.","We still have <em>…</em> time before the lesson starts, so we can finish this question.","little"],["3.","How <em>…</em> information did the guide give us?","much"],["4.","How <em>…</em> battles did the king fight?","many"],["5.","The village had <em>…</em> food left after the disaster, so people were worried.","little"],["6.","<em>…</em> soldiers stayed behind to help the villagers.","few (a few ook goed)"],["7.","There wasn't <em>…</em> damage after the small accident.","much"],["8.","The scientist made <em>…</em> discoveries: more than fifty in total.","many"]],"groups":[],"note":"8 punten: 1 punt per antwoord. F2: het aangeleverde antwoordenblad geeft little. F6: few is het hoofdantwoord; a few is ook goed. Few benadrukt een gering aantal, a few dat er enkele soldaten hielpen."},{"id":"G","title":"Present Perfect","kind":"Grammar","points":10,"instructions":"Write the correct Present Perfect form of the verb in brackets.","rows":[["1.","The scientists <em>…</em> just <em>…</em> an important discovery. (make)","have just made"],["2.","She <em>…</em> never <em>…</em> a steam train. (ride)","has never ridden"],["3.","<em>…</em> you ever <em>…</em> the Science Museum? (visit)","Have you ever visited?"],["4.","We <em>…</em> history for three years. (study)","have studied"],["5.","My class <em>…</em> not <em>…</em> the project yet. (finish)","hasn't finished / haven't finished (of voluit)"],["6.","They <em>…</em> already <em>…</em> the damaged bridge. (rebuild)","have already rebuilt"],["7.","He <em>…</em> three reports since September. (write)","has written"],["8.","The museum <em>…</em> the exhibition. (improve)","has improved"],["9.","I <em>…</em> never <em>…</em> such a terrible story. (hear)","have never heard"],["10.","<em>…</em> she <em>…</em> the answer yet? (find)","Has she found?"]],"groups":[],"note":"10 punten: 1 punt per volledig juiste vraag; geen halve punten. Bij G5 zijn 'has not finished', 'hasn’t finished', 'have not finished' en 'haven’t finished' correct in Brits Engels, omdat 'class' enkelvoud of groepsaanduiding kan zijn."},{"id":"H","title":"Writing","kind":"Writing","points":5,"instructions":"Write five sentences (at least seven words each). These are example answers; other correct sentences are possible.","rows":[["1.","Use the <b>Past Simple</b> to write about history.","Thomas Edison invented many useful things during his life."],["2.","Use the <b>Past Continuous</b>.","Thomas Edison was working on an invention one evening."],["3.","Use the <b>Present Perfect</b>.","His inventions have changed the lives of many people."],["4.","Use <b>much, many, little, a little, few</b> or <b>a few</b>.","Many people still benefit from his inventions today."],["5.","Write a <b>WH-question</b> you would like to ask this person.","How did you get the idea for your inventions?"]],"groups":[],"note":"5 punten: maximaal 1 punt per zin. De zin moet minimaal 7 woorden hebben en de gevraagde grammaticale constructie correct gebruiken. Spel- of hoofdletterfouten: −0,5 per fout; fout/ontbrekend vraagteken: −0,5; per woord onder 7 woorden: −0,5. Als de gevraagde constructie ontbreekt of fout is: 0 punten. Geen negatieve scores. Meerdere antwoorden mogelijk."}];const PAGES=[];
+const splits={B:[6],C:[4,3,3],D:[2,2,3],E:[4,4],F:[4,4],G:[3,3,2,2],H:[3,2]};
+for(const s of SECTIONS){
+ if(s.verbGrid?.length){PAGES.push({...s,rows:[],partTitle:'',support:'',groups:[],pageNo:0});}
+ else if(s.groups?.length){for(const g of s.groups)PAGES.push({...s,rows:g.rows,partTitle:g.heading,support:g.support||'',groups:[],pageNo:0});}
+ else{let i=0;for(const n of (splits[s.id]||[s.rows.length])){PAGES.push({...s,rows:s.rows.slice(i,i+n),partTitle:'',support:'',groups:[],pageNo:0});i+=n;}}
+}
+const totals={};for(const p of PAGES)totals[p.id]=(totals[p.id]||0)+1;
+const counts={};for(const p of PAGES)p.pageNo=(counts[p.id]=(counts[p.id]||0)+1);
+let page=0,revealed=0;
+const el=id=>document.getElementById(id);
+const escapeHTML=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function corrections(original,correct){
+ const a=original.split(/(\s+)/), b=correct.split(/(\s+)/);let html='',count=0;
+ for(let j=0;j<a.length;j++){
+  if(a[j]===b[j])html+=escapeHTML(a[j]);
+  else{html+=`<span class="fix" data-index="${count}" data-original="${escapeHTML(a[j])}" data-correct="${escapeHTML(b[j])}">${escapeHTML(a[j])}</span>`;count++;}
+ }return {html,count};
+}
+function revealTotal(s){return s.verbGrid?.length?s.verbGrid.reduce((n,r)=>n+r.all.length-1,0):s.mode==='corrections'?s.rows.reduce((n,r)=>n+corrections(r[1],r[2]).count,0):s.rows.length}
+function render(){
+ const s=PAGES[page],rows=s.rows,total=revealTotal(s);
+ el('letter').textContent=s.id;
+ el('title').textContent=s.title;
+ el('category').textContent=`${s.kind} · ${s.points} points · Part ${s.pageNo} of ${totals[s.id]}`;
+ el('instruction').textContent=s.mode==='corrections'?'Watch the original sentence. Each click highlights and corrects one mistake.':s.instructions;
+ let content='';
+ if(s.partTitle)content+=`<div class="groupTitle">${escapeHTML(s.partTitle)}</div>`;
+ if(s.support)content+=`<div class="wordbank">Choose from: ${escapeHTML(s.support)}</div>`;
+ if(s.verbGrid?.length){
+   const headings=['','Dutch','Infinitive','Past Simple','Past Participle'];
+   content+='<div class="verb-table" role="table" aria-label="Irregular verbs">';
+   content+='<div class="verb-head" role="row"><div class="verb-head-cell" role="columnheader">#</div>';
+   headings.slice(1).forEach(h=>content+=`<div class="verb-head-cell" role="columnheader">${escapeHTML(h)}</div>`);
+   content+='</div>';
+   let blankNo=0;
+   s.verbGrid.forEach((v,ri)=>{
+      content+=`<div class="verb-row" role="row"><div class="verb-number" role="rowheader">${ri+1}.</div>`;
+      v.all.forEach((word,ci)=>{
+         if(ci===v.given){content+=`<div class="verb-cell verb-given" role="cell"><strong>${escapeHTML(word)}</strong></div>`;}
+         else {
+            const shown=blankNo<revealed, active=blankNo===revealed;
+            content+=`<div class="verb-cell verb-blank ${shown?'verb-shown':''} ${active?'verb-active':''}" role="cell"><span class="verb-placeholder" aria-label="Nog invullen">…</span><strong class="verb-answer">${escapeHTML(word)}</strong></div>`;
+            blankNo++;
+         }
+      });
+      content+='</div>';
+   });
+   content+='</div>';
+ }else{
+ content+=`<div class="questions ${s.mode==='corrections'?'correction-list':''} ${s.id==='A'?'alphabet-list':''}">`;
+ let globalFix=0;
+ rows.forEach((r,i)=>{ 
+  if(s.mode==='corrections'){
+   const correction=corrections(r[1],r[2]);
+   // Give all changed spans unique indices across this page.
+   const text=correction.html.replace(/data-index="(\d+)"/g,(_,n)=>`data-index="${globalFix+Number(n)}"`);
+   content+=`<div class="qrow correction-row"><span class="num">${escapeHTML(r[0])}</span><div class="prompt">${text}</div></div>`;
+   globalFix+=correction.count;
+  }else{
+   content+=`<div class="qrow ${i<revealed?'shown':''} ${i===revealed?'current':''}"><span class="num">${escapeHTML(r[0])}</span><div class="prompt">${r[1]}</div><div class="answer">${escapeHTML(r[2])}</div></div>`;
+  }
+ });
+ content+='</div>';
+ }
+ el('content').innerHTML=content;
+ if(s.mode==='corrections'){
+  el('content').querySelectorAll('.fix').forEach(span=>{
+   if(Number(span.dataset.index)<revealed){span.textContent=span.dataset.correct;span.classList.add('fixed');}
+  });
+ }
+ el('progressLabel').textContent=`${s.id} · Part ${s.pageNo}/${totals[s.id]} · ${revealed}/${total} ${s.verbGrid?.length?'blanks':s.mode==='corrections'?'corrections':'answers'}`;
+ el('fill').style.width=(total?revealed/total*100:0)+'%';
+ el('prevSection').disabled=page===0;
+ el('nextSection').disabled=page===PAGES.length-1;
+ el('prevAnswer').disabled=revealed===0;
+ el('nextAnswer').textContent=revealed===total?'All shown ✓':s.mode==='corrections'?'Highlight next →':'Show answer →';
+ el('nextAnswer').disabled=revealed===total;
+ el('prevSection').textContent='← Page';el('nextSection').textContent='Next page →';
+ fitSlide();
+}
+
+function fitSlide(){
+ const panel=el('content'), q=panel.querySelector('.questions');
+ if(!q)return;
+ const rows=[...panel.querySelectorAll('.qrow')];
+ // Use the largest type size that fits all original sentences and answers.
+ const usable=Math.max(250, panel.clientHeight);
+ let size=Math.min(42,Math.max(19,Math.min(window.innerWidth*.027,usable/(Math.max(rows.length,1)*1.55))));
+ const minSize=window.innerHeight<580?15:17;
+ const fits=()=>{
+  if(panel.scrollHeight>panel.clientHeight+2 || q.scrollHeight>q.clientHeight+2)return false;
+  return rows.every(r=>{
+   const nodes=[r.querySelector('.prompt'),r.querySelector('.answer')].filter(Boolean);
+   return nodes.every(n=>n.scrollHeight<=n.clientHeight+2) && r.scrollHeight<=r.clientHeight+2;
+  });
+ };
+ for(;size>=minSize;size-=1){panel.style.setProperty('--fit-size',size+'px');if(fits())break;}
+ panel.style.setProperty('--fit-size',Math.max(minSize,size)+'px');
+}
+window.addEventListener('resize',()=>fitSlide());
+function next(){if(revealed<revealTotal(PAGES[page])){revealed++;render()}}
+function prev(){if(revealed>0){revealed--;render()}}
+function go(step){let n=page+step;if(n>=0&&n<PAGES.length){page=n;revealed=0;render()}}
+el('nextAnswer').onclick=next;
+el('prevAnswer').onclick=prev;
+el('nextSection').onclick=()=>go(1);
+el('prevSection').onclick=()=>go(-1);
+el('reset').onclick=()=>{revealed=0;render()};
+el('notes').onclick=()=>el('teacherOverlay').classList.add('open');
+el('close').onclick=()=>el('teacherOverlay').classList.remove('open');
+el('teacherOverlay').onclick=e=>{if(e.target===el('teacherOverlay'))el('teacherOverlay').classList.remove('open')};
+el('full').onclick=()=>{if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen?.()};
+document.addEventListener('keydown',e=>{
+ if(el('teacherOverlay').classList.contains('open')){if(e.key==='Escape')el('teacherOverlay').classList.remove('open');return}
+ if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();next()}
+ else if(e.key==='ArrowLeft'){e.preventDefault();prev()}
+ else if(e.key==='PageDown'){e.preventDefault();go(1)}
+ else if(e.key==='PageUp'){e.preventDefault();go(-1)}
+ else if(e.key.toLowerCase()==='f'&&!(e.ctrlKey||e.altKey)){el('full').click()}
+});render();
+</script></body></html>
