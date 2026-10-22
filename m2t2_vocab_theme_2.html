@@ -14,7 +14,27 @@ main{max-width:1200px;margin:0 auto;padding:18px 20px 40px}h2{font:normal clamp(
 .switch input:checked{background:#43a047;border-color:#81c784}
 .switch input:checked::before{transform:translateX(22px)}.switch strong{font-size:1.15rem}.pick-count{font-weight:700;color:#d5f5dc;margin:16px 0 0}.actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:22px 0}.action{background:var(--darkgreen);border:2px solid var(--mint);border-bottom:4px solid #266c2b;border-radius:30px;color:#fff;padding:11px 21px;font-weight:800;min-height:48px}.action[aria-selected=true],.action.is-active{background:#184631;color:#ffdf7b;border-color:var(--yellow)}.action:hover{background:var(--green)}button:focus-visible,a:focus-visible,input:focus-visible,.switch:focus-within{outline:3px solid var(--yellow);outline-offset:3px}
 .view[hidden],.exercise[hidden],#briefing[hidden]{display:none!important}.table-shell{overflow-x:auto;border-radius:14px;border:1px solid #477c62;margin:16px 0 20px}table{width:100%;border-collapse:collapse;min-width:450px}th{background:var(--darkgreen);color:#fff;text-align:left;padding:13px 17px;font-size:1.16rem}td{padding:11px 16px;border-bottom:1px solid #315066;vertical-align:top}tr:nth-child(even){background:#18364a}td:first-child{font-weight:800}tr.group td{background:#26543c;color:#ffdc82;font-weight:800;font-size:1.2rem;padding:12px 17px}tr:last-child td{border-bottom:0}.paren{font-size:.93em;color:#d1e3e8;font-weight:400}.example{color:#d2e5f1;font-size:.99rem;line-height:1.5}.small{font-size:.97rem;color:var(--muted)}
-.flashcard{display:grid;place-items:center;gap:10px;text-align:center;width:min(100%,650px);min-height:270px;margin:10px auto 15px;background:#134035;border:4px solid var(--mint);color:white;border-radius:22px;padding:23px;box-shadow:0 12px 25px #0004}.flashcard .front{font:normal clamp(1.6rem,3vw,2.2rem) Impact,'Arial Narrow',sans-serif}.flashcard .sub{font-size:.92rem;color:#d3e7d9}.flash-ctrl{display:flex;align-items:center;justify-content:center;gap:13px;flex-wrap:wrap}.mode{display:flex;gap:9px;justify-content:center;flex-wrap:wrap}.video-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}.video-card{border:2px solid var(--mint);border-radius:14px;padding:20px;background:#0c2237}.video-card h4{color:var(--yellow);margin:0 0 10px;font-size:1.3rem}.video-card p{margin:8px 0 14px}.video-placeholder{display:grid;gap:10px;align-content:center;justify-items:center;min-height:200px;padding:19px;border:2px dashed #4a765f;border-radius:12px;background:#091d31;text-align:center}.video-placeholder .action{max-width:100%;white-space:normal}.video-placeholder .small{margin:0}.video-frame{width:100%;aspect-ratio:16/9;border:0;border-radius:12px;background:#071522;display:block}.privacy-info{color:#d2e5f1}
+/* Flashcard Simulator: EngliForce MAVO 1-cardlayout, uitsluitend binnen de flashcardtab. */
+#view-flash .fc-controls{background:rgba(16,42,67,.8);padding:20px;border-radius:15px;border:1px solid var(--mint);display:flex;flex-wrap:wrap;gap:15px;justify-content:center;align-items:center;margin-bottom:25px}
+#view-flash .fc-controls label{font:normal 1.05rem Impact,'Arial Narrow',sans-serif;color:var(--mint);display:flex;align-items:center;gap:7px;cursor:pointer}
+#view-flash .fc-controls select{font:700 1rem 'Trebuchet MS',Arial,sans-serif;padding:8px;border-radius:9px;background:#102a43;color:white;border:2px solid var(--mint)}
+#view-flash .fc-controls input[type=checkbox]{width:19px;height:19px;accent-color:var(--green);cursor:pointer}
+#view-flash .fc-cards{display:flex;flex-wrap:wrap;justify-content:center;gap:25px;margin-top:20px;min-height:290px}
+#view-flash .fc-card{width:300px;height:285px;max-width:100%;perspective:1000px;position:relative;transition:transform .4s,opacity .4s}
+#view-flash .fc-inner{position:relative;width:100%;height:100%;text-align:center;transition:transform .6s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d;cursor:pointer;border-radius:20px;outline-offset:4px}
+#view-flash .fc-card.flipped .fc-inner{transform:rotateY(180deg)}
+#view-flash .fc-front,#view-flash .fc-back{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:20px;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:17px;overflow-wrap:anywhere;border:4px solid var(--mint);font:normal clamp(1.45rem,3vw,2rem) Impact,'Arial Narrow',sans-serif}
+#view-flash .fc-front{background:var(--darkgreen);color:#fff;transition:border-color .3s,box-shadow .3s}
+#view-flash .fc-back{background:var(--yellow);color:#05101a;transform:rotateY(180deg);font-size:clamp(1.4rem,2.7vw,1.85rem)}
+#view-flash .fc-example{font:italic .94rem/1.45 'Trebuchet MS',Arial,sans-serif;margin-top:13px;color:rgba(255,255,255,.91)}
+#view-flash .fc-back .fc-example{color:#263445}
+#view-flash .fc-known-btn{background:rgba(0,0,0,.1);color:#05101a;border:2px solid #05101a;margin-top:14px;padding:8px 15px;border-radius:10px;font-weight:800;font-size:.9rem;cursor:pointer}
+#view-flash .fc-known-btn[aria-pressed=true]{background:var(--green);color:white;border-color:white}
+#view-flash .fc-card.is-known .fc-front{border-color:#32d46c;box-shadow:0 0 15px rgba(46,204,113,.65)}
+#view-flash .fc-inner:focus-visible,#view-flash .fc-known-btn:focus-visible{outline:3px solid var(--yellow);outline-offset:4px}
+#view-flash .fc-empty{text-align:center;color:var(--yellow);font:normal 1.5rem Impact,'Arial Narrow',sans-serif}
+@media(max-width:700px){#view-flash .fc-card{width:min(100%,320px);height:270px}#view-flash .fc-front{font-size:1.85rem}#view-flash .fc-back{font-size:1.75rem}#view-flash .fc-controls{padding:15px;gap:10px}}
+.video-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}.video-card{border:2px solid var(--mint);border-radius:14px;padding:20px;background:#0c2237}.video-card h4{color:var(--yellow);margin:0 0 10px;font-size:1.3rem}.video-card p{margin:8px 0 14px}.video-placeholder{display:grid;gap:10px;align-content:center;justify-items:center;min-height:200px;padding:19px;border:2px dashed #4a765f;border-radius:12px;background:#091d31;text-align:center}.video-placeholder .action{max-width:100%;white-space:normal}.video-placeholder .small{margin:0}.video-frame{width:100%;aspect-ratio:16/9;border:0;border-radius:12px;background:#071522;display:block}.privacy-info{color:#d2e5f1}
 .sep{height:3px;background:linear-gradient(90deg,transparent,var(--green),transparent);margin:38px 0}.pickle-grid{display:flex;justify-content:center;flex-wrap:wrap;gap:24px}.mission-card{width:min(100%,290px);min-height:210px;background:#102a43;border:3px solid #365269;border-radius:19px;padding:23px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;color:#fff;text-align:center;transition:border-color .15s,transform .15s}.mission-card:hover{border-color:var(--yellow);transform:translateY(-2px)}.mission-card .title{font:normal 1.75rem Impact,'Arial Narrow',sans-serif;color:var(--yellow);margin:8px 0}.mission-card p{line-height:1.4;flex:1;margin:6px 0 15px}.achieved{font-weight:800;border:2px solid var(--mint);background:#132d43;color:#fff;border-radius:10px;min-height:42px;padding:8px 16px;cursor:pointer}.achieved.on{background:var(--green);border-color:#c5f3c6}.achieved:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}
 .exercise-box{max-width:940px;margin:15px auto;padding:27px;background:#102a43;border:2px solid var(--mint);border-radius:18px}.exercise h2{margin-bottom:11px}.exercise-intro{font-size:1.14rem}.progress{font-weight:800;color:#ffe29c;margin:9px 0 15px}.match-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.match-column{display:grid;gap:8px;align-content:start}.match-option{min-height:57px;border:2px solid #53886d;background:#123045;border-radius:10px;color:white;padding:10px;text-align:left;overflow-wrap:anywhere}.match-option.selected{background:#286743;border-color:var(--yellow)}.match-option.matched{background:#22613a;border-color:#9ae5a5;opacity:.66;cursor:default}.match-option.wrong{border-color:#ff9898;background:#612b34}.prompt{font-size:1.5rem;font-weight:800;color:#fff;background:#113b32;border-left:5px solid var(--yellow);border-radius:10px;padding:20px;margin:16px 0}.hint{font-size:1rem;color:#e6f1f5}.reply{display:block;width:100%;max-width:570px;background:#fff;color:#11253c;padding:14px 16px;border:2px solid #7abf94;border-radius:11px;margin:12px 0;font-size:1.2rem}.feedback{margin:16px 0;padding:14px 17px;background:#113c30;border-left:5px solid var(--mint);border-radius:9px;color:#fff;font-weight:700;min-height:55px}.feedback.error{background:#422d34;border-left-color:#ffab98}.feedback[hidden]{display:none}.choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:14px 0}.choice{background:#0d3048;border:2px solid #528a71;border-radius:12px;min-height:60px;color:white;padding:13px;text-align:left}.choice.correct{background:#205f35;border-color:#8bec9d}.choice.incorrect{background:#612b34;border-color:#ff9b9b}.choice:disabled:not(.correct):not(.incorrect){opacity:.6}.results{font-size:1.21rem;color:#ddf3df;padding:15px;background:#113b32;border-radius:13px;margin:18px 0}.below-actions{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin-top:23px}.no-selected{color:#ffd98d;font-weight:800;text-align:center;font-size:1.15rem}
 footer{text-align:center;padding:20px 18px 28px;color:#c4d4e5;font-size:.9rem}
@@ -32,7 +52,16 @@ footer{text-align:center;padding:20px 18px 28px;color:#c4d4e5;font-size:.9rem}
 <button class="action" type="button" data-view="video" role="tab" aria-selected="false">VIDEO</button></div>
 <div id="view-list" class="view" role="tabpanel"><h3>De woordenlijsten</h3><div class="table-shell"><table><thead><tr><th scope="col">English (UK)</th><th scope="col">Nederlands</th></tr></thead><tbody id="word-rows"></tbody></table></div></div>
 <div id="view-context" class="view" hidden role="tabpanel"><h3>Woorden in zinnen</h3><p class="small">Engelse voorbeeldzinnen op A2-niveau. De zin laat zien hoe je het woord gebruikt.</p><div class="table-shell"><table><thead><tr><th scope="col">English (UK)</th><th scope="col">Example</th></tr></thead><tbody id="context-rows"></tbody></table></div></div>
-<div id="view-flash" class="view" hidden role="tabpanel"><h3>🃏 Flashcard Simulator</h3><div class="mode"><button class="action is-active" type="button" data-direction="en">Engels → Nederlands</button><button class="action" type="button" data-direction="nl">Nederlands → Engels</button></div><button class="flashcard" id="flashcard" type="button" aria-label="Draai de kaart om"><span class="sub" id="flash-side">English</span><span class="front" id="flash-text"></span><span class="sub">Klik om om te draaien</span></button><div class="flash-ctrl"><button class="action" type="button" id="flash-prev">← VORIGE</button><strong id="flash-count" aria-live="polite"></strong><button class="action" type="button" id="flash-next">VOLGENDE →</button><button class="action" type="button" id="flash-shuffle">HUSSELEN</button></div></div>
+<div id="view-flash" class="view" hidden role="tabpanel"><h3>🃏 Flashcard Simulator</h3>
+<div class="fc-controls">
+<label for="fc-count">Aantal: <select id="fc-count"><option value="5">5</option><option value="10">10</option><option value="15" selected>15</option><option value="30">30</option><option value="all">Alle beschikbare woorden</option></select></label>
+<label><input type="checkbox" id="fc-examples"> Voorbeelden</label>
+<label><input type="checkbox" id="fc-reverse"> NL → EN</label>
+<label><input type="checkbox" id="fc-hide-known"> Verberg gekende woorden</label>
+<button class="action" type="button" id="fc-reset">Reset voortgang</button>
+<button class="action" type="button" id="fc-shuffle">Husselen 🔄</button>
+</div>
+<div class="fc-cards" id="fc-cards" aria-live="polite"></div></div>
 <div id="view-video" class="view" hidden role="tabpanel"><h3>🎬 Uitspraak Training</h3><p>Bekijk de uitspraakvideo bij de woordenlijst die je hebt geselecteerd. De video's worden <strong>niet automatisch geladen</strong>.</p><p class="small privacy-info"><strong>Privacy:</strong> Pas als je op <strong>VIDEO STARTEN</strong> klikt, wordt verbinding gemaakt met YouTube en kunnen gegevens met YouTube worden gedeeld. We gebruiken de privacyvriendelijkere YouTube no-cookie-speler.</p><div class="video-grid" id="video-list"></div></div>
 <p class="no-selected" id="no-selected" hidden>Kies minimaal één woordenlijst om te beginnen.</p></section>
 <div class="sep" role="separator"></div>
@@ -56,11 +85,11 @@ function baseMeaning(s){return s.replace(/\([^)]*\)/g,'').trim();}
 function norm(s){return baseMeaning(String(s)).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[’‘]/g,"'").replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ');}
 function accepted(raw,answer){const v=baseMeaning(raw).split(/\s*\/\s*/).map(s=>norm(s));return v.includes(norm(answer));}
 function make(tag,text,cls){const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e;}
-let selected=new Set(seasons.map(s=>s.id)),view='list',fIndex=0,fFlip=false,flashMode='en',flashDeck=[],activePickle=0,pickleState=null;
+let selected=new Set(seasons.map(s=>s.id)),view='list',activePickle=0,pickleState=null;
 try{const saved=JSON.parse(localStorage.getItem(storagePrefix+'selected'));if(Array.isArray(saved)&&saved.length&&saved.every(s=>seasons.some(se=>se.id===s)))selected=new Set(saved);}catch(e){}
 const selector=$('season-selector');seasons.forEach(s=>{const label=make('label',null,'switch'),text=make('strong',s.icon+' '+s.title),input=make('input');input.type='checkbox';input.setAttribute('role','switch');input.checked=selected.has(s.id);input.setAttribute('aria-label',s.title);input.addEventListener('change',()=>{if(input.checked)selected.add(s.id);else selected.delete(s.id);try{localStorage.setItem(storagePrefix+'selected',JSON.stringify([...selected]));}catch(e){}renderData();});label.append(text,input);selector.append(label);});
 function tableRows(id,context){const el=$(id);el.replaceChildren();chosen().forEach(s=>{const head=make('tr',null,'group');const td=make('td',s.icon+' '+s.title+' · 15 woorden');td.colSpan=2;head.append(td);el.append(head);s.words.forEach(w=>{const tr=make('tr');tr.append(make('td',w.en));const t=make('td');if(context){t.append(make('span',w.example,'example'));}else{t.textContent=w.nl;}tr.append(t);el.append(tr);});});}
-function renderData(){document.querySelectorAll('.switch').forEach((e,i)=>{e.querySelector('input').checked=selected.has(seasons[i].id);});const count=vocab().length;$('selection-count').textContent=selected.size+' van 4 woordenlijsten geselecteerd · '+count+' woorden';tableRows('word-rows',false);tableRows('context-rows',true);$('no-selected').hidden=count>0;flashDeck=shuffle(vocab());fIndex=0;fFlip=false;flashUpdate();renderVideos();if(count===0){$('flash-text').textContent='Kies eerst een lijst';} }
+function renderData(){document.querySelectorAll('.switch').forEach((e,i)=>{e.querySelector('input').checked=selected.has(seasons[i].id);});const count=vocab().length;$('selection-count').textContent=selected.size+' van 4 woordenlijsten geselecteerd · '+count+' woorden';tableRows('word-rows',false);tableRows('context-rows',true);$('no-selected').hidden=count>0;generateFlashcards();renderVideos(); }
 function renderVideos(){
  const list=$('video-list');list.replaceChildren();
  chosen().forEach(s=>{
@@ -90,8 +119,51 @@ function setView(name){
  view=name;document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.view===name)));document.querySelectorAll('.view').forEach(v=>{v.hidden=v.id!=='view-'+name;});
 }
 document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view)));
-function flashUpdate(){if(!flashDeck.length){$('flash-side').textContent='';$('flash-text').textContent='Kies een woordenlijst';$('flash-count').textContent='0 / 0';return;}fIndex=(fIndex+flashDeck.length)%flashDeck.length;const w=flashDeck[fIndex];const first=flashMode==='en'?'en':'nl';const second=first==='en'?'nl':'en';const displayed=fFlip?second:first;$('flash-side').textContent=displayed==='en'?'English':'Nederlands';$('flash-text').textContent=w[displayed];$('flash-count').textContent=(fIndex+1)+' / '+flashDeck.length;}
-$('flashcard').addEventListener('click',()=>{fFlip=!fFlip;flashUpdate();});$('flash-prev').addEventListener('click',()=>{fIndex--;fFlip=false;flashUpdate();});$('flash-next').addEventListener('click',()=>{fIndex++;fFlip=false;flashUpdate();});$('flash-shuffle').addEventListener('click',()=>{flashDeck=shuffle(vocab());fIndex=0;fFlip=false;flashUpdate();});document.querySelectorAll('[data-direction]').forEach(b=>b.addEventListener('click',()=>{flashMode=b.dataset.direction;fFlip=false;document.querySelectorAll('[data-direction]').forEach(x=>x.classList.toggle('is-active',x===b));flashUpdate();}));
+// De originele EngliForce multi-card-werking; voortgang alleen voor deze missie.
+let knownFlashcards=new Set();
+try{const saved=JSON.parse(localStorage.getItem(storagePrefix+'flash_known'));if(Array.isArray(saved))knownFlashcards=new Set(saved);}catch(e){}
+function saveKnownFlashcards(){try{localStorage.setItem(storagePrefix+'flash_known',JSON.stringify([...knownFlashcards]));}catch(e){}}
+function generateFlashcards(){
+  const root=$('fc-cards');root.replaceChildren();
+  const source=vocab(),hideKnown=$('fc-hide-known').checked;
+  const available=hideKnown?source.filter(w=>!knownFlashcards.has(w.en)):source;
+  const rawCount=$('fc-count').value;
+  const count=rawCount==='all'?available.length:Math.min(Number(rawCount),available.length);
+  const reverse=$('fc-reverse').checked,examples=$('fc-examples').checked;
+  if(!source.length){root.append(make('p','Kies eerst een woordenlijst.','fc-empty'));return;}
+  if(!available.length){root.append(make('p','Missie volbracht! Je kent alle woorden van deze selectie.','fc-empty'));return;}
+  shuffle(available).slice(0,count).forEach(w=>{
+    const card=make('div',null,'fc-card'+(knownFlashcards.has(w.en)?' is-known':''));
+    const inner=make('div',null,'fc-inner');inner.tabIndex=0;inner.setAttribute('role','button');inner.setAttribute('aria-label','Draai flashcard: '+(reverse?w.nl:w.en));
+    const front=make('div',reverse?w.nl:w.en,'fc-front');const back=make('div',reverse?w.en:w.nl,'fc-back');
+    if(examples){
+      // Er zijn Engelse voorbeeldzinnen in de originele MAVO2-lijst, geen Nederlandse vertalingen.
+      (reverse?back:front).append(make('div',w.example,'fc-example'));
+    }
+    const known=make('button',knownFlashcards.has(w.en)?'✅ Gekend':'✔️ Ken ik','fc-known-btn');
+    known.type='button';known.setAttribute('aria-pressed',String(knownFlashcards.has(w.en)));
+    known.addEventListener('click',e=>{
+      e.stopPropagation();
+      const isKnown=!knownFlashcards.has(w.en);
+      if(isKnown)knownFlashcards.add(w.en);else knownFlashcards.delete(w.en);
+      saveKnownFlashcards();
+      card.classList.toggle('is-known',isKnown);
+      known.textContent=isKnown?'✅ Gekend':'✔️ Ken ik';
+      known.setAttribute('aria-pressed',String(isKnown));
+      if(isKnown&&$('fc-hide-known').checked)generateFlashcards();
+    });
+    back.append(known);inner.append(front,back);card.append(inner);root.append(card);
+    const flip=()=>card.classList.toggle('flipped');
+    inner.addEventListener('click',e=>{if(e.target.closest('.fc-known-btn'))return;flip();});
+    inner.addEventListener('keydown',e=>{if(e.target!==inner)return;if(e.key==='Enter'||e.key===' '){e.preventDefault();flip();}});
+  });
+}
+['fc-count','fc-examples','fc-reverse','fc-hide-known'].forEach(id=>$(id).addEventListener('change',generateFlashcards));
+$('fc-shuffle').addEventListener('click',generateFlashcards);
+$('fc-reset').addEventListener('click',()=>{
+  if(!confirm('Wil je de voortgang van de flashcards wissen?'))return;
+  knownFlashcards.clear();saveKnownFlashcards();generateFlashcards();
+});
 function feedback(text,isError=false){const n=$('pickle-feedback');if(!n)return;n.textContent=text;n.classList.toggle('error',isError);n.hidden=false;}
 function hideFeedback(){const n=$('pickle-feedback');if(n)n.hidden=true;}
 function startPickle(id){if(!vocab().length){$('no-selected').hidden=false;$('study').scrollIntoView();return;}activePickle=id;$('briefing').hidden=true;$('exercise').hidden=false;window.scrollTo(0,0);if(id===1)startMatch();if(id===2)startTranslate();if(id===3)startCulture();}
