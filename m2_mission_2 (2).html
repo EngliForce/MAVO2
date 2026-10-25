@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+
+<html lang="nl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="strict-origin-when-cross-origin" name="referrer"/>
+<title>EngliForce Academy – MAVO 2 Mission 2: Time to Celebrate!</title>
+<style>
+
+        :root {
+            /* Groene accenten voor Theme 2 */
+            --hero-green-main: #43a047;
+            --hero-green-dark: #388e3c;
+            --hero-green-glow: rgba(67, 160, 71, 0.4);
+            --hero-yellow: #ffb703;
+            
+            /* Donkere achtergrondkleuren uit Theme 4 */
+            --dark-bg: #0b1a2a;
+            --card-bg: #102a43;
+            --card-border: #243b53;
+            --card-bg-done: #05101a;
+        }
+
+        body {
+            font-family: 'Trebuchet MS', Arial, sans-serif;
+            background: radial-gradient(circle at center, #102a43 0%, #05101a 100%);
+            color: white;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        header {
+            background: var(--hero-green-main);
+            padding: 2.5rem 1rem;
+            text-align: center;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            border-bottom: 5px solid var(--hero-yellow);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            color: white;
+        }
+
+        h1 {
+            font-family: Impact, 'Arial Narrow', sans-serif;
+            font-size: 3.5rem;
+            letter-spacing: 3px;
+            margin: 0;
+            text-shadow: 4px 4px 0px var(--hero-green-dark);
+        }
+
+        header p {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        .learning-goals {
+            background: var(--card-bg);
+            border: 3px solid var(--hero-green-main);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px var(--hero-green-glow);
+        }
+
+        .learning-goals h2 {
+            font-family: Impact, 'Arial Narrow', sans-serif;
+            font-size: 2.2rem;
+            color: var(--hero-green-main);
+            margin-top: 0;
+            letter-spacing: 1px;
+        }
+
+        .learning-goals p {
+            color: #e2e8f0;
+            font-size: 1.1rem;
+        }
+
+        .divider {
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--hero-green-main), transparent);
+            margin: 60px 0 20px 0;
+            border-radius: 2px;
+            box-shadow: 0 0 15px var(--hero-green-main);
+        }
+
+        .section-title {
+            font-family: Impact, 'Arial Narrow', sans-serif;
+            font-size: 2.8rem;
+            color: var(--hero-green-main);
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 3px solid var(--card-border);
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: white;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            border-color: var(--hero-green-main);
+            transform: translateY(-8px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .power-icon {
+            font-size: 2.5rem;
+            background: rgba(255,255,255,0.05);
+            width: 65px; height: 65px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .name {
+            font-weight: bold;
+            font-size: 1.45rem;
+            margin-bottom: 8px;
+            color: #f8fafc;
+            text-align: center;
+        }
+
+        .desc {
+            font-size: 1.05rem;
+            color: #c4d4e4;
+            flex-grow: 1;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            background: var(--card-border);
+            border: none;
+            color: white;
+            padding: 14px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: Impact, 'Arial Narrow', sans-serif;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            z-index: 5;
+        }
+
+        .card.done {
+            border-color: var(--hero-green-main);
+            background: var(--card-bg-done);
+            box-shadow: 0 0 20px var(--hero-green-glow);
+        }
+
+        .card.done .btn {
+            background: var(--hero-green-main);
+            color: white;
+        }
+
+        .star {
+            position: fixed;
+            pointer-events: none;
+            font-size: 3rem;
+            z-index: 1000;
+            animation: starFly 0.8s forwards;
+        }
+
+        @keyframes starFly {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(2) translateY(-150px); opacity: 0; }
+        }
+    
+
+/* Mission 2 page additions. Does not load external fonts, scripts or trackers. */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; overflow-y: auto; }
+body { overflow-x: hidden; }
+header { min-height: 180px; }
+header h1 { line-height: 1.12; }
+header p { margin-bottom: 14px; }
+.main-menu { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 23px; margin-top: 32px; }
+.menu-card { min-height: 345px; align-items: center; gap: 8px; text-align: center; padding: 26px 19px; }
+.menu-card .power-icon { width: 78px; height: 78px; font-size: 2.9rem; }
+.menu-card .card-header { margin: 0 0 9px; }
+.menu-card .name { font-size: 1.55rem; }
+.menu-card .desc { line-height: 1.5; font-size: 1.07rem; color: #d7e5f4; }
+.menu-card .meta { color: #a3b9ce; font-size: 0.98rem; margin-bottom: 14px; }
+.action-btn { display: block; width: 100%; background: #388e3c; color: white; border: 0; border-bottom: 4px solid #23672a; border-radius: 12px; text-align: center; padding: 14px 9px; text-decoration: none; cursor: pointer; font: 1.3rem Impact, 'Arial Narrow', sans-serif; letter-spacing: 0.5px; transition: background .18s, transform .18s; margin-top: auto; }
+.action-btn:hover, .action-btn:focus-visible { background: #43a047; transform: translateY(-2px); }
+.action-btn:focus-visible, .card:focus-visible, .btn:focus-visible { outline: 3px solid #ffb703; outline-offset: 3px; }
+.content-panel { margin-top: 34px; }
+.content-panel[hidden] { display: none !important; }
+.panel-title { color: var(--hero-green-main); font-family: Impact, 'Arial Narrow', sans-serif; letter-spacing: 1px; font-size: 2.1rem; margin: 0 0 8px; text-align:center; }
+.panel-intro { text-align: center; color:#e2e8f0; font-size: 1.13rem; line-height: 1.6; max-width:720px; margin: 0 auto 10px; }
+.grammar-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(225px,1fr)); gap: 23px; margin-top: 25px; }
+.grammar-card { cursor: default; padding: 18px; min-height: 253px; }
+.grammar-card .name { font-size:1.36rem; }
+.grammar-card .desc { font-size: 1rem; }
+.grammar-card .card-header { margin-bottom: 8px; }
+.grammar-card .power-icon { width: 63px; height: 63px; font-size: 2.5rem; }
+.grammar-card .topic-link { display:flex; flex-direction:column; flex:1; gap:3px; color: inherit; text-decoration:none; }
+.grammar-card .topic-link:focus-visible { outline: 2px solid var(--hero-yellow); outline-offset: 4px; border-radius: 9px; }
+.grammar-card .btn { margin-top: 12px; font-size: 1.19rem; width: 100%; }
+.grammar-card .btn:hover { background: #388e3c; }
+.grammar-card.done .btn { background: var(--hero-green-main); }
+.grammar-card.done .btn::before { content:'✓ '; }
+.notice-panel { padding: 28px; border: 2px solid var(--hero-green-main); border-radius: 20px; background: var(--card-bg); max-width: 720px; margin: 28px auto 0; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,.3); }
+.notice-panel p { color:#d8e7f5; font-size:1.1rem; line-height:1.65; }
+.notice-panel .power-icon { margin: 0 auto 15px; }
+.secondary-btn { display:block; margin:25px auto 0; min-width:185px; width:max-content; max-width:100%; padding:11px 19px; background:var(--card-border); }
+.status-note { text-align:center; color:#9bb0c6; font-size:.91rem; padding:0 15px; margin-top:29px; }
+footer { padding: 20px 0 10px; }
+@media(max-width: 850px) {
+  .main-menu { grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); }
+  .menu-card { min-height: 305px; }
+}
+@media(max-width: 610px) {
+  header { padding:2.2rem 1rem; min-height:unset; }
+  header h1 { font-size: clamp(2rem, 9vw, 3.1rem); letter-spacing:1.5px; }
+  header p { font-size: 1rem; }
+  main { padding: 17px 14px; margin: 4px auto; }
+  .main-menu { grid-template-columns:1fr; margin-top:22px; gap:16px; }
+  .menu-card { min-height: 0; padding: 23px; }
+  .menu-card .power-icon { width: 65px; height: 65px; font-size: 2.6rem; }
+  .grammar-grid { grid-template-columns:1fr; }
+  .section-title { font-size:2.25rem; }
+  .panel-title { font-size:1.95rem; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior:auto } .card,.btn,.action-btn { transition:none !important; } }
+
+
+/* Menu tegels zijn rechtstreeks aanklikbaar; ACHIEVED is de enige aparte bediening. */
+.main-menu .menu-card:has(.menu-card-link){position:relative;cursor:pointer}
+.menu-card-link{display:flex;flex-direction:column;align-items:center;flex:1;width:100%;text-decoration:none;color:inherit;gap:8px}
+.menu-card-link::after{content:"";position:absolute;inset:0;z-index:1;border-radius:18px}
+.menu-card-link:focus-visible{outline:0}
+.menu-card:has(.menu-card-link:focus-visible){outline:3px solid var(--hero-yellow);outline-offset:4px}
+.menu-card .menu-achieved{position:relative;z-index:2;width:100%;margin-top:auto;background:var(--card-border);border:2px solid #51718a;min-height:50px}
+.menu-card.done .menu-achieved,.menu-card .menu-achieved[aria-pressed="true"]{background:var(--hero-green-main);border-color:#b7ebaf}
+.menu-card.done .menu-achieved::before{content:"✓ ";}
+</style>
+</head>
+<body>
+<header>
+<h1>ENGLIFORCE ACADEMY</h1>
+<p>MISSION 2: TIME TO CELEBRATE!</p>
+</header>
+<main>
+<h2 class="section-title">⚡ CHOOSE YOUR MISSION</h2>
+<div aria-label="De drie onderdelen van Mission 2" class="main-menu">
+<article class="card menu-card" data-section="vocabulary"><a aria-label="Open vocabulary briefing" class="menu-card-link" href="m2t2_vocab_theme_2.html">
+<div class="card-header"><div aria-hidden="true" class="power-icon">📚</div></div>
+<div class="name">VOCABULARY</div>
+<div class="desc">Woordenlijsten, video's, flashcards en Pickle Missions</div>
+<div class="meta">4 onderwerpen · 60 woorden</div>
+</a><button aria-label="Markeer vocabulary als afgerond" aria-pressed="false" class="btn menu-achieved" data-section="vocabulary" type="button">ACHIEVED</button></article>
+<article class="card menu-card" data-section="grammar"><a aria-label="Open grammar briefing" class="menu-card-link" href="m2t2_grammar.html">
+<div class="card-header"><div aria-hidden="true" class="power-icon">🧠</div></div>
+<div class="name">GRAMMAR</div>
+<div class="desc">Uitleg, instructievideo's en interactieve oefeningen</div>
+<div class="meta">5 grammar topics</div>
+</a><button aria-label="Markeer grammar als afgerond" aria-pressed="false" class="btn menu-achieved" data-section="grammar" type="button">ACHIEVED</button></article>
+<article class="card menu-card" data-section="generator"><a aria-label="Open Test Generator" class="menu-card-link" href="m2_mission_2_test_generator.html">
+<div class="card-header"><div aria-hidden="true" class="power-icon">📝</div></div>
+<div class="name">TEST GENERATOR</div>
+<div class="desc">Stel je eigen proeftoets samen en ontdek wat je nog kunt oefenen</div>
+<div class="meta">Proeftoets · Analyse · Oefenadvies</div>
+</a><button aria-label="Markeer Test Generator als afgerond" aria-pressed="false" class="btn menu-achieved" data-section="generator" type="button">ACHIEVED</button></article>
+</div>
+
+<p class="status-note">Geen externe scripts, trackers of cookies. Flashcards werken lokaal in je browser.</p>
+</main>
+<footer><p style="text-align:center;opacity:.65;padding:35px 12px;">© 2026 EngliForce – Make English your superpower!</p></footer>
+<script>
+'use strict';
+const progressKey='hero_progress_m2_t2_main';
+function readMainProgress(){try{return JSON.parse(localStorage.getItem(progressKey)||'{}')||{};}catch{return {};}}
+function saveMainProgress(data){try{localStorage.setItem(progressKey,JSON.stringify(data));}catch{ /* Local storage can be disabled. */ }}
+function starBurst(el){
+ const s=document.createElement('span');s.className='star';s.textContent='⚡';
+ const r=el.getBoundingClientRect();s.style.left=r.left+r.width/2+'px';s.style.top=r.top+'px';
+ document.body.appendChild(s);setTimeout(()=>s.remove(),850);
+}
+const saved=readMainProgress();
+document.querySelectorAll('.menu-achieved').forEach(btn=>{
+ const section=btn.dataset.section,card=btn.closest('.menu-card');
+ function reflect(done){card.classList.toggle('done',done);btn.setAttribute('aria-pressed',String(done));}
+ reflect(Boolean(saved[section]));
+ btn.addEventListener('click',e=>{
+  e.stopPropagation();
+  const now=!card.classList.contains('done');
+  reflect(now);
+  const current=readMainProgress();current[section]=now;saveMainProgress(current);
+  if(now)starBurst(btn);
+ });
+});
+// Older links to #test open the standalone generator.
+if(location.hash.toLowerCase()==='#test')location.replace('m2_mission_2_test_generator.html');
+</script>
+</body>
+</html>
